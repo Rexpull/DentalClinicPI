@@ -14,33 +14,32 @@ const Sidebar = ({children}) => {
     const toggle = () => setIsOpen (!isOpen);
     const menuItem = [
         {
-            path:"/",
+            path:"/app/dashboard",
             name:"dashboard",
             icon:<FaTh/>
         },
         {
-            path:"/about",
+            path:"/app/about",
             name:"About",
             icon:<FaUserAlt/>
         },
         {
-            path:"/analytics",
+            path:"/app/analytics",
             name:"Analytics",
             icon:<FaRegChartBar/>
         },
         {
-            path:"/comment",
+            path:"/app/comment",
             name:"Comment",
             icon:<FaCommentAlt/>
         },
         {
-            path:"/product",
+            path:"/app/product",
             name:"Product",
             icon:<FaShoppingBag/>
         },
-        
         {
-            path:"/agenda",
+            path:"/app/agenda",
             name:"agenda",
             icon:<FaThList/>
         },
