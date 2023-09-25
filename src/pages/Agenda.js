@@ -4,7 +4,6 @@
 import * as React from "react";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
-import { MuiPickersUtilsProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 
 import { ViewState, EditingState } from "@devexpress/dx-react-scheduler";
@@ -116,7 +115,17 @@ class AppointmentFormContainerBasic extends React.PureComponent {
 
     this.state = {
       appointmentChanges: {},
+      paciente: "", // Novo estado para o campo Paciente
+      profissional: "", // Novo estado para o campo Profissional
+      consultorio: "", // Novo estado para o campo Consultorio
+      dataConsulta: null, // Novo estado para o campo Data da Consulta
+      horaInicio: null, // Novo estado para o campo Hora de Inicio
+      duracao: 15, // Novo estado para o campo Duração da Consulta (inicializado com 15)
+      observacao: "", // Novo estado para o campo Observação
     };
+
+  
+    
 
     this.getAppointmentData = () => {
       const { appointmentData } = this.props;
@@ -131,6 +140,12 @@ class AppointmentFormContainerBasic extends React.PureComponent {
     this.commitAppointment = this.commitAppointment.bind(this);
   }
 
+  calculateEndDate(startDate, duration) {
+    const endDate = new Date(startDate);
+    endDate.setMinutes(startDate.getMinutes() + duration);
+    return endDate;
+  }
+
   changeAppointment({ field, changes }) {
     const nextChanges = {
       ...this.getAppointmentChanges(),
@@ -140,9 +155,12 @@ class AppointmentFormContainerBasic extends React.PureComponent {
       appointmentChanges: nextChanges,
     });
   }
+ 
+
 
   commitAppointment(type) {
     const { commitChanges } = this.props;
+    const { duracao } = this.state; // Obtenha a duração da consulta do estado
     const appointment = {
       ...this.getAppointmentData(),
       ...this.getAppointmentChanges(),
@@ -168,14 +186,22 @@ class AppointmentFormContainerBasic extends React.PureComponent {
       target,
       onHide,
     } = this.props;
-    const { appointmentChanges } = this.state;
+    const { appointmentChanges, paciente, profissional, consultorio, dataConsulta, horaInicio, duracao, observacao } = this.state;
 
     const displayAppointmentData = {
       ...appointmentData,
       ...appointmentChanges,
+      Paciente: paciente,
+      Profissional: profissional,
+      Consultorio: consultorio,
+      "Data da Consulta": dataConsulta,
+      "Hora de Inicio": horaInicio,
+      "Duração da Consulta": duracao,
+      Observacao: observacao,
     };
 
     const isNewAppointment = appointmentData.id === undefined;
+    
     const applyChanges = isNewAppointment
       ? () => this.commitAppointment("added")
       : () => this.commitAppointment("changed");
@@ -232,9 +258,10 @@ class AppointmentFormContainerBasic extends React.PureComponent {
         target={target}
         fullSize
         onHide={onHide}
+        style={{maxWidth: "37.5rem", borderRight:"solid 1px black"}}
       >
-        <StyledDiv>
-          <div className={classes.header}>
+        <StyledDiv   > 
+          <div className={classes.header} style={{maxWidth: "35rem"}}>
             <IconButton
               className={classes.closeButton}
               onClick={cancelChanges}
@@ -244,45 +271,95 @@ class AppointmentFormContainerBasic extends React.PureComponent {
             </IconButton>
           </div>
           <div className={classes.content}>
-            <div className={classes.wrapper}>
-              <Create className={classes.icon} color="action" />
-              <TextField {...textEditorProps("Descrição")} />
+            {/* Campo Paciente */}
+            <div className={classes.wrapper} style={{ maxWidth: "35rem"}}>
+            <TextField
+                {...textEditorProps("Paciente")}
+                value={paciente}
+                onChange={(e) => this.setState({ paciente: e.target.value })}
+                required
+                size="small"
+              />
+
             </div>
-            <div className={classes.wrapper}>
-              <CalendarToday className={classes.icon} color="action" />
-              <LocalizationProvider dateAdapter={AdapterMoment} >
-                <DateTimePicker
-                  label="Data"
-                  renderInput={(props) => (
-                    <TextField
-                      className={classes.picker}
-                      variant="outlined"
-                      label="Data"
-                      {...props}
-                      inputProps={{
-                        ...props.inputProps,
-                        readOnly: true,
-                      }}
-                    />
-                  )}
-                  {...datePickerProps} // Usar datePickerProps em vez de startDatePickerProps
+           
+            <div style={{ display: "flex", justifyContent: "space-between", marginTop: "8px", maxWidth: "35rem" }}>
+
+              {/* Campo Profissional */}
+              <div style={{ flexBasis: "48%" }}>
+                <TextField
+                  {...textEditorProps("Profissional")}
+                  value={profissional}
+                  onChange={(e) => this.setState({ profissional: e.target.value })}
+                  required
                 />
-              </LocalizationProvider>
+              </div>
+
+              {/* Campo Consultorio */}
+              <div style={{ flexBasis: "48%",}}>
+                <TextField
+                  {...textEditorProps("Consultorio")}
+                  value={consultorio}
+                  onChange={(e) => this.setState({ consultorio: e.target.value })}
+                  required
+                />
+              </div>
             </div>
-            <div className={classes.wrapper}>
-              <LocationOn className={classes.icon} color="action" />
-              <TextField {...textEditorProps("Sala")} />
+
+            <div style={{ display: "flex", justifyContent: "space-between",marginTop: "8px" , maxWidth: "35rem" }}>
+              {/* Campo Data da Consulta */}
+             
+                <div className={classes.wrapper} style={{ flexBasis: "48%",  Width: "15rem !important" }} >
+               
+                  <LocalizationProvider dateAdapter={AdapterMoment}>
+                    <DateTimePicker
+                      label="Data"
+                      renderInput={(props) => (
+                        <TextField
+                          className={classes.picker}
+                          variant="outlined"
+                          label="Data"
+                          {...props}
+                          inputProps={{
+                            ...props.inputProps,
+                            readOnly: true,
+                          }}
+                        />
+                      )}
+                      {...datePickerProps}
+                    />
+                  </LocalizationProvider>
+                </div>
+           
+
+              {/* Campo Duração da Consulta */}
+              <div style={{ flexBasis: "48%", marginTop: "8px" }}>
+                <TextField
+                  label="Duração da Consulta (min)"
+                  type="number"
+                  value={duracao}
+                  onChange={(e) => this.setState({ duracao: e.target.value })}
+                  required
+                />
+              </div>
             </div>
-            <div className={classes.wrapper}>
-              <Notes className={classes.icon} color="action" />
+
+            {/* Campo Observação */}
+            <div className={classes.wrapper} style={{maxWidth: "35rem"}}>
               <TextField
-                {...textEditorProps("Observação")}
+                {...textEditorProps("Observacao")}
                 multiline
                 rows="6"
+                value={observacao}
+                onChange={(e) => this.setState({ observacao: e.target.value })}
               />
             </div>
+
+           
+            
+           
           </div>
-          <div className={classes.buttonGroup}>
+          <div className={classes.buttonGroup} style={{maxWidth: "35rem"}}>
             {!isNewAppointment && (
               <Button
                 variant="outlined"
@@ -296,6 +373,7 @@ class AppointmentFormContainerBasic extends React.PureComponent {
                 Delete
               </Button>
             )}
+
             <Button
               variant="outlined"
               color="primary"
@@ -359,6 +437,8 @@ export default class Demo extends React.PureComponent {
         previousAppointment,
       } = this.state;
 
+      
+
       const currentAppointment =
         data.filter(
           (appointment) =>
@@ -383,6 +463,69 @@ export default class Demo extends React.PureComponent {
       };
     });
   }
+
+  validateForm() {
+    const {
+      paciente,
+      profissional,
+      consultorio,
+      dataConsulta,
+      horaInicio,
+      duracao,
+    } = this.state;
+  
+    // Verifique se todos os campos obrigatórios estão preenchidos
+    if (!paciente || !profissional || !consultorio || !dataConsulta || !horaInicio || !duracao) {
+      return false;
+    }
+  
+    return true;
+  }
+  
+
+  applyChanges() {
+    const { commitChanges } = this.props;
+    const {
+      duracao,
+      paciente,
+      profissional,
+      consultorio,
+      dataConsulta,
+      horaInicio,
+      observacao,
+    } = this.state;
+  
+    // Verifique se todos os campos obrigatórios estão preenchidos
+    if (!paciente || !profissional || !consultorio || !dataConsulta || !horaInicio || !duracao) {
+      alert("Preencha todos os campos obrigatórios antes de criar o agendamento.");
+      return; // Impedir a criação do agendamento se algum campo estiver faltando
+    }
+  
+    const startDate = new Date(dataConsulta);
+    startDate.setHours(horaInicio.getHours());
+    startDate.setMinutes(horaInicio.getMinutes());
+  
+    const endDate = this.calculateEndDate(startDate, duracao);
+  
+    const appointment = {
+      Paciente: paciente,
+      Profissional: profissional,
+      Consultorio: consultorio,
+      "Data da Consulta": startDate, // Use a data de início calculada
+      "Hora de Inicio": startDate, // Use a data de início calculada
+      "Duração da Consulta": duracao,
+      Observacao: observacao,
+    };
+  
+    commitChanges({ added: appointment });
+    this.setState({
+      appointmentChanges: {},
+    });
+  }
+  
+  
+
+  
   handleDateChange = (date) => {
     this.setState({ currentDate: date });
   };
