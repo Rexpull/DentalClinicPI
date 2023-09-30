@@ -2,13 +2,13 @@ import './App.css';
 import React from 'react';
 import { BrowserRouter, Route, Routes, Outlet } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
-import Dashboard from './pages/Dashboard';
-import About from './pages/About';
-import Comment from './pages/Comment';
-import Analytics from './pages/Analytics';
-import Product from './pages/Product';
+import Comment from './pages/Ajustes';
+import Financeiro from './pages/Financeiro';
 import Demo from './pages/Agenda';
 import Login from './pages/Login';
+import Pacientes from './pages/Pacientes';
+import Inicio from './pages/Inicio';
+import Ajustes from './pages/Ajustes';
 
 const App = () => {
   return (
@@ -24,13 +24,11 @@ const App = () => {
               </Sidebar>
             }
           >
-            {/* Remova a barra inicial em /dashboard */}
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="about" element={<About />} />
-            <Route path="comment" element={<Comment />} />
-            <Route path="analytics" element={<Analytics />} />
-            <Route path="product" element={<Product />} />
-            <Route path="agenda" element={<Demo />} />
+            <Route path="Inicio" element={<Inicio />} />
+            <Route path="Pacientes" element={<Pacientes />} />
+            <Route path="Ajustes" element={<Ajustes />} />
+            <Route path="Financeiro" element={<Financeiro />} />
+            <Route path="Agenda" element={<Demo />} />
           </Route>
         </Routes>
       </BrowserRouter>

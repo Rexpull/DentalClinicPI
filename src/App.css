@@ -9,13 +9,15 @@
 main{
   width:  100%;
   padding: 20px;
+  background-color: #C0C0C0;
 }
 .sidebar{
-  background-color:#DC143C;
+  background-color:	#00008B;
   color: #fff;
   height: 100vh;
   width: 250px;
   transition: all 0.5s;
+  box-shadow: 8px 0 10px rgba(0, 0, 0, 0.2);
 }
 .top_section{
   display: flex;
@@ -29,6 +31,7 @@ main{
   display: flex;
   font-size: 25px;
   margin-left: 70px;
+  cursor: pointer;
 }
 .link{
   display: flex;
@@ -38,13 +41,13 @@ main{
   transition: all 0.5s;
 }
 .link:hover{
-  background-color: #C0C0C0;
-  color: 		#DC143C;
+  background-color: #4682B4;
+  color: 		#00008B;
   transition: all 0.5s;
 }
 .active{
-  background-color:#C0C0C0;
-  color: 	#DC143C;
+  background-color:#4682B4;
+  color: 	#00008B;
 }
 .icon, .link_text{
   font-size: 20px;

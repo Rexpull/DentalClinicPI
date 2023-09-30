@@ -25,7 +25,7 @@ function Login() {
 
     if (validateFields()) {
       if (email === "quintalbar@gmail.com" && password === "quintal1234") {
-        window.location.href = "/app/dashboard";
+        window.location.href = "/app/Inicio";
       } else {
         setError("Email ou senha incorretos.");
       }
