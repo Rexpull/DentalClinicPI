@@ -24,7 +24,7 @@ function Login() {
     e.preventDefault();
 
     if (validateFields()) {
-      if (email === "quintalbar@gmail.com" && password === "quintal1234") {
+      if (email === "teste@gmail.com" && password === "1234") {
         window.location.href = "/app/dashboard";
       } else {
         setError("Email ou senha incorretos.");
@@ -40,7 +40,7 @@ function Login() {
     <div className="container2">
       <div className="area">
         
-        <ul className="circles">
+        {/* <ul className="circles">
           <li className="dente dente1"><img src={Dente1} alt="Dente 1" /></li>
           <li className="dente dente2"><img src={Dente2} alt="Dente 2" /></li>
           <li className="dente dente3"><img src={Dente3} alt="Dente 3" /></li>
@@ -50,7 +50,7 @@ function Login() {
           <li className="dente dente1"><img src={Dente1} alt="Dente 1" /></li>
           <li className="dente dente2"><img src={Dente2} alt="Dente 2" /></li>
           <li className="dente dente3"><img src={Dente3} alt="Dente 3" /></li>
-        </ul>
+        </ul> */}
       </div>
       <div className="container-login">
         <div className="subContainer">

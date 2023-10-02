@@ -7,8 +7,9 @@ import About from './pages/About';
 import Comment from './pages/Comment';
 import Analytics from './pages/Analytics';
 import Product from './pages/Product';
-import Demo from './pages/Agenda';
+import Demo from './pages/agenda';
 import Login from './pages/Login';
+
 
 const App = () => {
   return (

@@ -4,8 +4,8 @@
 import * as React from "react";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
+import ModalPaciente from '../components/ModalPaciente';
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-
 import { ViewState, EditingState } from "@devexpress/dx-react-scheduler";
 import {
   Scheduler,
@@ -36,11 +36,7 @@ import Fab from "@mui/material/Fab";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import TextField from "@mui/material/TextField";
-import LocationOn from "@mui/icons-material/LocationOn";
-import Notes from "@mui/icons-material/Notes";
 import Close from "@mui/icons-material/Close";
-import CalendarToday from "@mui/icons-material/CalendarToday";
-import Create from "@mui/icons-material/Create";
 import { appointments } from "../components/appointments";
 
 
@@ -119,12 +115,12 @@ class AppointmentFormContainerBasic extends React.PureComponent {
       profissional: "", // Novo estado para o campo Profissional
       consultorio: "", // Novo estado para o campo Consultorio
       dataConsulta: null, // Novo estado para o campo Data da Consulta
-      horaInicio: null, // Novo estado para o campo Hora de Inicio
+      horaInicio: null, // Novo estado para o campo Hora de Inicio  1
       duracao: 15, // Novo estado para o campo Duração da Consulta (inicializado com 15)
       observacao: "", // Novo estado para o campo Observação
+      isModalOpen: false, //Estado padrão do Modal de Paciente
     };
 
-  
     
 
     this.getAppointmentData = () => {
@@ -139,7 +135,16 @@ class AppointmentFormContainerBasic extends React.PureComponent {
     this.changeAppointment = this.changeAppointment.bind(this);
     this.commitAppointment = this.commitAppointment.bind(this);
   }
+  
+  openModal = () => {
+    this.setState({ isModalOpen: true });
+  };
 
+  componentDidMount() {
+    // Abra o modal assim que o componente for montado
+    this.openModal();
+  }
+  
   calculateEndDate(startDate, duration) {
     const endDate = new Date(startDate);
     endDate.setMinutes(startDate.getMinutes() + duration);
@@ -160,7 +165,7 @@ class AppointmentFormContainerBasic extends React.PureComponent {
 
   commitAppointment(type) {
     const { commitChanges } = this.props;
-    const { duracao } = this.state; // Obtenha a duração da consulta do estado
+  
     const appointment = {
       ...this.getAppointmentData(),
       ...this.getAppointmentChanges(),
@@ -201,7 +206,9 @@ class AppointmentFormContainerBasic extends React.PureComponent {
     };
 
     const isNewAppointment = appointmentData.id === undefined;
-    
+
+    const { isModalOpen } = this.state;
+
     const applyChanges = isNewAppointment
       ? () => this.commitAppointment("added")
       : () => this.commitAppointment("changed");
@@ -252,15 +259,18 @@ class AppointmentFormContainerBasic extends React.PureComponent {
       cancelAppointment();
     };
 
+
+  
+
     return (
       <AppointmentForm.Overlay
         visible={visible}
         target={target}
         fullSize
-        onHide={onHide}
-        style={{maxWidth: "37.5rem", borderRight:"solid 1px black"}}
+        onHide={onHide}   
+        style={{maxWidth: "37.5rem", borderRight:"solid 1px rgba(168,163,168,0.61)", paddingRight:"20px !important", boxshadow: "2px 2px 5px 1px rgba(168,163,168,0.61)"}}
       >
-        <StyledDiv   > 
+        <StyledDiv  style={{  margingRight:"20px !important"}} > 
           <div className={classes.header} style={{maxWidth: "35rem"}}>
             <IconButton
               className={classes.closeButton}
@@ -281,6 +291,13 @@ class AppointmentFormContainerBasic extends React.PureComponent {
                 size="small"
               />
 
+            </div>
+          
+            <div> {/* Ignorem essa puta gambiarra aqui, no fim é necessaria... */}
+            <a href="#" onClick={this.openModal} style={{display:"none !important"}}>
+                
+              </a>
+              {this.state.isModalOpen && <ModalPaciente openModal={this.openModal} />}
             </div>
            
             <div style={{ display: "flex", justifyContent: "space-between", marginTop: "8px", maxWidth: "35rem" }}>
@@ -505,7 +522,7 @@ export default class Demo extends React.PureComponent {
     startDate.setHours(horaInicio.getHours());
     startDate.setMinutes(horaInicio.getMinutes());
   
-    const endDate = this.calculateEndDate(startDate, duracao);
+    
   
     const appointment = {
       Paciente: paciente,
@@ -613,6 +630,8 @@ export default class Demo extends React.PureComponent {
     this.setState({ currentDate: newDate });
   }
 
+  
+
   render() {
     const {
       currentDate,
@@ -622,13 +641,13 @@ export default class Demo extends React.PureComponent {
       startDayHour,
       endDayHour,
     } = this.state;
-
+    
     console.log("Current Date:", this.state.currentDate);
     return (
       <LocalizationProvider dateAdapter={AdapterDateFns} >
-        <Paper>
-          <Scheduler data={data} height={640} locale="pt-BR">
-            <ViewState
+        <Paper >
+          <Scheduler data={data} height={680} locale="pt-BR"> 
+           <ViewState
               currentDate={currentDate}
               onCurrentDateChange={this.currentDateChange}
               locale="pt-BR"
@@ -693,7 +712,7 @@ export default class Demo extends React.PureComponent {
           </Dialog>
 
           <StyledFab
-            color="secondary"
+            color="primary"
             className={classes.addButton}
             onClick={() => {
               this.setState({ editingFormVisible: true });
