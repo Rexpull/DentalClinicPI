@@ -5,7 +5,6 @@ import * as React from "react";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-
 import { ViewState, EditingState } from "@devexpress/dx-react-scheduler";
 import {
   Scheduler,
@@ -98,6 +97,7 @@ const StyledDiv = styled("div")(({ theme }) => ({
   },
   [`& .${classes.button}`]: {
     marginLeft: theme.spacing(2),
+    color: "#4682B4",
   },
 }));
 const StyledFab = styled(Fab)(({ theme }) => ({
@@ -693,7 +693,7 @@ export default class Demo extends React.PureComponent {
           </Dialog>
 
           <StyledFab
-            color="secondary"
+            color="primary"
             className={classes.addButton}
             onClick={() => {
               this.setState({ editingFormVisible: true });
