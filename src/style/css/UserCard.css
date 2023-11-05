@@ -1,0 +1,26 @@
+/* Dentista */
+.feminino-background {
+    background: #7f7f7f;
+   
+    color: white; /* Cor de texto para Dentista */
+
+    padding: 8px;
+  }
+  
+  /* Secretária */
+  .masculino-background {
+    background: linear-gradient(to bottom, transparent, transparent 50%, rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0, 0.5));
+    background: #7f7f7f;
+
+    color: white; /* Cor de texto para Secretária */
+    padding: 8px;
+  }
+
+
+.Cardzinho{
+    box-shadow: 2px 2px 8px 0px rgba(0,0,0,0.37);
+-webkit-box-shadow: 2px 2px 8px 0px rgba(0,0,0,0.37);
+-moz-box-shadow: 2px 2px 8px 0px rgba(0,0,0,0.37);
+}
+
+

@@ -19,8 +19,8 @@ const Sidebar = ({children}) => {
             icon:<FaTh/>
         },
         {
-            path:"/app/about",
-            name:"About",
+            path:"/app/paciente",
+            name:"paciente",
             icon:<FaUserAlt/>
         },
         {
@@ -34,8 +34,8 @@ const Sidebar = ({children}) => {
             icon:<FaCommentAlt/>
         },
         {
-            path:"/app/product",
-            name:"Product",
+            path:"/app/Ajustes",
+            name:"ajuste",
             icon:<FaShoppingBag/>
         },
         {
