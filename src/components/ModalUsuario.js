@@ -58,6 +58,8 @@ import React, { useState, useEffect } from 'react';
       horaInicial: '12:00',
       horaFinal: '13:30',
     });
+    const [ativo, setAtivo] = useState(false);
+
 
     const openModal = () => {
       setIsOpen(true);
@@ -462,10 +464,19 @@ import React, { useState, useEffect } from 'react';
               <div className="modal-content">
                 <div className="modal-container">
                   <FormControl display="flex" flexDir="column" gap="4">
-                  <HStack spacing="4" className="tituloUsuario">
-                          <div >
+                  <HStack spacing="525" className="tituloUsuario">
+                       
                               <p className="titleFormUsuario">Cadastro de Usuario</p>
-                          </div>
+                              <FormControlLabel
+                                control={
+                                  <Switch
+                                    checked={ativo}
+                                    onChange={(e) => setAtivo(e.target.checked)}
+                                  />
+                                }
+                                label="Ativo"
+                                sx={{padding:'0px',margin:'0px'}}
+                              />
                       </HStack>
                     <div>
                       
