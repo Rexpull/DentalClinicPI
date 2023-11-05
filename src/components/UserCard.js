@@ -7,7 +7,8 @@ import Typography from '@mui/material/Typography';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faUserLarge,faPhone,faCheck,faXmark } from '@fortawesome/free-solid-svg-icons';
 import '../style/css/UserCard.css';
-import { Column } from 'devextreme-react/data-grid';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -86,7 +87,7 @@ function getColorByInitial(initial) {
   return defaultColor;
 }
 
-function UserCard({ user, onViewClick }) {
+function UserCard({ user, onViewClick,refreshUserList  }) {
   const [openConfirmationDialog, setOpenConfirmationDialog] = React.useState(false);
 
 
@@ -103,6 +104,14 @@ function UserCard({ user, onViewClick }) {
       .then((response) => {
         // Se a chamada da API for bem-sucedida, você pode realizar ações adicionais, se necessário.
         console.log(`Usuário reativado: ${user.nome}`);
+        
+        toast.success('Usuário reativado com sucesso', {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+        });
       })
       .catch((error) => {
         // Lidere com erros, por exemplo, exiba uma mensagem de erro ao usuário.
@@ -114,6 +123,13 @@ function UserCard({ user, onViewClick }) {
   const deleteUser = (user) => {
     // You can implement the logic to delete the user here
     console.log(`Deleting user: ${user.nome}`);
+    toast.success('Usuário excluído com sucesso', {
+      position: 'top-right',
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+    });
   };
 
   const backgroundClass = user.sexo === 'F' ? 'feminino-background' : 'masculino-background';

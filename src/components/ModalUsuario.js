@@ -1,4 +1,4 @@
-  import React, { useState } from "react";
+import React, { useState, useEffect } from 'react';
   import "devextreme/dist/css/dx.light.css";
   import "../style/css/ModalPaciente.css";
   import { FormControl, FormLabel, HStack } from "@chakra-ui/react";
@@ -7,6 +7,7 @@
   import Button from "@mui/material/Button";
   import Tabs from "@mui/material/Tabs";
   import Tab from "@mui/material/Tab";
+  import Switch from "@mui/material/Switch";
   import TextField from "@mui/material/TextField";
   import RadioGroup from "@mui/material/RadioGroup";
   import FormControlLabel from "@mui/material/FormControlLabel";
@@ -50,6 +51,13 @@
     const [acessoFinanceiro, setAcessoFinanceiro] = useState(false);
     const [acessoTratamento, setAcessoTratamento] = useState(false);
     const [acessoDocumento, setAcessoDocumento] = useState(false);
+    const [horarios, setHorarios] = useState({});
+    const [tempoPadraoConsulta, setTempoPadraoConsulta] = useState(30); // Add this line
+    const [horarioAlmocoFixo, setHorarioAlmocoFixo] = useState(false);
+    const [horariosAlmoco, setHorariosAlmoco] = useState({
+      horaInicial: '12:00',
+      horaFinal: '13:30',
+    });
 
     const openModal = () => {
       setIsOpen(true);
@@ -63,8 +71,99 @@
       setIsOpen(false);
     };
 
+    const handleHorarioAlmocoChange = (campo, valor) => {
+      setHorariosAlmoco({
+        ...horariosAlmoco,
+        [campo]: valor,
+      });
+    };
+
+    const handleHorarioAlmocoFixoChange = (event) => {
+      setHorarioAlmocoFixo(event.target.checked);
+    };
     
+    const handleHoraInicialChange = (dia, value) => {
+      if (horariosAlmoco) {
+        setHorarios({
+          ...horarios,
+          [dia]: {
+            ...horarios[dia],
+            horaInicial: value,
+          },
+        });
+      } else {
+        setHorarios({
+          ...horarios,
+          [dia]: {
+            ...horarios[dia],
+            horaInicial: horariosAlmoco ? value : null,
+          },
+        });
+      }
+    };
     
+    const handleHoraFinalChange = (dia, value) => {
+      if (horariosAlmoco) {
+        setHorarios({
+          ...horarios,
+          [dia]: {
+            ...horarios[dia],
+            horaFinal: value,
+          },
+        });
+      } else {
+        setHorarios({
+          ...horarios,
+          [dia]: {
+            ...horarios[dia],
+            horaFinal: horariosAlmoco ? value : null,
+          },
+        });
+      }
+    };
+
+    const handleTrabalhaNoDiaChange = (dia, value) => {
+      setHorarios({
+        ...horarios,
+        [dia]: {
+          ...horarios[dia],
+          trabalha: value,
+        },
+      });
+    };
+    
+
+    useEffect(() => {
+      // Função para buscar os dados da clínica da sua API
+      const fetchClinicaData = async () => {
+        try {
+          const response = await fetch('https://clinicapi-api.azurewebsites.net/Clinica/BuscarClinica/?id=4');
+          if (response.ok) {
+            const data = await response.json();
+            // Extrair a hora inicial e final dos dados da API
+            const { horaInicial, horaFinal } = data.retorno;
+            // Criar um objeto com os valores iniciais
+            const initialHorarios = {
+              Seg: { horaInicial, horaFinal },
+              Ter: { horaInicial, horaFinal },
+              Qua: { horaInicial, horaFinal },
+              Qui: { horaInicial, horaFinal },
+              Sex: { horaInicial, horaFinal },
+              Sab: { horaInicial, horaFinal },
+              Dom: { horaInicial, horaFinal },
+            };
+            setHorarios(initialHorarios);
+          } else {
+            console.error('Erro ao buscar os dados da clínica da API');
+          }
+        } catch (error) {
+          console.error('Erro ao buscar os dados da clínica da API:', error);
+        }
+      };
+      
+      // Chame a função para buscar os dados da clínica
+      fetchClinicaData();
+    }, []);
 
     const commissionFields = (
       <div style={{display:'flex', justifyContent:'center', flexDirection:'column', alignItems:'center',gap:'20px', padding:'20px'}}>
@@ -185,7 +284,112 @@
       </div>
     );
 
-    const officeHoursFields = <div>{/* Fields for office hours */}</div>;
+    const officeHoursFields = 
+    <div >
+      <table style={{ width: '100%', marginTop: '10px', borderCollapse: 'collapse', }}>
+      <thead style={{background: '#e9ecef', padding: '5px',marginBottom:'16px'}}> 
+        <tr>
+          <th ></th>
+          {Object.keys(horarios).map((dia) => (
+            <th key={dia}>
+              <label style={{ display: 'flex', alignItems: 'center'}}>
+                <Checkbox
+                  checked={horarios[dia].trabalha}
+                  onChange={(e) => handleTrabalhaNoDiaChange(dia, e.target.checked)}
+                />
+                <div style={{cursor:'pointer'}}>{dia}</div>
+              </label>
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Hora Inicial</td>
+          {Object.keys(horarios).map((dia) => (
+            <td key={dia}>
+              <div style={{ display: 'flex',marginTop:'12px',marginBottom:'20px' }}>
+                <TextField
+                  variant="standard"
+                  size="small"
+                  value={horarios[dia].horaInicial}
+                  onChange={(e) => handleHoraInicialChange(dia, e.target.value)}
+                  disabled={!horarios[dia].trabalha}
+                  style={{ width: '70px',marginLeft:'12px' }}
+                />
+              </div>
+            </td>
+          ))}
+        </tr>
+        <tr>
+          <td>Hora Final</td>
+          {Object.keys(horarios).map((dia) => (
+            <td key={dia}>
+              <div style={{ display: 'flex' }}>
+                <TextField
+                  variant="standard"
+                  size="small"
+                  value={horarios[dia].horaFinal}
+                  onChange={(e) => handleHoraFinalChange(dia, e.target.value)}
+                  disabled={!horarios[dia].trabalha}
+                  style={{ width: '70px',marginLeft:'12px'  }}
+                />
+              </div>
+            </td>
+          ))}
+        </tr>
+      </tbody>
+    </table>
+    <div style={{display:'flex',justifyContent:'start',alignItems:'end', gap:'40px'}}>
+    <div style={{ marginTop: '35px' }}>
+      <TextField
+            label="Tempo padrão para consulta (minutos)"
+            variant="outlined"
+            width="200px"
+            size="small"
+            value={tempoPadraoConsulta}
+            onChange={(e) => setTempoPadraoConsulta(e.target.value)}
+          />
+    </div>
+    <FormControlLabel
+      control={
+        <Switch
+          checked={horarioAlmocoFixo}
+          onChange={handleHorarioAlmocoFixoChange}
+        />
+      }
+      label="Horário de almoço fixo"
+    />
+    </div>
+    {horarioAlmocoFixo && ( // Renderize os campos de "Horário de Almoço" apenas se horarioAlmocoFixo estiver ativado
+      <>
+      <div style={{display:'flex', alignItems:'center', gap:'4px',marginTop:'15px'}}>
+        <div>
+          <TextField
+            label="Horário Inicial"
+            variant="outlined"
+            size="small"
+            value={horariosAlmoco.horaInicial}
+            onChange={(e) => handleHorarioAlmocoChange('horaInicial', e.target.value)}
+          />
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <p style={{ margin: '0 8px' }}>até</p>
+        </div>
+        <div>
+          <TextField
+            label="Horário Final"
+            variant="outlined"
+            size="small"
+            value={horariosAlmoco.horaFinal}
+            onChange={(e) => handleHorarioAlmocoChange('horaFinal', e.target.value)}
+          />
+        </div>
+        </div>
+      </>
+    )}
+    
+  </div>;
 
     async function enviarDadosUsuario() {
       const usuarioData = {
@@ -235,7 +439,7 @@
       } 
       return null;
     }
-
+  
     return (
       <>
         <Button

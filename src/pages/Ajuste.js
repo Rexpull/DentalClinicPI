@@ -51,18 +51,17 @@ function AjustesClinica() {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
-
+ 
 
   const handleTestClick = () => {
     console.log('Teste clicado'); // Adicione seu console.log aqui para depuração
      // Altera o estado para abrir o modal
   };
 
-
   const handleChangeTab = (event, newValue) => {
     setActiveTab(newValue);
   };
-
+  
 
   useEffect(() => {
     async function fetchUsers() {
@@ -81,7 +80,7 @@ function AjustesClinica() {
 
     fetchUsers();
   }, []);
-
+  
 
   useEffect(() => {
     async function fetchClinicaData() {
@@ -533,6 +532,7 @@ function AjustesClinica() {
               <UserCard
                 user={user}
                 onViewClick={(selectedUser) => setSelectedUser(selectedUser)}
+                
               />
             </Grid>
           ))}
