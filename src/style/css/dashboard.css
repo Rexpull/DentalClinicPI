@@ -1,0 +1,86 @@
+body{
+    background-color: rgba(245, 245, 245, 0.822);
+}
+
+.graficoSuperior{
+    background-color: aqua;
+    height: 50vh;
+}
+
+.posGrafic{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 2%;
+}
+
+.grafico1{
+    width: 95%;
+    height: 10vh;
+    padding-top: 1%;
+}
+
+.container1{
+    background-color: rgb(255, 255, 255);
+    width: 49%;
+    height: 41vh;
+    border-radius: 10px;
+    box-shadow: 1px 1px 4px rgb(146, 146, 146);
+}
+
+.posGrafic2{
+    background-color:  rgba(245, 245, 245, 0.822);
+    height: 40vh;
+    padding-top: 2%;
+}
+
+.container2{
+    background-color: rgb(255, 255, 255);
+    height: 38vh;
+    border-radius: 10px;
+    box-shadow: 1px 1px 4px rgb(146, 146, 146);
+}
+
+.Info{
+    display: flex;
+    justify-content: space-between;
+}
+
+.iconsTop{
+    width: 40%;
+    height: 40%;
+}
+
+.infoAtraso{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.subInfo{
+    display: flex;
+    flex-direction: column;
+}
+
+.debitos{
+    font-size: 14px;
+}
+
+.valorDebitos{
+    color: red;
+}
+
+.valorOrcamento{
+    color: rgb(255, 190, 0);
+}
+
+.header{
+    display: flex;
+    justify-content: space-around;
+
+}
+
+.iconPlan{
+    width: 20%;
+    height: 20%;
+}
