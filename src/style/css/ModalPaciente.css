@@ -1,4 +1,24 @@
+:root {
+  --body_background: white;  
+  --body_color: black;
+  --link_color: black;
+  --box_shadow: 4px 0 5px rgba(0, 0, 0, 0.4);
+  --color: black;
+  --border_color: black;
+}
 
+[data-theme="dark"]{
+  --body_background: #343434;
+  --body_color: white;
+  --link_color: white;
+  --box_shadow: 4px 0 5px rgba(0, 0, 0, 0.4);
+  --color: white;
+  --border_color: white;
+}
+
+.a-linha{
+  color: var(--color) !important;
+}
 
 .modal-overlay {
   position: fixed;
@@ -9,13 +29,8 @@
   background-color: rgba(0, 0, 0, 0.5); /* fundo escurecido com transparência */
   display: flex;
   justify-content: center;
-  flex-direction: column;
   align-items: center;
   z-index: 1000; /* z-index alto para ficar acima de outros elementos */
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-  box-shadow: 0 11px 15px -7px #0003, 0 24px 38px 3px #00000024, 0 9px 46px 8px #0000001f;
-  border-radius: 4px ;
 }
 
 /* Estilo do conteúdo do modal */
@@ -24,15 +39,13 @@
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-  max-width: 90%;
-  width: 70%;
-  max-height: 90%;
-  overflow-y: auto;
+  max-width: 90%; /* Largura máxima responsiva */
+  width: 70%; /* 100% de largura em dispositivos pequenos */
+  max-height: 90%; /* Altura máxima responsiva */
+  overflow-y: auto; /* Rolagem vertical se o conteúdo for longo */
   text-align: center;
-  position: relative; /* Add this line */
-  margin-bottom: 5px;
-  padding-bottom: 0px !important;
 }
+
 .positionButton {
   display: flex;
   justify-content: flex-end;
@@ -70,24 +83,7 @@
 .titleForm {
   font-size: 21px;
   font-weight: 600;
-  font: 400 22px/32px Roboto,Helvetica Neue,sans-serif;
-  letter-spacing: normal;
-  margin: 0 0 16px;
-  color: #000;
 }
-
-
-.titleFormUsuario {
-  font-size: 21px;
-  font-weight: 600;
-  font: 400 22px/32px Roboto,Helvetica Neue,sans-serif;
-  letter-spacing: normal;
-  margin: 0 0 16px;
-  color: #000;
-  
-  
-}
-
 
 FormLabel {
   font-weight: 100;
@@ -97,93 +93,4 @@ textarea{
   width: 100%;
   height: 10vh;
   border: 1px,solid,#000;
-}
-
-
-.fixed-buttons {
-  position: sticky;
-  bottom: 0; /* Fixa na parte inferior */
-  background-color: #fff;
-  display: flex;
-  justify-content:  flex-end;
-  padding: 18px 0px;
-  min-height: 52px;
-  align-items: center;
-  z-index: 1;
-}
-
-.submit-modal{
-  background-color: #50ae54 !important;
-  box-shadow: 0 3px 1px -2px #0003, 0 2px 2px #00000024, 0 1px 5px #0000001f;
-  color: #fff !important;
-  box-sizing: border-box;
-    position: relative;
-    -webkit-user-select: none;
-    user-select: none;
-    cursor: pointer;
-    outline: none;
-    border: none;
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
-    display: inline-block;
-    white-space: nowrap;
-    text-decoration: none;
-    vertical-align: baseline;
-    text-align: center;
-    margin: 0;
-    min-width: 64px;
-    line-height: 36px;
-    padding: 0 16px;
-    border-radius: 4px;
-    overflow: visible;
-    transform: translate3d(0, 0, 0);
-    transition: background 400ms cubic-bezier(0.25, 0.8, 0.25, 1),box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
-    text-transform: uppercase;
-    font-family: Roboto,Helvetica Neue,sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    margin-left: 8px;
-}
-
-.cancel-modal{
-  box-sizing: border-box;
-  position: relative;
-  -webkit-user-select: none;
-  user-select: none;
-  cursor: pointer;
-  outline: none;
-  border: none;
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
-  display: inline-block;
-  white-space: nowrap;
-  text-decoration: none;
-  vertical-align: baseline;
-  text-align: center;
-  margin: 0;
-  min-width: 64px;
-  line-height: 36px;
-  padding: 0 16px;
-  border-radius: 4px;
-  overflow: visible;
-  text-transform: uppercase;    
-  font-family: Roboto,Helvetica Neue,sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  color: #000;
-  background: transparent;
-  margin-right: 10px !important;
-}
-
-.accordionTitle{
-  color:'#696969';  
-  padding:1px 4px;
-  font-Weight:'600'
-}
-
-.accordionTitle:hover{
-  outline: none;
-  
-}
-#panel1a-header:hover{
-  outline: none;
-  background-color: #0000000A;
 }
