@@ -7,57 +7,92 @@ import {
     FaShoppingBag,
     FaTh, FaThList, FaUserAlt,
 } from 'react-icons/fa'
-import {NavLink} from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import { ReactComponent as Sun } from "./Sun.svg";
+import { ReactComponent as Moon } from "./Moon.svg";
 
-const Sidebar = ({children}) => {
-    const[isOpen ,setIsOpen] = useState(false);
-    const toggle = () => setIsOpen (!isOpen);
+const Sidebar = ({ children }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const toggle = () => setIsOpen(!isOpen);
+
+    const setDarkMode = () =>{
+        document.querySelector("body").setAttribute('data-theme', 'dark')
+        localStorage.setItem("selectedTheme", "dark")
+    }; 
+
+    const setLightMode = () =>{
+        document.querySelector("body").setAttribute('data-theme', 'light')
+        localStorage.setItem("selectedTheme", "light")
+    };
+
+    const selectedTheme = localStorage.getItem("selectedTheme");
+
+    if (selectedTheme === "dark"){
+        setDarkMode();
+    };
+
+    const toggleTheme = (e) => {
+        if (e.target.checked) setDarkMode();
+        else setLightMode()
+    };
+
     const menuItem = [
         {
-            path:"/app/dashboard",
-            name:"dashboard",
-            icon:<FaTh/>
+            path: "/app/dashboard",
+            name: "dashboard",
+            icon: <FaTh />
         },
         {
-            path:"/app/paciente",
-            name:"paciente",
-            icon:<FaUserAlt/>
+            path: "/app/about",
+            name: "About",
+            icon: <FaUserAlt />
         },
         {
-            path:"/app/analytics",
-            name:"Analytics",
-            icon:<FaRegChartBar/>
+            path: "/app/analytics",
+            name: "Analytics",
+            icon: <FaRegChartBar />
         },
         {
-            path:"/app/comment",
-            name:"Comment",
-            icon:<FaCommentAlt/>
+            path: "/app/comment",
+            name: "Comment",
+            icon: <FaCommentAlt />
         },
         {
-            path:"/app/Ajustes",
-            name:"ajuste",
-            icon:<FaShoppingBag/>
+            path: "/app/product",
+            name: "Product",
+            icon: <FaShoppingBag />
         },
         {
-            path:"/app/agenda",
-            name:"agenda",
-            icon:<FaThList/>
+            path: "/app/agenda",
+            name: "agenda",
+            icon: <FaThList />
         },
     ]
     return (
         <div className="container">
-            <div style={{width: isOpen ? "300px" : "50px"}} className="sidebar">
+            <div style={{ width: isOpen ? "300px" : "50px" }} className="sidebar">
                 <div className="top_section">
-                    <h1 style={{display: isOpen ? "block" : "none"}} className="logo">Logo</h1>
-                    <div style={{marginLeft: isOpen ? "120px" : "0px"}} className="bars">
-                        <FaBars onClick={toggle}/>
+                    <div className='dark_mode'style={{ display: isOpen ? "block" : "none" }}>
+                        <input
+                            className='dark_mode_input'
+                            type='checkbox'
+                            id='darkmode-toggle'
+                            onChange={toggleTheme}
+                            defaultChecked={selectedTheme === "dark"}
+                        />
+                        <label className='dark_mode_label' for='darkmode-toggle'>
+
+                        </label>
+                    </div>
+                    <div style={{ marginLeft: isOpen ? "120px" : "0px" }} className="bars">
+                        <FaBars onClick={toggle} />
                     </div>
                 </div>
                 {
-                    menuItem.map((item, index)=>(
+                    menuItem.map((item, index) => (
                         <NavLink to={item.path} key={index} className="link" activeclassName="active">
                             <div className="icon">{item.icon}</div>
-                            <div style={{display: isOpen ? "block" : "none"}} className="link_text">{item.name}
+                            <div style={{ display: isOpen ? "block" : "none" }} className="link_text">{item.name}
                             </div>
                         </NavLink>
                     ))

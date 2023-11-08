@@ -1,0 +1,140 @@
+:root {
+    --body_background: white;  
+    --body_color: black;
+    --link_color: black;
+    --box_shadow: 4px 0 5px rgba(0, 0, 0, 0.4);
+    --color: black;
+    --border_color: black;
+  }
+  
+  [data-theme="dark"]{
+    --body_background: #343434;
+    --body_color: white;
+    --link_color: white;
+    --box_shadow: 4px 0 5px rgba(0, 0, 0, 0.4);
+    --color: white;
+    --border_color: white;
+  }
+
+.css-17r3ykr .MainLayout-background {
+    background-color: var(--body_background) !important;
+    border-color: var(--border_color) !important;
+}
+.css-15fo4yt {
+    background-color: var(--body_background) !important;
+    color: blue !important;
+}
+.css-wjks0j.Layout-flexRow  {
+    background-color: var(--body_background) !important;
+    border-color: blue !important;
+}
+.papers{
+    background-color: var(--body_background) !important;
+    border-color: var(--border_color) !important;
+}
+.css-4plepo .MainLayout-background{
+    background-color: var(--body_background) !important;
+}
+
+.css-1675apn-MuiTableCell-root .Cell-dayOfMonth{
+    color: var(--color) !important;
+}
+
+.css-1675apn-MuiTableCell-root .Cell-dayOfWeek{
+    color: var(--color) !important;
+}
+
+.css-vcheuy .Layout-cell{
+    background-color: var(--body_background) !important;
+}
+
+.css-1e41c9a-MuiTypography-root.TitleCell-title{
+    background-color: var(--body_background) !important;
+    color: var(--color) !important;
+}
+
+.css-1fbp63r .Label-text{
+    color: var(--color) !important;
+}
+
+.css-xd4oto-MuiTableCell-root.TickCell-cell{
+    background-color:  var(--body_background) !important;
+}
+
+.css-vnscjq-MuiButtonBase-root-MuiButton-root{
+    color: var(--color) !important;
+}
+
+.css-xya8j6-MuiButtonBase-root-MuiButton-root.TodayButton-button:first-of-type{
+    color: var(--color) !important;
+    border-color: var(--border_color) !important;
+}
+
+.css-i4bv87-MuiSvgIcon-root{
+    color: var(--color) !important;
+}
+
+.css-1d98kcf-MuiButtonBase-root-MuiFab-root.Demo-addButton{
+    background-color:  var(--body_background) !important;
+}
+
+.css-hfutr2-MuiSvgIcon-root-MuiSelect-icon{
+    color: var(--color) !important;
+}
+
+.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input{
+    color: var(--color) !important;
+}
+
+.css-1d3z3hw-MuiOutlinedInput-notchedOutline{
+    border-color: var(--border_color) !important;
+}
+
+.css-4t3x6l-MuiPaper-root-MuiDrawer-paper{
+    background-color: var(--body_background) !important;
+}
+
+.css-1wy01w9 .Demo-wrapper{
+    color: var(--color) !important;
+}
+
+.css-1rwt2y5-MuiButtonBase-root-MuiButton-root{
+    border-color: var(--border_color) !important;
+    color: var(--color) !important;
+}
+
+.css-1rwt2y5-MuiButtonBase-root-MuiButton-root:hover{
+    background-color: rgba(147, 145, 145, 0.4) !important;
+}
+
+/* Campos mantem em branco quando focados */
+.css-1jy569b-MuiFormLabel-root-MuiInputLabel-root.Mui-focused {
+    color: var(--color) !important;
+}
+
+/* Observação, Profissional, Consultorio */
+.css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root
+{
+    color: var(--color) !important;
+}
+
+/* Paciente */
+.css-1pysi21-MuiFormLabel-root-MuiInputLabel-root{
+    color: var(--color) !important;
+}
+
+/* Duração Label */
+.css-1jy569b-MuiFormLabel-root-MuiInputLabel-root{
+    color: var(--color) !important;
+}
+
+/* Ficar branco nas escritas */
+.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input{
+    color: var(--color) !important;
+}
+.css-1n4twyu-MuiInputBase-input-MuiOutlinedInput-input{
+    color: var(--color) !important;
+}
+.css-1sqnrkk-MuiInputBase-input-MuiOutlinedInput-input{
+    color: var(--color) !important;
+}
