@@ -6,8 +6,7 @@ import Dashboard from './pages/Dashboard';
 import Pacientes from './pages/pacientes';
 import Comment from './pages/Comment';
 import Analytics from './pages/Analytics';
-
-import Demo from './pages/agenda';
+import Demo from './pages/Agenda';
 import Login from './pages/Login';
 import AjustesClinica from './pages/Ajuste';
 
