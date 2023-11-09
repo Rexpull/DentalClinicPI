@@ -1,4 +1,26 @@
 
+:root {
+  --body_background: white;  
+  --body_color: black;
+  --link_color: black;
+  --box_shadow: 4px 0 5px rgba(0, 0, 0, 0.4);
+  --color: black;
+  --border_color: black;
+}
+
+[data-theme="dark"]{
+  --body_background: #343434;
+  --body_color: white;
+  --link_color: white;
+  --box_shadow: 4px 0 5px rgba(0, 0, 0, 0.4);
+  --color: white;
+  --border_color: white;
+}
+
+.a-linha{
+  color: var(--color) !important;
+}
+
 
 .modal-overlay {
   position: fixed;
@@ -54,7 +76,9 @@
   border: none;
   cursor: pointer;
 }
-
+.css-1s3wj9k-MuiButtonBase-root-MuiFab-root{
+  text-transform: none !important;
+}
 .close-button:hover {
   background-color: #aaaaaa;
 }
@@ -89,9 +113,6 @@
 }
 
 
-FormLabel {
-  font-weight: 100;
-}
 
 textarea{
   width: 100%;
@@ -168,7 +189,7 @@ textarea{
   font-family: Roboto,Helvetica Neue,sans-serif;
   font-size: 14px;
   font-weight: 700;
-  color: #000;
+  color: #000 !important;
   background: transparent;
   margin-right: 10px !important;
 }

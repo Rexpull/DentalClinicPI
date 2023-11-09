@@ -34,7 +34,8 @@ function Modal() {
   const [cpfError, setCPFError] = useState(false);
   const [nomePaciente, setNomePaciente] = useState("");
   const [dataNascimentoPaciente, setDataNascimentoPaciente] = useState("2023-01-01");
-  
+  const [responsavelObrigatorio, setResponsavelObrigatorio] = useState(false);
+
   async function enviarDadosPaciente() {
     const siglaUF = estadosSiglas[selectedUF] || "AA";
     const pacienteData = {
@@ -82,7 +83,21 @@ function Modal() {
     // Adicione o mapeamento completo aqui
   ];
   
-  
+  const calculateAge = (date) => {
+    const today = new Date();
+    const birthDate = new Date(date);
+    const age = today.getFullYear() - birthDate.getFullYear();
+    const month = today.getMonth() - birthDate.getMonth();
+    if (month < 0 || (month === 0 && today.getDate() < birthDate.getDate())) {
+      return age - 1;
+    }
+    return age;
+  };
+
+  const checkResponsavelObrigatorio = (dataNascimento) => {
+    const idade = calculateAge(dataNascimento);
+    setResponsavelObrigatorio(idade < 18);
+  };
 
   const openModal = () => {
     setIsOpen(true);
@@ -330,7 +345,9 @@ function Modal() {
                 <HStack spacing="4" mt={15}>
                   <div className="titulo">
                     <p className="titleForm">
-                      Dados do responsável <small>(opcional)</small>
+                      Dados do responsável <small>{responsavelObrigatorio
+              ? "(obrigatório)"
+              : "(opcional)"}</small>
                     </p>
                   </div>
                 </HStack>

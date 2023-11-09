@@ -21,24 +21,35 @@ import IconButton from '@mui/material/IconButton';
 import InfoIcon from '@mui/icons-material/Info';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import "../style/css/paciente.css";
+import ModalPaciente from "../components/ModalPaciente";
 
 
 const URL = 'https://clinicapi-api.azurewebsites.net/paciente/ListarPacientes';
 const DELETE_URL = 'https://clinicapi-api.azurewebsites.net/Paciente/DeletarPaciente';
 
 function Pacientes() {
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [columns] = useState([
+    { name: 'sexo', title: 'Sexo', getCellValue: row => (row.sexo === 'F' ? 
+    <AccountCircleIcon sx={{border:'3px solid pink' ,padding:'0px',borderRadius:'50px', width:'50px',height:'50px'}} /> : 
+    <AccountCircleIcon sx={{border:'3px solid blue' ,padding:'0px',borderRadius:'50px', width:'50px',height:'50px'}}/>) },
     { name: 'nome', title: 'Nome' },
-    { name: 'sexo', title: 'Sexo' },
     { name: 'telefone', title: 'Telefone' },
     { name: 'cpf', title: 'CPF' },
     { name: 'email', title: 'Email' },
-    { name: 'actions', title: 'Ações' },
+    { name: 'actions', title: 'Ações'   },
+   
   ]);
 
   const [rows, setRows] = useState([]);
@@ -49,11 +60,14 @@ function Pacientes() {
   const [isLoading, setIsLoading] = useState(true);
   const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false);
   const [patientToDeleteId, setPatientToDeleteId] = useState(null);
+  const [isModalPacienteOpen, setIsModalPacienteOpen] = useState(false);
+
 
   const getQueryString = () => (
     `${URL}?take=${pageSize}&skip=${pageSize * currentPage}`
   );
 
+  
   const loadData = () => {
     const queryString = getQueryString();
     if (queryString !== lastQuery) {
@@ -77,11 +91,11 @@ function Pacientes() {
               cpf: item.cpf,
               email: item.email,
               actions: (
-                <div>
+                <div >
                   <IconButton color="primary" onClick={() => handleEdit(item)}>
                     <InfoIcon />
                   </IconButton>
-                  <IconButton color="secondary" onClick={() => handleDelete(item.id)}>
+                  <IconButton color="danger" onClick={() => handleDelete(item.id)}>
                     <DeleteIcon />
                   </IconButton>
                 </div>
@@ -103,6 +117,10 @@ function Pacientes() {
 
   const handleEdit = (item) => {
     // Implemente a lógica para editar o item aqui
+  };
+
+  const openModalPaciente = () => {
+    setIsModalPacienteOpen(true);
   };
 
   const handleDelete = (id) => {
@@ -203,7 +221,7 @@ function Pacientes() {
           <IntegratedPaging />
           <Table />
           <TableHeaderRow showSortingControls />
-          <Toolbar />
+          <Toolbar /> {/* Adicione a Toolbar para a barra de ferramentas */}
           <SearchPanel />
           <PagingPanel
             pageSizes={[9, 20, 50, 100]}
@@ -216,18 +234,31 @@ function Pacientes() {
         open={isDeleteConfirmationOpen}
         onClose={() => handleDeleteConfirmation(false)}
       >
-        <DialogTitle>Tem certeza que deseja excluir?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Tem certeza de que deseja excluir este registro?
+          </DialogContentText>
+        </DialogContent>
         <DialogActions>
-          <Button onClick={() => handleDeleteConfirmation(false)} color="primary">
+          <Button onClick={() => handleDeleteConfirmation(false)} color="error">
             Não
           </Button>
-          <Button onClick={() => handleDeleteConfirmation(true)} color="primary">
+          <Button onClick={() => handleDeleteConfirmation(true)} color="primary"  variant="contained">
             Sim
           </Button>
         </DialogActions>
       </Dialog>
       <ToastContainer /> {/* Toastify container */}
-    </Paper>
+      
+ 
+    <Fab color="success" aria-label="add" size='medium' onClick={openModalPaciente} sx={{position:'absolute', left:'1%',top:'7px'}}>
+      <AddIcon />
+      <ModalPaciente open={isModalPacienteOpen} onClose={() => setIsModalPacienteOpen(false)} sx={{color:'black'}}/>
+    </Fab>
+    
+      
+    </Paper >
+   
   );
 }
 

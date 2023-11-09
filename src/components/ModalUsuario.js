@@ -29,6 +29,7 @@ import React, { useState, useEffect } from 'react';
   import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
   import { faLayerGroup,faIdCardClip } from '@fortawesome/free-solid-svg-icons';
 
+
   function ModalUsuario() {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedTab, setSelectedTab] = React.useState(0);
@@ -58,6 +59,7 @@ import React, { useState, useEffect } from 'react';
       horaInicial: '12:00',
       horaFinal: '13:30',
     });
+    const [horarioAtendimentoVisible, setHorarioAtendimentoVisible] = useState(false); 
     const [ativo, setAtivo] = useState(false);
 
 
@@ -133,7 +135,28 @@ import React, { useState, useEffect } from 'react';
         },
       });
     };
-    
+
+    const handlePerfilChange = (e) => {
+      const selectedPerfil = e.target.value;
+      setPerfil(selectedPerfil);
+  
+      // Defina as permissões com base no perfil selecionado
+      if (selectedPerfil === "Dentista") {
+        setHorarioAtendimentoVisible(true);
+        setAcessoAjustes(true);
+        setAcessoDashboard(true);
+        setAcessoFinanceiro(true);
+        setAcessoTratamento(true);
+        setAcessoDocumento(true);
+      } else if (selectedPerfil === "Secretário(a)") {
+        setHorarioAtendimentoVisible(false);
+        setAcessoAjustes(false);
+        setAcessoDashboard(false);
+        setAcessoFinanceiro(false);
+        setAcessoTratamento(false);
+        setAcessoDocumento(false);
+      }
+    };
 
     useEffect(() => {
       // Função para buscar os dados da clínica da sua API
@@ -191,17 +214,18 @@ import React, { useState, useEffect } from 'react';
         />
        <FormControl>
        
-        <Select
+        <TextField
           size="small"
           fullWidth
-          sx={{ width: '770px', color: 'black' }}
+          select
+          sx={{ width: '790px', color: 'black' }}
           value={selectedCommissionOption}
           onChange={(e) => setSelectedCommissionOption(e.target.value)}
-          helpertext='teste'
+          label='Quando você paga o profissional?'
         >
           <MenuItem value={"Tratamento Finalizado"}>Tratamento Finalizado</MenuItem>
           <MenuItem value={"Débito recebido do paciente"}>Débito recebido do paciente</MenuItem>
-        </Select>
+        </TextField>
       </FormControl>
       </div>
     );
@@ -393,50 +417,80 @@ import React, { useState, useEffect } from 'react';
     
   </div>;
 
-    async function enviarDadosUsuario() {
-      const usuarioData = {
-        nome: nomeUsuario,
-        senha,
-        telefone,
-        email,
-        sexo,
-        perfil,
-        endereco: {
-          rua,
-          bairro,
-          cidade,
-          cep,
-        },
-        horariosAtendimento: {
-          // Adicione os campos de horários de atendimento aqui
-        },
-        comissao: {
-          valorPorcentagem,
-          salarioBruto,
-        },
+const enviarDadosUsuario = async () => {
+  // Crie um objeto com os dados do usuário a serem enviados para a API
+
+  const horariosAtendimento = [];
+  Object.keys(horarios).forEach((dia) => {
+    if (horarios[dia].trabalha) {
+      const tempoConsulta = `00:${tempoPadraoConsulta}:00`;
+      const horario = {
+        horaInicial: horarios[dia].horaInicial,
+        horaFinal: horarios[dia].horaFinal,
+        almocoInicio: horarioAlmocoFixo ? `${horariosAlmoco.horaInicial}:00` : '00:00:00',
+        almocoFinal: horarioAlmocoFixo ? `${horariosAlmoco.horaFinal}:00`  : '00:00:00',
+        tempoConsulta,
+        dia,
       };
-
-      console.log("Dados do usuário enviados para a API:", usuarioData);
-
-      try {
-        const response = await axios.post("URL_DA_API", usuarioData);
-
-        if (response.status === 200) {
-          console.log("deu boa");
-        } else {
-          // Lide com outros casos, se necessário
-        }
-      } catch (error) {
-        console.error("Erro ao enviar os dados do usuário:", error);
-      }
+      horariosAtendimento.push(horario);
     }
+  });
 
+  const usuarioData = {
+    sexo: sexo === 'Masculino' ? 'M' : 'F',
+    telefone,
+    email,
+    nomeUsuario,
+    nome: nomeUsuario, // O nome do usuário parece ser duplicado
+    senha,
+    ativo: true, // Sempre 1 na criação
+    fotoUrl: 'string', // Substitua 'string' pela URL da foto, se aplicável
+    endereco: {
+      cep: null,
+      cidade: null,
+      rua: null,
+      bairro: null,
+      complemento: null,
+      numero: 0,
+      uf: selectedUF ? selectedUF : 'MG', 
+    },
+    acesso: {
+      menuAjustes: acessoAjustes,
+      menuDashboard: acessoDashboard,
+      menuFinanceiro: acessoFinanceiro,
+      agendaCompleta: true, // Defina o valor apropriado
+      criarDocumento: acessoDocumento,
+      criarTratamento: acessoTratamento,
+      descricao: perfil , 
+    },
+    horarioAtendimento: horariosAtendimento,
+    salario: {
+      porcentagemComissao: '12', // Certifique-se de que valorPorcentagem seja um número
+      tipoPagamento: selectedCommissionOption === "Tratamento Finalizado",
+      salarioBruto: '1200', // Certifique-se de que salarioBruto seja um número
+      tipoFuncionario: 0, // Defina o valor apropriado
+    },
+  };
+
+  try {
+    // Substitua 'URL_DA_API' pela URL da sua API
+    const response = await axios.post("https://clinicapi-api.azurewebsites.net/Usuario/CriarUsuario", usuarioData);
+
+    if (response.status === 200) {
+      console.log("Dados do usuário enviados com sucesso!");
+    } else {
+      // Lide com outros casos, se necessário
+    }
+  } catch (error) {
+    console.error("Erro ao enviar os dados do usuário:", error);
+  }
+};
     function RenderTabFields() {
       if (selectedTab === 0) {
         return permissionFields;
       } else if (selectedTab === 1) {
         return commissionFields;
-      } else if (selectedTab === 2) {
+      } else if (selectedTab === 2 && horarioAtendimentoVisible) {
         return officeHoursFields;
       } 
       return null;
@@ -464,19 +518,11 @@ import React, { useState, useEffect } from 'react';
               <div className="modal-content">
                 <div className="modal-container">
                   <FormControl display="flex" flexDir="column" gap="4">
-                  <HStack spacing="525" className="tituloUsuario">
-                       
-                              <p className="titleFormUsuario">Cadastro de Usuario</p>
-                              <FormControlLabel
-                                control={
-                                  <Switch
-                                    checked={ativo}
-                                    onChange={(e) => setAtivo(e.target.checked)}
-                                  />
-                                }
-                                label="Ativo"
-                                sx={{padding:'0px',margin:'0px'}}
-                              />
+                  <HStack spacing="*-m  " className="tituloUsuario">
+                        <div style={{ position: "relative" }}>
+                          <p className="titleFormUsuario">Cadastro de Usuário</p>
+                          
+                        </div>
                       </HStack>
                     <div>
                       
@@ -520,9 +566,9 @@ import React, { useState, useEffect } from 'react';
                         </InputMask>
                       </HStack>
 
-                      <HStack spacing="15" mb={25}>
+                      <HStack spacing="15" mb={5}>
                         <TextField
-                          label="Email"
+                          label="E-mail"
                           variant="outlined"
                           fullWidth
                           size="small"
@@ -532,35 +578,37 @@ import React, { useState, useEffect } from 'react';
                         />
 
                        
-                          <FormLabel>Quanto?</FormLabel>
-                          <Select
+                      
+                          <TextField
+                          variant='outlined'
                             size="small"
-                            label="Perfil"
+                            label="Selecione uma Permissão"
                             fullWidth
+                            select
                             value={perfil}
-                            onChange={(e) => setPerfil(e.target.value)}
+                            onChange={handlePerfilChange}
                             required
-                            helperText="Pleas"
+                            
                           >
                             <MenuItem value={"Dentista"}>Dentista</MenuItem>
                             <MenuItem value={"Secretário(a)"}>Secretário(a)</MenuItem>
-                          </Select>
+                          </TextField>
                       
                         <FormControl
                           component="fieldset"
-                          style={{ display: "flex" }}
+                          style={{ display: "flex",flexDirection:'column', marginLeft:'70px',marginRight:'30px' }}
                         >
                           <FormLabel
                             component="legend"
-                            ml={75}
+                            ml={140}
                             mr={16}
-                            fontSize={20}
-                            pb={2}
-                            color="#000"
+                            fontSize={10}
+                            
+                            color="#696969"
                             display="flex"
                             alignItems="center"
                           >
-                            Sexo
+                            Não obrigatório *
                           </FormLabel>
                           <RadioGroup
                             value={sexo}
@@ -570,17 +618,22 @@ import React, { useState, useEffect } from 'react';
                               display: "flex",
                               flexDirection: "row",
                               flexWrap: "nowrap",
+                              fontSize:'16px',
+                              marginBottom:'15px'
+                      
                             }}
                           >
                             <FormControlLabel
                               value="Masculino"
                               control={<Radio />}
                               label="Masculino"
+                              sx={{fontSize:'16px'}}
                             />
                             <FormControlLabel
                               value="Feminino"
                               control={<Radio />}
                               label="Feminino"
+                              sx={{fontSize:'16px'}}
                             />
                           </RadioGroup>
                         </FormControl>
@@ -618,14 +671,16 @@ import React, { useState, useEffect } from 'react';
                             }}
                           />
                           
-                          <Tab
-                            label="Horários de Atendimento"
-                            sx={{
-                              fontFamily: "Roboto,Helvetica Neue,sans-serif",
-                              fontSize: "14px",
-                              fontWeight: "700",
-                            }}
-                          />
+                          {horarioAtendimentoVisible && (
+                            <Tab
+                              label="Horários de Atendimento"
+                              sx={{
+                                fontFamily: "Roboto,Helvetica Neue,sans-serif",
+                                fontSize: "14px",
+                                fontWeight: "700",
+                              }}
+                            />
+                          )}
                         </Tabs>
                       </GroupItem>
                     </Form>
@@ -637,7 +692,7 @@ import React, { useState, useEffect } from 'react';
                       Fechar
                     </Button>
                     <Button onClick={enviarDadosUsuario} className="submit-modal">
-                      Salvar
+                      Salvar e Criar
                     </Button>
                   </div>
                 </div>
