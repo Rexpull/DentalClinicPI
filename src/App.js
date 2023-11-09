@@ -3,13 +3,13 @@ import React from 'react';
 import { BrowserRouter, Route, Routes, Outlet } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
-import About from './pages/About';
+import Pacientes from './pages/pacientes';
 import Comment from './pages/Comment';
 import Analytics from './pages/Analytics';
-import Product from './pages/Product';
-import Demo from './pages/Agenda';
-import Login from './pages/Login';
 
+import Demo from './pages/agenda';
+import Login from './pages/Login';
+import AjustesClinica from './pages/Ajuste';
 
 const App = () => {
   return (
@@ -27,11 +27,11 @@ const App = () => {
           >
             {/* Remova a barra inicial em /dashboard */}
             <Route path="dashboard" element={<Dashboard />} />
-            <Route path="about" element={<About />} />
+            <Route path="paciente" element={<Pacientes />} />
             <Route path="comment" element={<Comment />} />
             <Route path="analytics" element={<Analytics />} />
-            <Route path="product" element={<Product />} />
-            <Route path="Agenda" element={<Demo />} />
+            <Route path="ajustes" element={<AjustesClinica />} />
+            <Route path="agenda" element={<Demo />} />
           </Route>
         </Routes>
       </BrowserRouter>
