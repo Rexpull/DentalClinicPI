@@ -4,6 +4,9 @@
   --link_color: black;
   --box_shadow: 4px 0 5px rgba(0, 0, 0, 0.4);
   --color: black;
+  --cor-do-botao-ativo: #00BFFF;
+  --cor-do-botao-padrao: #ebebeb;
+  --cor_background_div: #feea98;
 }
 
 [data-theme="dark"]{
@@ -12,6 +15,9 @@
   --link_color: white;
   --box_shadow: 4px 0 5px rgba(0, 0, 0, 0.4);
   --color: white;
+  --cor-do-botao-ativo: #0000CD;
+  --cor-do-botao-padrao: #75787e;
+  --cor_background_div: #FFA500;
 }
 
 * {

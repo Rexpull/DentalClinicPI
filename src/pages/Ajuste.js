@@ -12,6 +12,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ModalUsuario from '../components/ModalUsuario';
 import UserCard from '../components/UserCard';
+import '../style/css/ajuste.css';
 
 const initialFormData = {
   nome: '',
@@ -321,7 +322,7 @@ function AjustesClinica() {
               />
             </Grid>
             <Grid item xs={6}>
-              <TextField
+              <TextField 
                 name="horaFinal"
                 label="Horário final da clínica"
                 variant="outlined"

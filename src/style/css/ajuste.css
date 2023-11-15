@@ -1,0 +1,69 @@
+:root {
+    --body_background: white;  
+    --body_color: black;
+    --link_color: black;
+    --box_shadow: 4px 0 5px rgba(0, 0, 0, 0.4);
+    --color: black;
+    --cor-do-botao-ativo: #00BFFF;
+    --cor-do-botao-padrao: #ebebeb;
+    --cor_background_div: #feea98;
+    --cor-do-botao-pressionado: #75787e;
+    --cor-do-botao-alternativo: #bfc3c1;
+  }
+  
+  [data-theme="dark"]{
+    --body_background: #343434;
+    --body_color: white;
+    --link_color: white;
+    --box_shadow: 4px 0 5px rgba(0, 0, 0, 0.4);
+    --color: white;
+    --cor-do-botao-ativo: #0000CD;
+    --cor-do-botao-padrao: #75787e;
+    --cor_background_div: #ceb930;
+    --cor-do-botao-pressionado: #d0d0d0;
+    --cor-do-botao-alternativo: white;
+}
+
+.css-2ulfj5-MuiTypography-root{
+    color: var(--body_color) !important;
+}
+
+.css-1sn4lm3-MuiTypography-root{
+    color: var(--body_color) !important;
+}
+
+.css-i4bv87-MuiSvgIcon-root {
+    color: var(--color) !important;
+}
+
+.css-k4qjio-MuiFormHelperText-root{
+    color: #2196f3 !important;
+ }
+
+ .css-1you3x9-MuiButtonBase-root-MuiTab-root{
+    color: var(--link_color) !important;
+ }
+
+ .css-1you3x9-MuiButtonBase-root-MuiTab-root.Mui-selected{
+    color: #2196f3 !important;
+ }
+
+ .modal-content{
+    background-color: var(--body_background) !important;
+    color: var(--color) !important;
+ }
+
+ .css-sh22l5-MuiButtonBase-root-MuiAccordionSummary-root{
+    background-color: var(--body_background) !important;
+    color: var(--color) !important;
+ }
+
+ .fixed-buttons{
+    background-color: var(--body_background) !important;
+    color: var(--color) !important;
+ }
+ .cancel-modal{
+    background-color: var(--cor-do-botao-padrao) !important;
+    color: var(--body_color) !important;
+ }
+ 

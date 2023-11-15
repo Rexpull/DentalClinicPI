@@ -8,7 +8,7 @@
   display: flex;
 }
 main{
-  background-color: var(--body_background);
+  background-color: var(--body_bacground);
   width: 100%;
   padding: 20px;
   position: relative;
@@ -77,6 +77,7 @@ main{
   font-size: 20px;
   
 }
+
 /* DarkTheme*/
 
 .dark_mode {
@@ -146,4 +147,29 @@ main{
 }
 .dark_mode_input:checked + .dark_mode_label svg.moon {
   fill: #fff;
+}
+
+.css-6od3lo-MuiChip-label{
+  color: var(--color) !important;
+}
+
+.css-1jh9be9-MuiButtonBase-root-MuiChip-root{
+  background-color: var(--cor-do-botao-ativo) !important;
+}
+
+.css-4rh8r4-MuiButtonBase-root-MuiChip-root{
+  background-color: var(--cor-do-botao-ativo) !important;
+}
+
+.css-2hqgb0-MuiButtonBase-root-MuiChip-root{
+  background-color: var(--cor-do-botao-padrao) !important;
+}
+
+.css-ybclxu-MuiButtonBase-root-MuiChip-root{
+  background-color: var(--cor-do-botao-padrao) !important;
+}
+
+.css-kpm0tx-MuiButtonBase-root-MuiButton-root{
+  color: var(--color) !important;
+  background-color: var(--cor-do-botao-padrao) !important;
 }

@@ -1,13 +1,25 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable react/no-unused-state */
-
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
 import * as React from "react";
 import { styled } from "@mui/material/styles";
-import '../style/css/agenda.css';
 import Paper from "@mui/material/Paper";
-import ModalPaciente from '../components/ModalPaciente';
+import "../style/css/agenda.css";
+import Typography from "@mui/material/Typography";
+import ModalPaciente from "../components/ModalPaciente";
+import SugestaoHorarios from "../components/sugestionAppointment";
+import Chip from "@mui/material/Chip";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { ViewState, EditingState } from "@devexpress/dx-react-scheduler";
+import Autocomplete from "@mui/material/Autocomplete";
+import InputMask from "react-input-mask";
+import "react-datepicker/dist/react-datepicker.css";
+import DateFnsUtils from "@mui/x-date-pickers/AdapterDateFns";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import MenuItem from "@mui/material/MenuItem";
+import { format } from "date-fns";
 import {
   Scheduler,
   Toolbar,
@@ -24,9 +36,7 @@ import {
   TodayButton,
 } from "@devexpress/dx-react-scheduler-material-ui";
 import { connectProps } from "@devexpress/dx-react-core";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker"; // Use DateTimePicker do @mui/x-date-pickers
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"; // Use LocalizationProvider do @mui/x-date-pickers
-import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -34,15 +44,13 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import Fab from "@mui/material/Fab";
-import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import TextField from "@mui/material/TextField";
-import Close from "@mui/icons-material/Close";
-import { appointments } from "../components/appointments";
-import { blue } from "@mui/material/colors";
-
+import Switch from "@mui/material/Switch";
+import axios from "axios";
 
 const PREFIX = "Demo";
+
 // #FOLD_BLOCK
 const classes = {
   content: `${PREFIX}-content`,
@@ -63,6 +71,7 @@ const StyledDiv = styled("div")(({ theme }) => ({
     margin: theme.spacing(2, 0),
     marginRight: theme.spacing(2),
   },
+
   [`& .${classes.header}`]: {
     overflow: "hidden",
     paddingTop: theme.spacing(0.5),
@@ -110,21 +119,35 @@ const StyledFab = styled(Fab)(({ theme }) => ({
 class AppointmentFormContainerBasic extends React.PureComponent {
   constructor(props) {
     super(props);
+    this.marcarAgendamento = this.marcarAgendamento.bind(this);
 
     this.state = {
       appointmentChanges: {},
+      tipoRepeticao: 'todos',
       paciente: "", // Novo estado para o campo Paciente
       profissional: "", // Novo estado para o campo Profissional
       consultorio: "", // Novo estado para o campo Consultorio
       dataConsulta: null, // Novo estado para o campo Data da Consulta
       horaInicio: null, // Novo estado para o campo Hora de Inicio  1
-      duracao: 15, // Novo estado para o campo Duração da Consulta (inicializado com 15)
+      duracao: 30, // Novo estado para o campo Duração da Consulta (inicializado com 15)
       observacao: "", // Novo estado para o campo Observação
       isModalOpen: false, //Estado padrão do Modal de Paciente
+      openSugestaoHorarios: false, // Define o estado inicial de openSugestaoHorarios como falso
+      dataSelecionada: null, // Novo estado para a data selecionada
+      retornoSelecionado: "Sem Retorno",
+      isAgendamentoMode: true,
+      selectedDate: new Date(),
+      pacientes: [],
+      professionals: [],
+      consultorios: ["Consultorio 1", "Consultorio 2"],
+      duracoes: ["15", "30", "45", "60", "90", "120"],
+      formData: {
+        horaInicial: "15:15",
+      },
+      compromisso:"",
     };
 
     
-
     this.getAppointmentData = () => {
       const { appointmentData } = this.props;
       return appointmentData;
@@ -137,16 +160,140 @@ class AppointmentFormContainerBasic extends React.PureComponent {
     this.changeAppointment = this.changeAppointment.bind(this);
     this.commitAppointment = this.commitAppointment.bind(this);
   }
+
+  toggleModeCompromisso = () => {
+    this.setState(() => ({
+      isAgendamentoMode: false,
+    }));
+  };
+
+  toggleModeAgendamento = () => {
+    this.setState(() => ({
+      isAgendamentoMode: true,
+    }));
+  };
+
+
   
   openModal = () => {
     this.setState({ isModalOpen: true });
   };
 
-  componentDidMount() {
-    // Abra o modal assim que o componente for montado
+  async componentDidMount() {
+    try {
+      // Faça a chamada à API para buscar os profissionais
+      const professionalsResponse = await axios.get(professionalusers);
+      console.log("Resposta da API (Profissionais):", professionalsResponse);
+
+      if (professionalsResponse.status === 200) {
+        const professionals = professionalsResponse.data.retorno.map(
+          (user) => ({
+            id: user.id,
+            nome: user.nome,
+          })
+        );
+        this.setState({ professionals });
+        console.log("Profissionais:", professionals);
+      } else {
+        console.error(
+          "Erro ao buscar profissionais. Status:",
+          professionalsResponse.status
+        );
+      }
+    } catch (error) {
+      console.error("Erro ao buscar profissionais. Status:", error);
+      // Trate o erro, exiba uma mensagem, etc.
+    }
+
+    try {
+      // Faça a chamada à API para buscar os profissionais
+      const pacientesResponse = await axios.get(pacienteusers);
+      console.log("Resposta da API (pacientes):", pacientesResponse);
+
+      if (pacientesResponse.status === 200) {
+        const pacientes = pacientesResponse.data.retorno.map((user) => ({
+          id: user.id,
+          nome: user.nome,
+        }));
+        this.setState({ pacientes });
+        console.log("pacientes:", pacientes);
+      } else {
+        console.error(
+          "Erro ao buscar pacientes. Status:",
+          pacientesResponse.status
+        );
+      }
+    } catch (error) {
+      console.error("Erro ao buscar pacientes. Status:", error);
+      // Trate o erro, exiba uma mensagem, etc.
+    }
+
     this.openModal();
   }
-  
+
+  async marcarAgendamento() {
+    function converterMinutosParaHoraDuracao(duracao) {
+      const horas = Math.floor(duracao / 60);
+      const minutosRestantes = duracao % 60;
+
+      // Formate as horas e minutos como strings com dois dígitos
+      const horasFormatadas = horas.toString().padStart(2, "0");
+      const minutosFormatados = minutosRestantes.toString().padStart(2, "0");
+
+      // Retorne a duração formatada no formato "HH:MM:SS"
+      return `${horasFormatadas}:${minutosFormatados}:00`;
+    }
+
+    const {
+      paciente,
+      profissional,
+      consultorio,
+
+      horaInicial,
+      duracao,
+      observacao,
+    } = this.state;
+
+    console.log("clickou");
+    // Certifique-se de que a função validateForm está definida
+
+    const selectedDate = new Date(this.state.selectedDate);
+    selectedDate.setHours(0, 0, 0, 0);
+
+    const duracaoFormatada = converterMinutosParaHoraDuracao(duracao);
+
+    const dataAgendamento = {
+      pacienteId: paciente, // Defina o pacienteId conforme necessário
+      usuarioId: profissional, // Defina o usuarioId conforme necessário
+      dataConsulta: format(selectedDate, "yyyy-MM-dd"), // Converte a data para o formato ISO
+      horaInicio: format(selectedDate, "HH:mm:ss"), // Converte a hora de início para o formato ISO
+      duracao: duracaoFormatada, // Use a duração selecionada
+      sala: consultorio,
+      observacao: observacao,
+      titulo: "Consulta teste de banco",
+    };
+    console.log(dataAgendamento);
+    try {
+      // Faça a chamada à API
+      const response = await axios.post(
+        "https://clinicapi-api.azurewebsites.net/Agendamento/CriarAgendamento",
+        dataAgendamento
+      );
+      console.log(dataAgendamento);
+      if (response.status === 200) {
+        alert("Agendamento marcado com sucesso!"); // Exiba uma mensagem de sucesso
+      } else {
+        alert("Ocorreu um erro ao marcar o agendamento."); // Exiba uma mensagem de erro
+      }
+    } catch (error) {
+      alert("Ocorreu um erro ao marcar o agendamento: " + error.message);
+    }
+  }
+
+  handleRetornoChange = (event) => {
+    this.setState({ retornoSelecionado: event.target.value });
+  };
+
   calculateEndDate(startDate, duration) {
     const endDate = new Date(startDate);
     endDate.setMinutes(startDate.getMinutes() + duration);
@@ -162,12 +309,35 @@ class AppointmentFormContainerBasic extends React.PureComponent {
       appointmentChanges: nextChanges,
     });
   }
- 
 
+
+  filterProfessionals(inputValue) {
+    return this.state.professionals.filter((professional) =>
+      professional.toLowerCase().includes(inputValue.toLowerCase())
+    );
+  }
+
+  filterPacientes(inputValue) {
+    return this.state.pacientes.filter((paciente) =>
+      paciente.toLowerCase().includes(inputValue.toLowerCase())
+    );
+  }
+
+  filterConsultorios(inputValue) {
+    return this.state.consultorios.filter((consultorio) =>
+      consultorio.toLowerCase().includes(inputValue.toLowerCase())
+    );
+  }
+
+  filterDuracoes(inputValue) {
+    return this.state.duracoes.filter((duracao) =>
+      duracao.toLowerCase().includes(inputValue.toLowerCase())
+    );
+  }
 
   commitAppointment(type) {
     const { commitChanges } = this.props;
-  
+
     const appointment = {
       ...this.getAppointmentData(),
       ...this.getAppointmentChanges(),
@@ -192,8 +362,44 @@ class AppointmentFormContainerBasic extends React.PureComponent {
       cancelAppointment,
       target,
       onHide,
+      dataSelecionada,
     } = this.props;
-    const { appointmentChanges, paciente, profissional, consultorio, dataConsulta, horaInicio, duracao, observacao } = this.state;
+    const {
+      appointmentChanges,
+      paciente,
+      profissional,
+      consultorio,
+      dataConsulta,
+      horaInicio,
+      duracao,
+      observacao,
+      pacientes,
+      professionals,
+      consultorios,
+      selectedDate,
+      duracoes,
+      formData,
+      compromisso,
+      titulo,
+      repetir,
+      descricao,
+      diaSemana,
+      diaInteiro,
+      dataInicial,
+      dataFinal,
+      disponivel
+    } = this.state;
+
+    const displayCompromissoData = {
+      Titulo: titulo,
+      Profissional: profissional,
+      Consultorio: consultorio,
+      DataInicial: dataInicial,
+      DataFicial: dataFinal,
+      Repetir: repetir,
+      Descricao: descricao,
+      diaSemana: diaSemana,
+    };
 
     const displayAppointmentData = {
       ...appointmentData,
@@ -201,15 +407,13 @@ class AppointmentFormContainerBasic extends React.PureComponent {
       Paciente: paciente,
       Profissional: profissional,
       Consultorio: consultorio,
-      "Data da Consulta": dataConsulta,
+      DataConsulta: dataConsulta,
       "Hora de Inicio": horaInicio,
       "Duração da Consulta": duracao,
       Observacao: observacao,
     };
 
     const isNewAppointment = appointmentData.id === undefined;
-
-    const { isModalOpen } = this.state;
 
     const applyChanges = isNewAppointment
       ? () => this.commitAppointment("added")
@@ -227,18 +431,19 @@ class AppointmentFormContainerBasic extends React.PureComponent {
       className: classes.textField,
     });
 
+    
     const pickerEditorProps = (field) => ({
       // keyboard: true,
       value: displayAppointmentData[field],
       onChange: (date) =>
-        this.changeAppointment({
-          field: [field],
-          changes: date
-            ? date.toDate()
-            : new Date(displayAppointmentData[field]),
-        }),
+      this.changeAppointment({
+        field: [field],
+        changes: date
+        ? new Date(date) 
+        : new Date(displayAppointmentData[field]),
+      }),
       ampm: false,
-      inputFormat: "DD/MM/YYYY HH:mm",
+      inputFormat: "dd/MM/yyyy HH:mm",
       onError: () => null,
       renderInput: (props) => (
         <TextField
@@ -248,11 +453,72 @@ class AppointmentFormContainerBasic extends React.PureComponent {
             ...props.inputProps,
             readOnly: true, // Set input as readOnly
           }}
-        />
-      ),
-    });
-    const datePickerProps = pickerEditorProps("startDate");
+          />
+          ),
+        });
+        
+        const dataInicialPickerProps = pickerEditorProps("dataInicial");
+        const dataFinalPickerProps = pickerEditorProps("dataFinal");
+        const dataConsultaPickerProps = pickerEditorProps("dataConsulta");
+        dataInicialPickerProps.minDateTime = new Date();
+        dataFinalPickerProps.minDateTime = dataInicialPickerProps.minDateTime;
 
+        dataFinalPickerProps.onError = (error) => {
+          // Adicione uma validação personalizada para garantir que 'Termina em' não seja menor que 'Começa em'
+          if (error.code === "validate.min") {
+            return "A data não pode ser menor que 'Começa em'";
+          }
+        };
+        
+  const handleDataInicialChange = (date) => {
+    this.changeAppointment({
+      field: ["dataInicial"],
+      changes: date ? new Date(date)  : new Date(displayCompromissoData.DataInicial),
+    });
+  };
+  
+  const handleDataFinalChange = (date) => {
+    this.changeAppointment({
+      field: ["dataFinal"],
+      changes: date ? new Date(date)  : new Date(displayCompromissoData.DataFicial),
+    });
+  };
+
+  const handleDataConsultaChange = (date) => {
+    this.changeAppointment({
+      field: ["dataConsulta"],
+      changes: date ? new Date(date)  : new Date(displayCompromissoData.DataConsulta),
+    });
+  };
+
+    const handleHoraInicialChange = (event) => {
+      const { value } = event.target;
+
+      // Divida a string da hora em horas e minutos
+      const [hours, minutes] = value.split(":").map(Number);
+
+      // Crie um novo objeto Date e defina as horas e minutos
+      const selectedDate = new Date();
+      selectedDate.setHours(hours);
+      selectedDate.setMinutes(minutes);
+
+      // Atualize o estado com a nova data
+      const updatedFormData = { ...formData, horaInicial: selectedDate };
+      this.setState({ formData: updatedFormData });
+    };
+
+    const setFormData = (data) => {
+      this.setState({
+        formData: { ...this.state.formData, ...data },
+      });
+    };
+
+    // Make setFormData accessible within the component
+    this.setFormData = setFormData;
+
+    const datePickerProps = pickerEditorProps("dataConsulta");
+    const timePickerProps = pickerEditorProps("horaInicio");
+  
     const cancelChanges = () => {
       this.setState({
         appointmentChanges: {},
@@ -261,166 +527,641 @@ class AppointmentFormContainerBasic extends React.PureComponent {
       cancelAppointment();
     };
 
+    const handleOpenSugestaoHorarios = () => {
+      this.setState({ openSugestaoHorarios: true });
+    };
 
-  
+    const { isAgendamentoMode } = this.state;
 
     return (
-      <AppointmentForm.Overlay 
-       className="tbAgenda"
+      <AppointmentForm.Overlay
         visible={visible}
         target={target}
         fullSize
-        onHide={onHide}   
-        style={{maxWidth: "37.5rem", borderRight:"solid 1px rgba(168,163,168,0.61)", paddingRight:"20px !important", boxshadow: "2px 2px 5px 1px rgba(168,163,168,0.61)"}}
+        onHide={onHide}
+        style={{
+          maxWidth: "33.5rem",
+          borderRight: "solid 1px rgba(168,163,168,0.61)",
+          paddingRight: "20px !important",
+          boxshadow: "2px 2px 5px 1px rgba(168,163,168,0.61)",
+        }}
       >
-        <StyledDiv  style={{  margingRight:"20px !important"}} > 
-          <div className={classes.header} style={{maxWidth: "35rem"}}>
-            <IconButton
-              className={classes.closeButton}
-              onClick={cancelChanges}
-              size="large"
-            >
-              <Close color="action" />
-            </IconButton>
-          </div>
-          <div className={classes.content}>
-            {/* Campo Paciente */}
-            <div className={classes.wrapper} style={{ maxWidth: "35rem"}}>
-            <TextField 
-                {...textEditorProps("Paciente")}
-                value={paciente}
-                onChange={(e) => this.setState({ paciente: e.target.value })}
-                required
-                size="small"
-              />
-
-            </div>
-          
-            <div> {/* Ignorem essa puta gambiarra aqui, no fim é necessaria... */}
-            <a href="#" onClick={this.openModal} style={{display:"none !important"}}>
-                
-              </a>
-              {this.state.isModalOpen && <ModalPaciente openModal={this.openModal}/>}
-            </div>
-           
-            <div style={{ display: "flex", justifyContent: "space-between", marginTop: "8px", maxWidth: "35rem" }}>
-
-              {/* Campo Profissional */}
-              <div style={{ flexBasis: "48%" }}>
-                <TextField
-                  {...textEditorProps("Profissional")}
-                  value={profissional}
-                  onChange={(e) => this.setState({ profissional: e.target.value })}
-                  required
+        <div
+          style={{ display: "flex", padding: "15px", marginTop: "40px" }}
+          className={classes.header}
+        >
+          <Chip
+            label="Consulta"
+            onClick={this.toggleModeAgendamento}
+            clickable
+            color={isAgendamentoMode ? "primary" : "default"}
+            sx={{
+              width: "90px",
+              marginRight: "5px",
+              fontSize: "16px",
+              fontWeight: "400",
+            }}
+          />
+          <Chip
+            label="Compromisso"
+            onClick={this.toggleModeCompromisso}
+            clickable
+            color={isAgendamentoMode ? "default" : "primary"}
+            sx={{ width: "125px", fontSize: "16px", fontWeight: "400" }}
+          />
+        </div>
+        {isAgendamentoMode ? (
+          <StyledDiv style={{ margingRight: "20px !important" }}>
+            <div className={classes.content}>
+              {/* Campo Paciente */}
+              <div
+                className={classes.wrapper}
+                style={{
+                  maxWidth: "31.5rem",
+                  paddingBottom: "0px",
+                  marginTop: "5px",
+                }}
+              >
+                <Autocomplete
+                  freeSolo
+                  sx={{
+                    maxWidth: "31.5rem !important",
+                    width: "31.5rem !important",
+                  }}
+                  options={pacientes} // Use a lista de pacientes buscada na API
+                  getOptionLabel={(option) => option.nome}
+                  value={
+                    pacientes
+                      ? pacientes.find((p) => p.id === paciente) || null
+                      : null
+                  }
+                  onChange={(_, newValue) =>
+                    this.setState({ paciente: newValue ? newValue.id : null })
+                  }
+                  renderInput={(params) => (
+                    <TextField
+                      {...textEditorProps("Paciente")}
+                      {...params}
+                      required
+                      size="small"
+                    />
+                  )}
                 />
               </div>
 
-              {/* Campo Consultorio */}
-              <div style={{ flexBasis: "48%",}}>
-                <TextField
-                  {...textEditorProps("Consultorio")}
-                  value={consultorio}
-                  onChange={(e) => this.setState({ consultorio: e.target.value })}
-                  required
-                />
+              <div
+                style={{
+                  paddingLeft: "365px",
+                  color: "#2196f3",
+                  fontSize: "13px",
+                  paddingBottom: "18.5px",
+                  marginTop: "4px",
+                }}
+              >
+                {" "}
+                {/* Ignorem essa puta gambiarra aqui, no fim é necessaria... */}
+                <a
+                  href="#"
+                  onClick={this.openModal}
+                  style={{ display: "none !important" }}
+                ></a>
+                {this.state.isModalOpen && (
+                  <ModalPaciente openModal={this.openModal} />
+                )}
               </div>
-            </div>
 
-            <div style={{ display: "flex", justifyContent: "space-between",marginTop: "8px" , maxWidth: "35rem" }}>
-              {/* Campo Data da Consulta */}
-             
-                <div className={classes.wrapper} style={{ flexBasis: "48%",  Width: "15rem !important" }} >
-               
-                  <LocalizationProvider dateAdapter={AdapterMoment}>
-                    <DateTimePicker
-                      label="Data"
-                      renderInput={(props) => (
-                        <TextField
-                          className={classes.picker}
-                          variant="outlined"
-                          label="Data"
-                          {...props}
-                          inputProps={{
-                            ...props.inputProps,
-                            readOnly: true,
-                          }}
-                        />
+              <div
+                style={{
+                  maxWidth: "31.5rem",
+                }}
+              >
+                {/* Campo Profissional */}
+                <div style={{ paddingBottom: "21.5px", maxWidth: "31.5rem" }}>
+                  <Autocomplete
+                    freeSolo
+                    options={professionals}
+                    getOptionLabel={(option) => option.nome}
+                    value={
+                      professionals.find((p) => p.id === profissional) || null
+                    }
+                    onChange={(_, newValue) =>
+                      this.setState({
+                        profissional: newValue ? newValue.id : null,
+                      })
+                    }
+                    renderInput={(params) => (
+                      <TextField
+                        {...textEditorProps("Profissional")}
+                        {...params}
+                        required
+                        size="small"
+                      />
+                    )}
+                  />
+                </div>
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  paddingBottom: "21.5px",
+                  maxWidth: "31.5rem",
+                }}
+              >
+                {/* Campo Consultorio */}
+                <div
+                  style={{
+                    flexBasis: "48%",
+                    paddingBottom: "21.5px",
+                    maxWidth: "300px !important",
+                  }}
+                >
+                  <Autocomplete
+                    freeSolo
+                    options={consultorios}
+                    getOptionLabel={(option) => option}
+                    value={consultorio}
+                    onChange={(_, newValue) =>
+                      this.setState({ consultorio: newValue })
+                    }
+                    renderInput={(params) => (
+                      <TextField
+                        {...textEditorProps("Consultorio")}
+                        {...params}
+                        required
+                        size="small"
+                      />
+                    )}
+                  />
+                </div>
+
+                {/* Campo Duração da Consulta */}
+                <div style={{ flexBasis: "48%", maxWidth: "300px !important" }}>
+                  <Autocomplete
+                    freeSolo
+                    options={this.state.duracoes}
+                    value={this.state.duracaoSelecionada}
+                    onChange={(_, newValue) =>
+                      this.setState({ duracaoSelecionada: newValue })
+                    }
+                    renderInput={(params) => (
+                      <TextField
+                        {...textEditorProps("Duração da consulta (min)")}
+                        {...params}
+                        required
+                        size="small"
+                        defaultValue="30"
+                      />
+                    )}
+                  />
+                </div>
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  paddingBottom: "21.5px",
+                  maxWidth: "31.5rem",
+                }}
+              >
+                {/* Campo Data da Consulta */}
+                <div
+                  style={{
+                    marginRight: "5px",
+                    flexBasis: "68%",
+                    maxWidth: "300px !important",
+                  }}
+                >
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <DatePicker
+                      label="Data da Consulta"
+                      inputFormat="dd/MM/yyyy"
+                      size="small"
+                      {...dataConsultaPickerProps}
+                      onChange={handleDataConsultaChange}
+                      renderInput={(params) => (
+                        <TextField {...params} size="small" />
                       )}
-                      {...datePickerProps}
                     />
                   </LocalizationProvider>
                 </div>
-           
 
-              {/* Campo Duração da Consulta */}
-              <div style={{ flexBasis: "48%", marginTop: "8px" }}>
+                {/* Campo Hora de Início */}
+                <div
+                  style={{ width: "32%", marginRight: "5px", flexBasis: "68%" }}
+                >
+                  <InputMask
+                    mask="99:99" // Define a máscara para o formato de hora (hh:mm)
+                    maskChar="_" // O caractere a ser exibido como espaço reservado
+                    value={this.state.formData.horaInicial}
+                    onChange={handleHoraInicialChange}
+                  >
+                    {(inputProps) => (
+                      <TextField
+                        className={classes.picker}
+                        variant="outlined"
+                        label="Hora de Início"
+                        size="small"
+                        {...inputProps}
+                      />
+                    )}
+                  </InputMask>
+                </div>
+              </div>
+
+              {/* Botão "Sugestão de Horário" */}
+              <div
+                style={{
+                  color: "#2196f3",
+                  fontSize: "13px",
+                  paddingBottom: "18.5px",
+                }}
+              >
+                <a href="#" onClick={handleOpenSugestaoHorarios} size="small">
+                  Encontrar horário livre
+                </a>
+              </div>
+              <SugestaoHorarios
+                open={this.state.openSugestaoHorarios}
+                onClose={() => this.setState({ openSugestaoHorarios: false })}
+              />
+              {/* Campo Observação */}
+              <div className={classes.wrapper} style={{ maxWidth: "31.5rem" }}>
                 <TextField
-                  label="Duração da Consulta (min)"
-                  type="number"
-                  value={duracao}
-                  onChange={(e) => this.setState({ duracao: e.target.value })}
-                  required
-                  InputLabelProps={{
-                    style: { color: 'whiteLabel' } // Define a cor do rótulo para branco
-                  }}
+                  {...textEditorProps("Observacao")}
+                  multiline
+                  rows="2"
+                  value={observacao}
+                  onChange={(e) =>
+                    this.setState({ observacao: e.target.value })
+                  }
                 />
+              </div>
+              <div className={classes.wrapper} style={{ maxWidth: "31.5rem" }}>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <TextField
+                    value={this.state.retornoSelecionado}
+                    onChange={this.handleRetornoChange}
+                    style={{ marginLeft: "10px" }}
+                    size="small"
+                    select
+                    label="Retorno em"
+                  >
+                    <MenuItem value="Sem Retorno">Sem Retorno</MenuItem>
+                    <MenuItem value="1 Mês">1 Mês</MenuItem>
+                    <MenuItem value="2 Meses">2 Meses</MenuItem>
+                    <MenuItem value="6 Meses">6 Meses</MenuItem>
+                    <MenuItem value="12 Meses">12 Meses</MenuItem>
+                  </TextField>
+                </div>
               </div>
             </div>
 
-            {/* Campo Observação */}
-            <div className={classes.wrapper} style={{maxWidth: "35rem"}}>
-              <TextField
-                {...textEditorProps("Observacao")}
-                multiline
-                rows="6"
-                value={observacao}
-                onChange={(e) => this.setState({ observacao: e.target.value })}
-              />
-            </div>
-
-           
-            
-           
-          </div>
-          <div className={classes.buttonGroup} style={{maxWidth: "35rem"}}>
-            {!isNewAppointment && (
+            <div
+              className={classes.buttonGroup}
+              style={{ maxWidth: "33.5rem" }}
+            >
               <Button
-                variant="outlined"
-                color="secondary"
+                className={classes.closeButton}
+                onClick={cancelChanges}
+                size="large"
+                style={{ color: "black" }}
+              >
+                {isNewAppointment ? "Fechar" : ""}
+              </Button>
+              {!isNewAppointment && (
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  className={classes.button}
+                  onClick={() => {
+                    visibleChange();
+                    this.commitAppointment("deleted");
+                  }}
+                >
+                  Desmarcar
+                </Button>
+              )}
+
+              <Button
+                variant="contained"
+                color="success"
                 className={classes.button}
                 onClick={() => {
-                  visibleChange();
-                  this.commitAppointment("deleted");
+                  this.marcarAgendamento(); // Agora a função está definida
                 }}
               >
-                Delete
+                {isNewAppointment ? "Marcar" : "Salvar"}
               </Button>
-            )}
+            </div>
+          </StyledDiv>
+        ) : (
+          <div>
+             <StyledDiv style={{ margingRight: "20px !important" }}>
+              <div className={classes.content}>
+                {/* Campo Compromisso */}
+                <div
+                  className={classes.wrapper}
+                  style={{ maxWidth: "31.5rem" }}
+                >
+                  <TextField
+                    {...textEditorProps("Qual é o compromisso?")}
+                    required
+                    size="small"
+                    value={compromisso}
+                    onChange={(e) =>
+                      this.setState({ compromisso: e.target.value })
+                    }
+                    InputProps={{
+                      endAdornment: (
+                  <Typography variant="caption" color="textSecondary">{`${compromisso.length}/255`}</Typography>
+                  ),
+                  }}
+                  />
+                </div>
 
-            <Button
-              variant="outlined"
-              color="primary"
-              className={classes.button}
-              onClick={() => {
-                visibleChange();
-                applyChanges();
-              }}
-            >
-              {isNewAppointment ? "Criar" : "Salvar"}
-            </Button>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    paddingBottom: "34.5px",
+                    maxWidth: "31.5rem",
+                    paddingTop: "8.5px",
+                  }}
+                >
+                  <div
+                    style={{
+                      maxWidth: "400px !important",
+                      flexBasis: "70%",
+                    }}
+                  >
+                    {/* Campo Profissional */}
+                    <div style={{ maxWidth: "31.5rem" }}>
+                      <Autocomplete
+                        freeSolo
+                        options={professionals}
+                        getOptionLabel={(option) => option.nome}
+                        value={
+                          professionals.find((p) => p.id === profissional) ||
+                          null
+                        }
+                        onChange={(_, newValue) =>
+                          this.setState({
+                            profissional: newValue ? newValue.id : null,
+                          })
+                        }
+                        renderInput={(params) => (
+                          <TextField
+                            {...textEditorProps("Agenda de")}
+                            {...params}
+                            required
+                            size="small"
+                          />
+                        )}
+                      />
+                    </div>
+                  </div>
+                  {/* Campo Dia Inteiro (Switch) */}
+                  <div 
+                    style={{ flexBasis: "28%", maxWidth: "200px !important" }}
+                  >
+                    <Switch
+                      checked={diaInteiro}
+                      onChange={(e) =>
+                        this.setState({ diaInteiro: e.target.checked })
+                      }
+                      color="primary"
+                    />
+                    <label className="button-text">Dia Inteiro</label>
+                  </div>
+                </div>
+
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    paddingBottom: "21.5px",
+                    maxWidth: "31.5rem",
+                  }}
+                >
+                  {/* Começa em */}
+                  <div
+                    style={{
+                      flexBasis: "48%",
+                      maxWidth: "400px !important",
+                    }}
+                  >
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                      <DateTimePicker
+                        label="Começa em"
+                        inputFormat="dd/MM/yyyy HH:mm"
+                        size="small"
+                        {...dataInicialPickerProps}// Use o estado apropriado para armazenar a data/hora de início
+                        onChange={handleDataInicialChange} // Implemente a função de manipulador
+                        renderInput={(params) => (
+                          <TextField {...params} size="small" />
+                        )}
+                        required
+                      />
+                    </LocalizationProvider>
+                  </div>
+
+                  {/* Termina em */}
+                  <div
+                    style={{
+                      flexBasis: "48%",
+                      maxWidth: "400px !important",
+                    }}
+                  >
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                      <DateTimePicker
+                        label="Termina em"
+                        inputFormat="dd/MM/yyyy HH:mm"
+                        size="small"
+                        {...dataFinalPickerProps}
+                        onChange={handleDataFinalChange}
+                        renderInput={(params) => (
+                          <TextField {...params} size="small" />
+                        )}
+                        required
+                      />
+                    </LocalizationProvider>
+                  </div>
+                </div>
+
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    paddingBottom: "21.5px",
+                    maxWidth: "31.5rem",
+                    flexDirection:'column',
+                  }}
+                >
+                  {/* Repetir Compromisso */}
+                  <div
+                    style={{ flexBasis: "28%", maxWidth: "200px !important" }}
+                  >
+                    <Switch
+                       checked={this.state.repetirCompromisso}
+                      onChange={(e) =>
+                        this.setState({ repetirCompromisso: e.target.checked })
+                      }
+                      color="primary"
+                    />
+                    <label className="button-text">Repetir Compromisso</label>
+                  </div>
+
+                  {this.state.repetirCompromisso && (
+                    <div style={{ maxWidth: "13.5rem" }}>
+                      {/* Campo para escolher a repetição do compromisso */}
+                      <TextField
+                        select
+                        label="Repetir"
+                        value={this.state.tipoRepeticao}
+                        onChange={(e) => this.setState({ tipoRepeticao: e.target.value })}
+                        size="small"
+                        fullWidth
+                      >
+                        <MenuItem value="todos">Todos os dias</MenuItem>
+                        <MenuItem value="semana">Semanalmente</MenuItem>
+                        <MenuItem value="quinzena">Quinzenalmente</MenuItem>
+                        <MenuItem value="mes">Mensalmente</MenuItem>
+                        <MenuItem value="ano">Anualmente</MenuItem>
+                      </TextField>
+                    </div>
+                  )}
+
+                  {/* Receber alerta */}
+                  <div
+                    style={{ flexBasis: "28%", maxWidth: "200px !important" }}
+                  >
+                    <Switch
+                      checked={this.state.receberAlerta}
+                      onChange={(e) =>
+                        this.setState({ receberAlerta: e.target.checked })
+                      }
+
+                      color="primary"
+                    />
+                    <label className="button-text">Receber Alerta</label>
+                  </div>
+                  {this.state.receberAlerta && (
+                    <div style={{ maxWidth: "31.5rem" }}>
+                      {/* Campo para escolher quando receber o alerta */}
+                      <TextField
+                        select
+                        label="Alerta"
+                        value={this.state.tipoAlerta}
+                        onChange={(e) => this.setState({ tipoAlerta: e.target.value })}
+                        size="small"
+                        fullWidth
+                      >
+                        <MenuItem value="5min">5 minutos antes</MenuItem>
+                        <MenuItem value="10min">10 minutos antes</MenuItem>
+                        <MenuItem value="15min">15 minutos antes</MenuItem>
+                        <MenuItem value="30min">30 minutos antes</MenuItem>
+                        {/* ... outros valores que você queira oferecer */}
+                      </TextField>
+                    </div>
+                  )}
+                </div>
+
+                <div className="barra_compromisso"
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    paddingBottom: "21.5px",
+                    maxWidth: "31.5rem",
+                    flexDirection:'column',
+                    background:'#feea98',
+                    paddingLeft:'12px'
+                
+                  }}
+                >
+                  <FormControlLabel
+                  onClick={(e) => e.stopPropagation()}
+                  onMouseDown={(e) => e.preventDefault()}
+                  sx={{color:'black',paddingLeft:'5px',fontsize: '16px',
+                  fontweight: '500',
+                  margin: '0',
+                  lineheight: '18px'}}
+                    control={ 
+                      <Checkbox
+                      
+                      
+                        onChange={(e) =>this.setState({ disponivel: e.target.checked })}
+                        sx={{pointerEvents: "none",color:'blue',paddingLeft:'5px'}}
+                      />
+                    }
+                    label="Não disponível para atendimento neste período."
+                  />
+                  <label style={{paddingLeft:'30px', fontSize:'13px',color:'black',paddingRight:'30px'}}>Marcando essa opção um compromisso ficará visível em sua agenda. Caso seja necessário marcar um atendimento neste horário você será avisado por e-mail.</label>
+                </div>
+              
+              </div>
+
+              <div
+                className={classes.buttonGroup}
+                style={{ maxWidth: "33.5rem" }}
+              >
+                <Button
+                  className={classes.closeButton}
+                  onClick={cancelChanges}
+                  size="large"
+                  style={{ color: "black" }}
+                >
+                  {isNewAppointment ? "Fechar" : ""}
+                </Button>
+                {!isNewAppointment && (
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    className={classes.button}
+                    onClick={() => {
+                      visibleChange();
+                      this.commitAppointment("deleted");
+                    }}
+                  >
+                    Desmarcar
+                  </Button>
+                )}
+
+                <Button
+                  variant="contained"
+                  color="success"
+                  className={classes.button}
+                  onClick={() => {
+                    this.marcarAgendamento(); // Agora a função está definida
+                  }}
+                >
+                  {isNewAppointment ? "Marcar" : "Salvar"}
+                </Button>
+              </div>
+            </StyledDiv>
           </div>
-        </StyledDiv>
+        )}
       </AppointmentForm.Overlay>
     );
   }
 }
 
+const pacienteusers =
+  "https://clinicapi-api.azurewebsites.net/Paciente/ListarPacientes";
+const professionalusers =
+  "https://clinicapi-api.azurewebsites.net/Usuario/ListarUsuarios?param=0";
+const appointmentsApiUrl =
+  "https://clinicapi-api.azurewebsites.net/Agendamento/ListarAgendamentos";
+
 /* eslint-disable-next-line react/no-multi-comp */
 export default class Demo extends React.PureComponent {
   constructor(props) {
     super(props);
+    this.handleDateChange = this.handleDateChange.bind(this);
     this.state = {
-      data: appointments,
+      data: [],
       currentDate: new Date(), // Pega a data atual com o Date_fns
       selectedDate: new Date(),
       confirmationVisible: false,
@@ -432,14 +1173,12 @@ export default class Demo extends React.PureComponent {
       startDayHour: 9,
       endDayHour: 19,
       isNewAppointment: false,
+      dataSelecionada: null,
     };
 
     this.currentDateChange = (currentDate) => {
       this.setState({ currentDate });
     };
-
-    
-
 
     this.toggleConfirmationVisible = this.toggleConfirmationVisible.bind(this);
     this.commitDeletedAppointment = this.commitDeletedAppointment.bind(this);
@@ -459,8 +1198,6 @@ export default class Demo extends React.PureComponent {
         isNewAppointment,
         previousAppointment,
       } = this.state;
-
-      
 
       const currentAppointment =
         data.filter(
@@ -487,6 +1224,62 @@ export default class Demo extends React.PureComponent {
     });
   }
 
+  async componentDidMount() {
+    // Faz uma requisição para buscar os dados da API
+    function parseDuration(duration) {
+      const [hours, minutes] = duration.split(":").map(Number);
+      return hours * 60 * 60 * 1000 + minutes * 60 * 1000;
+    }
+
+    try {
+      const response = await axios.get(appointmentsApiUrl);
+      const { retorno } = response.data;
+
+      if (retorno) {
+        // Formata os dados recebidos da API para o formato esperado
+        const formattedAppointments = retorno.map((apiAppointment) => {
+          const dataConsultaDate = new Date(apiAppointment.dataConsulta);
+          const horaInicioTime = new Date(apiAppointment.horaInicio);
+
+          // Extract date components
+          const year = dataConsultaDate.getFullYear();
+          const month = dataConsultaDate.getMonth();
+          const day = dataConsultaDate.getDate();
+
+          // Extract time components
+          const hours = horaInicioTime.getHours();
+          const minutes = horaInicioTime.getMinutes();
+
+          const startDate = new Date(
+            dataConsultaDate.getFullYear(),
+            dataConsultaDate.getMonth(),
+            dataConsultaDate.getDate(),
+            horaInicioTime.getHours(),
+            horaInicioTime.getMinutes()
+          );
+          console.log("startdate:", startDate);
+
+          return {
+            id: apiAppointment.agendamentoId,
+            title: apiAppointment.titulo,
+            startDate: apiAppointment.DataConsulta,
+            endDate: new Date(
+              new Date(
+                apiAppointment.dataConsulta + apiAppointment.horaInicio
+              ).getTime() + parseDuration(apiAppointment.duracao)
+            ),
+            location: apiAppointment.sala,
+          };
+        });
+        // Atualiza o estado com os dados formatados
+        this.setState({ data: formattedAppointments });
+        console.log("Agendamentos no banco: ", formattedAppointments);
+      }
+    } catch (error) {
+      console.error("Erro ao buscar dados da API:", error);
+    }
+  }
+
   validateForm() {
     const {
       paciente,
@@ -496,15 +1289,21 @@ export default class Demo extends React.PureComponent {
       horaInicio,
       duracao,
     } = this.state;
-  
+
     // Verifique se todos os campos obrigatórios estão preenchidos
-    if (!paciente || !profissional || !consultorio || !dataConsulta || !horaInicio || !duracao) {
+    if (
+      !paciente ||
+      !profissional ||
+      !consultorio ||
+      !dataConsulta ||
+      !horaInicio ||
+      !duracao
+    ) {
       return false;
     }
-  
+
     return true;
   }
-  
 
   applyChanges() {
     const { commitChanges } = this.props;
@@ -517,40 +1316,44 @@ export default class Demo extends React.PureComponent {
       horaInicio,
       observacao,
     } = this.state;
-  
+
     // Verifique se todos os campos obrigatórios estão preenchidos
-    if (!paciente || !profissional || !consultorio || !dataConsulta || !horaInicio || !duracao) {
-      alert("Preencha todos os campos obrigatórios antes de criar o agendamento.");
+    if (
+      !paciente ||
+      !profissional ||
+      !consultorio ||
+      !dataConsulta ||
+      !horaInicio ||
+      !duracao
+    ) {
+      alert(
+        "Preencha todos os campos obrigatórios antes de criar o agendamento."
+      );
       return; // Impedir a criação do agendamento se algum campo estiver faltando
     }
-  
+
     const startDate = new Date(dataConsulta);
     startDate.setHours(horaInicio.getHours());
     startDate.setMinutes(horaInicio.getMinutes());
-  
-    
-  
+
     const appointment = {
       Paciente: paciente,
       Profissional: profissional,
       Consultorio: consultorio,
-      "Data da Consulta": startDate, // Use a data de início calculada
-      "Hora de Inicio": startDate, // Use a data de início calculada
-      "Duração da Consulta": duracao,
+      DataConsulta: dataConsulta, // Use a data de início calculada
+      HoraInicio: horaInicio, // Use a data de início calculada
+      Duracao: duracao,
       Observacao: observacao,
     };
-  
+
     commitChanges({ added: appointment });
     this.setState({
       appointmentChanges: {},
     });
   }
-  
-  
 
-  
-  handleDateChange = (date) => {
-    this.setState({ currentDate: date });
+  handleDateChange = (newDate) => {
+    this.setState({ selectedDate: newDate });
   };
 
   componentDidUpdate() {
@@ -636,8 +1439,6 @@ export default class Demo extends React.PureComponent {
     this.setState({ currentDate: newDate });
   }
 
-  
-
   render() {
     const {
       currentDate,
@@ -646,15 +1447,26 @@ export default class Demo extends React.PureComponent {
       editingFormVisible,
       startDayHour,
       endDayHour,
+      dataSelecionada,
     } = this.state;
 
-    
+    const messages = {
+      "pt-BR": {
+        Week: "Semana",
+        Day: "Dia",
+      },
+    };
+
     console.log("Current Date:", this.state.currentDate);
     return (
-      <LocalizationProvider dateAdapter={AdapterDateFns} className="tbAgenda" >
+      <LocalizationProvider
+        dateAdapter={AdapterDateFns}
+        className="tbAgenda"
+        locale="pt-BR"
+      >
         <Paper className="papers">
-          <Scheduler data={data} height={680} locale="pt-BR"> 
-           <ViewState
+          <Scheduler data={data} height={680} locale="pt-BR">
+            <ViewState
               currentDate={currentDate}
               onCurrentDateChange={this.currentDateChange}
               locale="pt-BR"
@@ -669,10 +1481,10 @@ export default class Demo extends React.PureComponent {
               endDayHour={endDayHour}
               firstDayOfWeek={2} // Define a segunda-feira como o primeiro dia da semana
               locale="pt-BR"
-              messages={{ week: 'Semana' }} 
+              messages={messages["pt-BR"]}
             />
-            <DayView messages={{ day: 'Dia' }} />
-            <AllDayPanel messages={{ 'All Day': 'Hoje' }}/>
+            <DayView messages={messages["pt-BR"]} />
+            <AllDayPanel messages={{ "All Day": "Hoje" }} />
             <EditRecurrenceMenu />
             <Appointments />
             <AppointmentTooltip
@@ -681,9 +1493,9 @@ export default class Demo extends React.PureComponent {
               showDeleteButton
             />
             <Toolbar />
-            <ViewSwitcher  messages={{ week: 'Semana', day: 'Dia' }}  />
+            <ViewSwitcher messages={messages["pt-BR"]} />
             <DateNavigator />
-            <TodayButton messages={{ today: 'Hoje' }} />
+            <TodayButton messages={{ today: "Hoje" }} />
 
             <AppointmentForm
               overlayComponent={this.appointmentForm}

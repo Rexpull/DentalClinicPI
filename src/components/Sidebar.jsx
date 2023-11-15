@@ -7,13 +7,11 @@ import {
     FaShoppingBag,
     FaTh, FaThList, FaUserAlt,
 } from 'react-icons/fa'
-import { NavLink } from 'react-router-dom';
-import { ReactComponent as Sun } from "./Sun.svg";
-import { ReactComponent as Moon } from "./Moon.svg";
+import {NavLink} from 'react-router-dom';
 
-const Sidebar = ({ children }) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const toggle = () => setIsOpen(!isOpen);
+const Sidebar = ({children}) => {
+    const[isOpen ,setIsOpen] = useState(false);
+    const toggle = () => setIsOpen (!isOpen);
 
     const setDarkMode = () =>{
         document.querySelector("body").setAttribute('data-theme', 'dark')
@@ -38,38 +36,38 @@ const Sidebar = ({ children }) => {
 
     const menuItem = [
         {
-            path: "/app/dashboard",
-            name: "dashboard",
-            icon: <FaTh />
+            path:"/app/dashboard",
+            name:"Dashboard",
+            icon:<FaTh/>
         },
         {
-            path: "/app/about",
-            name: "About",
-            icon: <FaUserAlt />
+            path:"/app/paciente",
+            name:"Paciente",
+            icon:<FaUserAlt/>
         },
         {
-            path: "/app/analytics",
-            name: "Analytics",
-            icon: <FaRegChartBar />
+            path:"/app/analytics",
+            name:"Analytics",
+            icon:<FaRegChartBar/>
         },
         {
-            path: "/app/comment",
-            name: "Comment",
-            icon: <FaCommentAlt />
+            path:"/app/comment",
+            name:"Comment",
+            icon:<FaCommentAlt/>
         },
         {
-            path: "/app/product",
-            name: "Product",
-            icon: <FaShoppingBag />
+            path:"/app/Ajustes",
+            name:"Ajuste",
+            icon:<FaShoppingBag/>
         },
         {
-            path: "/app/agenda",
-            name: "agenda",
-            icon: <FaThList />
+            path:"/app/agenda",
+            name:"Agenda",
+            icon:<FaThList/>
         },
     ]
     return (
-        <div className="container">
+          <div className="container">
             <div style={{ width: isOpen ? "300px" : "50px" }} className="sidebar">
                 <div className="top_section">
                     <div className='dark_mode'style={{ display: isOpen ? "block" : "none" }}>
@@ -90,7 +88,7 @@ const Sidebar = ({ children }) => {
                 </div>
                 {
                     menuItem.map((item, index) => (
-                        <NavLink to={item.path} key={index} className="link" activeclassName="active">
+                        <NavLink to={item.path} key={index} className="link" activeclassName="active" style={{alignItems:'center'}}>
                             <div className="icon">{item.icon}</div>
                             <div style={{ display: isOpen ? "block" : "none" }} className="link_text">{item.name}
                             </div>
