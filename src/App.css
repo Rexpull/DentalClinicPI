@@ -28,7 +28,8 @@ main{
 .sidebar{
   background-color: var(--body_background);
   color: var(--body_color);
-  height: 100vh;
+  height: 100%;
+  min-height: 100vh;
   width: 250px;
   transition: all 0.5s;
   box-shadow: var(--box_shadow);
@@ -146,4 +147,31 @@ main{
 }
 .dark_mode_input:checked + .dark_mode_label svg.moon {
   fill: #fff;
+}
+
+
+
+css-6od3lo-MuiChip-label{
+  color: var(--color) !important;
+}
+
+.css-1jh9be9-MuiButtonBase-root-MuiChip-root{
+  background-color: var(--cor-do-botao-ativo) !important;
+}
+
+.css-4rh8r4-MuiButtonBase-root-MuiChip-root{
+  background-color: var(--cor-do-botao-ativo) !important;
+}
+
+.css-2hqgb0-MuiButtonBase-root-MuiChip-root{
+  background-color: var(--cor-do-botao-padrao) !important;
+}
+
+.css-ybclxu-MuiButtonBase-root-MuiChip-root{
+  background-color: var(--cor-do-botao-padrao) !important;
+}
+
+.css-kpm0tx-MuiButtonBase-root-MuiButton-root{
+  color: var(--color) !important;
+  background-color: var(--cor-do-botao-padrao) !important;
 }

@@ -44,9 +44,9 @@ import React, { useState, useEffect } from 'react';
     const [bairro, setBairro] = useState("");
     const [cidade, setCidade] = useState("");
     const [cep, setCEP] = useState("");
-    const [valorPorcentagem, setValorPorcentagem] = useState("");
+    const [valorPorcentagem, setValorPorcentagem] = useState("0");
     const [salarioBruto, setSalarioBruto] = useState("");
-    const [selectedCommissionOption, setSelectedCommissionOption] = useState("");
+    const [selectedCommissionOption, setSelectedCommissionOption] = useState("0");
     const [acessoAjustes, setAcessoAjustes] = useState(false);
     const [acessoDashboard, setAcessoDashboard] = useState(false);
     const [acessoFinanceiro, setAcessoFinanceiro] = useState(false);
@@ -60,6 +60,7 @@ import React, { useState, useEffect } from 'react';
       horaFinal: '13:30',
     });
     const [horarioAtendimentoVisible, setHorarioAtendimentoVisible] = useState(false); 
+    const [comissionVisible, setComissionVisible] = useState(false); 
     const [ativo, setAtivo] = useState(false);
 
 
@@ -148,6 +149,7 @@ import React, { useState, useEffect } from 'react';
         setAcessoFinanceiro(true);
         setAcessoTratamento(true);
         setAcessoDocumento(true);
+        setComissionVisible(true);
       } else if (selectedPerfil === "Secretário(a)") {
         setHorarioAtendimentoVisible(false);
         setAcessoAjustes(false);
@@ -155,6 +157,9 @@ import React, { useState, useEffect } from 'react';
         setAcessoFinanceiro(false);
         setAcessoTratamento(false);
         setAcessoDocumento(false);
+        setSelectedCommissionOption("0");
+        setValorPorcentagem("0");
+        setComissionVisible(false);
       }
     };
 
@@ -192,7 +197,7 @@ import React, { useState, useEffect } from 'react';
 
     const commissionFields = (
       <div style={{display:'flex', justifyContent:'center', flexDirection:'column', alignItems:'center',gap:'20px', padding:'20px'}}>
-          <TextField
+        <TextField
           label="Valor do Salario base"
           variant="outlined"
           required
@@ -202,33 +207,37 @@ import React, { useState, useEffect } from 'react';
           }}
           size="small"
         />
-        <TextField
-          label="Porcentagem de comissão"
-          variant="outlined"
-          size="small"
-          required
-          fullWidth
-          InputProps={{
-            startAdornment: <InputAdornment position="start">%</InputAdornment>,
-          }}
-        />
-       <FormControl>
-       
-        <TextField
-          size="small"
-          fullWidth
-          select
-          sx={{ width: '790px', color: 'black' }}
-          value={selectedCommissionOption}
-          onChange={(e) => setSelectedCommissionOption(e.target.value)}
-          label='Quando você paga o profissional?'
-        >
-          <MenuItem value={"Tratamento Finalizado"}>Tratamento Finalizado</MenuItem>
-          <MenuItem value={"Débito recebido do paciente"}>Débito recebido do paciente</MenuItem>
-        </TextField>
-      </FormControl>
+        {comissionVisible && (
+          <>
+            <TextField
+              label="Porcentagem de comissão"
+              variant="outlined"
+              size="small"
+              required
+              fullWidth
+              InputProps={{
+                startAdornment: <InputAdornment position="start">%</InputAdornment>,
+              }}
+            />
+            <FormControl>
+              <TextField
+                size="small"
+                fullWidth
+                select
+                sx={{ width: '790px', color: 'black' }}
+                value={selectedCommissionOption}
+                onChange={(e) => setSelectedCommissionOption(e.target.value)}
+                label='Quando você paga o profissional?'
+              >
+                <MenuItem value={"Tratamento Finalizado"}>Tratamento Finalizado</MenuItem>
+                <MenuItem value={"Débito recebido do paciente"}>Débito recebido do paciente</MenuItem>
+              </TextField>
+            </FormControl>
+          </>
+        )}
       </div>
     );
+     
 
     const permissionFields = (
       <div >
@@ -415,7 +424,7 @@ import React, { useState, useEffect } from 'react';
       </>
     )}
     
-  </div>;
+  </div>
 
 const enviarDadosUsuario = async () => {
   // Crie um objeto com os dados do usuário a serem enviados para a API

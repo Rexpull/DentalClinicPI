@@ -33,13 +33,15 @@ import 'react-toastify/dist/ReactToastify.css';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import "../style/css/paciente.css";
 import ModalPaciente from "../components/ModalPaciente";
+import { useNavigate } from 'react-router-dom';
 
 
 const URL = 'https://clinicapi-api.azurewebsites.net/paciente/ListarPacientes';
 const DELETE_URL = 'https://clinicapi-api.azurewebsites.net/Paciente/DeletarPaciente';
 
-function Pacientes() {
+function Pacientes( user ) {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const navigate = useNavigate();
   const [columns] = useState([
     { name: 'sexo', title: 'Sexo', getCellValue: row => (row.sexo === 'F' ? 
     <AccountCircleIcon sx={{border:'3px solid pink' ,padding:'0px',borderRadius:'50px', width:'50px',height:'50px'}} /> : 
@@ -61,6 +63,7 @@ function Pacientes() {
   const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false);
   const [patientToDeleteId, setPatientToDeleteId] = useState(null);
   const [isModalPacienteOpen, setIsModalPacienteOpen] = useState(false);
+  const [editingUser, setEditingUser] = useState(null);
 
 
   const getQueryString = () => (
@@ -93,10 +96,10 @@ function Pacientes() {
               actions: (
                 <div >
                   <IconButton color="primary" onClick={() => handleEdit(item)}>
-                    <InfoIcon />
+                    <InfoIcon sx={{color:'Blue !important'}}/>
                   </IconButton>
-                  <IconButton color="danger" onClick={() => handleDelete(item.id)}>
-                    <DeleteIcon />
+                  <IconButton onClick={() => handleDelete(item.id)}>
+                    <DeleteIcon  sx={{color:'red !important'}} />
                   </IconButton>
                 </div>
               ),
@@ -116,8 +119,11 @@ function Pacientes() {
   };
 
   const handleEdit = (item) => {
-    // Implemente a lógica para editar o item aqui
+    setEditingUser(item); 
+    setIsModalPacienteOpen(true);
+    navigate(`/app/paciente/detalhes/${item.id}`);
   };
+  
 
   const openModalPaciente = () => {
     setIsModalPacienteOpen(true);
@@ -253,7 +259,15 @@ function Pacientes() {
  
     <Fab color="success" aria-label="add" size='medium' onClick={openModalPaciente} sx={{position:'absolute', left:'1%',top:'7px'}}>
       <AddIcon />
-      <ModalPaciente open={isModalPacienteOpen} onClose={() => setIsModalPacienteOpen(false)} sx={{color:'black'}}/>
+      <a
+          href="#"
+          onClick={openModalPaciente} // Apenas `openModalPaciente` sem `this`
+          style={{ display: "none !important" }}
+        ></a>
+        {/* A condição para renderizar o ModalPaciente também deve ser atualizada */}
+        {isModalPacienteOpen && (
+          <ModalPaciente open={isModalPacienteOpen} onClose={() => setIsModalPacienteOpen(false)} sx={{color:'black'}}/>
+        )}
     </Fab>
     
       

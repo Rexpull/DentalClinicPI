@@ -1,4 +1,6 @@
+
 @import url('https://fonts.googleapis.com/css?family=Exo:400,700'); 
+
 * {
   margin: 0;
   padding: 0;
@@ -7,250 +9,109 @@
 
 body, html {
   font-family: Nunito, sans-serif;
-}
-
-.context {
-  width: 100%;
-  position: absolute;
-  top:50vh;
-  
-}
-
-.context h1{
-  text-align: center;
-  color: #fff;
-  font-size: 50px;
+  background-color: black; /* Alterado para preto */
+  color: #fff; /* Cor do texto alterada para branco */
 }
 
 
-.area{
-position: absolute;
-  background: #0f0f0ff1;  
-  background: -webkit-linear-gradient(to left, #369e7b, #747497);  
-  width: 100%;
-  height:100vh;
-  
- 
-}
-
-.circles{
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
-
-.circles li{
-  position: absolute;
-  display: block;
-  list-style: none;
-  width: 20px;
-  height: 20px;
-  background: rgba(72, 66, 160, 0.664);
-  animation: animate 25s linear infinite;
-  bottom: -150px;
-  filter: blur(8px);
-  
-}
-
-.circles li:nth-child(1){
-  left: 25%;
-  width: 80px;
-  height: 80px;
-  animation-delay: 0s;
-}
-
-
-.circles li:nth-child(2){
-  left: 10%;
-  width: 20px;
-  height: 20px;
-  animation-delay: 2s;
-  animation-duration: 12s;
-}
-
-.circles li:nth-child(3){
-  left: 70%;
-  width: 20px;
-  height: 20px;
-  animation-delay: 4s;
-}
-
-.circles li:nth-child(4){
-  left: 40%;
-  width: 60px;
-  height: 60px;
-  animation-delay: 0s;
-  animation-duration: 18s;
-}
-
-.circles li:nth-child(5){
-  left: 65%;
-  width: 20px;
-  height: 20px;
-  animation-delay: 0s;
-}
-
-.circles li:nth-child(6){
-  left: 75%;
-  width: 110px;
-  height: 110px;
-  animation-delay: 3s;
-}
-
-.circles li:nth-child(7){
-  left: 35%;
-  width: 150px;
-  height: 150px;
-  animation-delay: 7s;
-}
-
-.circles li:nth-child(8){
-  left: 50%;
-  width: 25px;
-  height: 25px;
-  animation-delay: 15s;
-  animation-duration: 45s;
-}
-
-.circles li:nth-child(9){
-  left: 20%;
-  width: 15px;
-  height: 15px;
-  animation-delay: 2s;
-  animation-duration: 35s;
-}
-
-.circles li:nth-child(10){
-  left: 85%;
-  width: 150px;
-  height: 150px;
-  animation-delay: 0s;
-  animation-duration: 11s;
-}
-
-
-
-
-
-@keyframes animate {
-
-  0%{
-      transform: translateY(0) rotate(0deg);
-      opacity: 1;
-      border-radius: 0;
-  }
-
-  100%{
-      transform: translateY(-1000px) rotate(720deg);
-      opacity: 0;
-      border-radius: 50%;
-  }
-
-}
 
 .container2 {
   width: 100%;
+  height: 100vh; /* Defina a altura como 100% da altura da tela (viewport height) */
   margin: 0 auto;
+  background: linear-gradient(0, #120c56, #000000);
+  border-radius: 0;
 }
-
-  .subContainer {
-    height: 68vh;
-    width: 29%;
-    background-color: #2ca199;
-    overflow: hidden;
-    border-top-left-radius: 25px;
-    border-bottom-left-radius: 25px; 
-    border-top-right-radius: 0px;
-    border-bottom-right-radius: 0px;
-    border-left: 2px solid #fff;
-    border-top: 2px solid #fff;
-    
-  }
-
-  .logoStonks {
-    width: 60%; 
-    height: auto; 
-    margin-top: -45.5px; 
-}
-
-  .imageFinanca{
-    position: absolute;
-    z-index: 9999;
-    border-radius: 25px;
-    width: 39%;
-    height: 64%;
-    top: 27.3%;
-    left: 18%;
-  }
-
-  .conectText{
-    margin-top: 28%;
-    margin-bottom: 1%;
-    color: rgb(224, 224, 224);
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    font-size: 35px;
-    
-    position: relative;
-    left: -2px;
-    font-family: greycliffcf,sans-serif;
-    font-size: 2em;
-    margin-block-start: 1.17em;
-    margin-block-end: 0.27em;
-    margin-inline-start: 0px;
-    margin-inline-end: 0px;
-    font-weight: bold;
-    padding: 0 !important;
-  } 
-  .conectText-subtitle{
-    padding: 0 !important;
-    margin-bottom: 45px;
-    font-size: 15px;
-    color: rgb(224, 224, 224);
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    position: relative;
-    left: -2px;
-    font-family: greycliffcf,sans-serif;
-   
-    margin-inline-start: 0px;
-    margin-inline-end: 0px;
-
-  }
-
-
-  .container-login {
-    position: relative;
-    z-index: 9999;
-    min-height: 100vh;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    padding: 15px;  
-  }
-
   
 
-  .wrap-login {
-    border-radius: 50px;
-    height: 68vh;
-    width: 26%;
-    background: linear-gradient(to bottom, #1d2327, #2f2f2f); 
-    overflow: hidden;
-    padding: 0px 40px 44px 55px;
-    border-top-left-radius: 0px;
-    border-bottom-left-radius: 0px;
-    border-top-right-radius: 25px;
-    border-bottom-right-radius: 25px;
-    border-right: 2px solid #fff;
-    border-top: 2px solid #fff;
-  } 
+.subContainer {
+  height: 68vh;
+  width: 29%;
+  background: linear-gradient(to bottom, #14171a, #1c1a1a); 
+  overflow: hidden;
+  border-top-left-radius: 25px;
+  border-bottom-left-radius: 25px; 
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+.logo {
+  width: 60%; 
+  margin-top: -40px; 
+  margin-left: 83px;
+}
+
+.imageFinanca {
+  position: absolute;
+  z-index: 9999;
+  border-radius: 25px;
+  width:33.5%;
+  height: 48%;
+  top: 36.6%;
+  left: 20%;
+}
+
+
+.conectText {
+  margin-top: 28%;
+  margin-bottom: 1%;
+  color: rgb(224, 224, 224);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: 35px;
+  position: relative;
+  left: -2px;
+  font-family: greycliffcf,sans-serif;
+  font-size: 2em;
+  margin-block-start: 1.17em;
+  margin-block-end: 0.27em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  font-weight: bold;
+  padding: 0 !important;
+  margin-top: 30%;
+} 
+
+.conectText-subtitle {
+  padding: 0 !important;
+  margin-bottom: 45px;
+  font-size: 15px;
+  color: rgb(224, 224, 224);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+  left: -2px;
+  font-family: greycliffcf,sans-serif;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  
+}
+
+.container-login {
+  position: relative;
+  z-index: 9999;
+  min-height: 100vh;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;  
+}
+
+.wrap-login {
+  border-radius: 50px;
+  height: 68vh;
+  width: 26%;
+  background: linear-gradient(to bottom, #1d2327, #2f2f2f); 
+  overflow: hidden;
+  padding: 0px 40px 44px 55px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-top-right-radius: 25px;
+  border-bottom-right-radius: 25px;
+} 
 
 .login-form {
   width: 100%;
@@ -258,6 +119,7 @@ position: absolute;
 }
 
 .login-form-title {
+  
   font-family: Nunito, sans-serif;
   display: block;
   color: azure;
@@ -292,6 +154,7 @@ position: absolute;
   background-color: transparent;
   padding: 0 5px;
   font-family: Nunito, sans-serif;
+  margin-top: -8px;
 }
 
 .focus-input {
@@ -376,6 +239,7 @@ position: absolute;
   align-items: center;
   width: 100%;
   height: 50px;
+  margin-top: 5%;
   
   background: rgb(6,14,131);
   background: linear-gradient(0deg, rgba(6,14,131,1) 0%, rgba(12,25,180,1) 100%);
@@ -424,3 +288,242 @@ position: absolute;
 .error{
   color: white;
 }
+
+.stars,
+.stars2 {
+  position: relative;
+  border-radius: 50%;
+}
+
+.stars::after,
+.stars2::after {
+  content: " ";
+  position: absolute;
+  top: 100%; 
+  border-radius: inherit;
+  animation: anim-stars 30s linear infinite;
+  opacity: 0; 
+}
+
+.stars::after {
+  width: 3px;
+  height: 3px;
+  box-shadow:
+    50px 30px white,
+    1000px 80px white,
+    50px 30px white,
+    1000px 80px white,
+    800px 120px white,
+    1200px 20px white,
+    1250px 130px white,
+    200px 50px white,
+    500px 74px white,
+    600px 100px white,
+    1400px 90px white,
+    200px 100px white,
+    50px 180px white,
+    300px 100px white,
+    370px 400px white,
+    370px 500px white,
+    1250px 600px white,
+    1000px 700px white,
+    1500px 700px white,
+    70px 15px white,
+    1100px 50px white,
+    900px 90px white,
+    1150px 10px white,
+    1220px 110px white,
+    180px 40px white,
+    520px 65px white,
+    650px 95px white,
+    1430px 80px white,
+    220px 95px white,
+    60px 175px white,
+    320px 90px white,
+    385px 410px white,
+    390px 520px white,
+    1240px 610px white,
+    1010px 720px white,
+    1510px 720px white,
+    30px 10px white,
+    1050px 70px white,
+    850px 110px white,
+    1170px 30px white,
+    1230px 120px white,
+    160px 60px white,
+    540px 85px white,
+    630px 110px white,
+    1420px 100px white,
+    240px 100px white,
+    55px 165px white,
+    310px 80px white,
+    400px 430px white,
+    380px 530px white,
+    50px 30px white,
+    1000px 80px white,
+    800px 120px white,
+    1200px 20px white,
+    1250px 130px white,
+    200px 50px white,
+    500px 74px white,
+    600px 100px white,
+    1400px 90px white,
+    200px 100px white,
+    50px 180px white,
+    300px 100px white,
+    370px 400px white,
+    370px 500px white,
+    1250px 600px white,
+    1000px 700px white,
+    1500px 700px white,
+    70px 15px white,
+    1100px 50px white,
+    900px 90px white,
+    1150px 10px white,
+    1220px 110px white,
+    180px 40px white,
+    520px 65px white,
+    650px 95px white,
+    1430px 80px white,
+    220px 95px white,
+    60px 175px white,
+    320px 90px white,
+    385px 410px white,
+    390px 520px white,
+    1240px 610px white,
+    1010px 720px white,
+    1510px 720px white,
+    30px 10px white,
+    1050px 70px white,
+    850px 110px white,
+    1170px 30px white,
+    1230px 120px white,
+    160px 60px white,
+    540px 85px white,
+    630px 110px white,
+    1420px 100px white,
+    240px 100px white,
+    55px 165px white,
+    310px 80px white,
+    400px 430px white,
+    380px 530px white,
+    1260px 620px white,
+    1020px 740px white,
+    1490px 690px white,
+    800px 350px white,
+    600px 400px white,
+    1100px 300px white,
+    1200px 420px white,
+    750px 350px white,
+    900px 280px white,
+    1050px 370px white,
+    1400px 360px white,
+    300px 350px white,
+    450px 280px white,
+    700px 320px white,
+    330px 700px white,
+    400px 640px white,
+    1250px 500px white,
+    1100px 600px white,
+    1000px 550px white,
+    1260px 620px white,
+    1020px 740px white,
+    1490px 690px white;
+    
+}
+
+.stars2::after {
+  width: 1px;
+  height: 1px;
+  box-shadow:
+    15px 15px white,
+    10px 20px white,
+      10px 20px white,
+  170px 50px white,
+  280px 110px white,
+  350px 80px white,
+  400px 130px white,
+  780px 40px white,
+  890px 110px white,
+  1005px 180px white,
+  1120px 50px white,
+  1260px 190px white,
+  1325px 120px white,
+  1400px 210px white,
+  10px 280px white,
+  120px 350px white,
+  220px 400px white,
+  360px 340px white,
+  470px 280px white,
+  550px 390px white,
+  650px 320px white,
+  780px 270px white,
+  900px 360px white,
+  1020px 400px white,
+  1100px 340px white,
+  1200px 370px white,
+  1300px 430px white,
+  10px 480px white,
+  120px 550px white,
+  220px 610px white,
+  360px 550px white,
+  470px 480px white,
+  550px 590px white,
+  650px 520px white,
+  780px 470px white,
+  900px 560px white,
+  1020px 600px white,
+  1100px 540px white,
+  1200px 570px white,
+  1300px 630px white,
+  10px 680px white,
+  120px 750px white,
+  220px 810px white,
+  360px 750px white,
+  470px 680px white,
+  550px 790px white,
+  650px 720px white,
+  780px 670px white,
+  900px 760px white,
+  1020px 800px white,
+  1100px 740px white,
+  1200px 770px white,
+  1300px 830px white,
+  10px 880px white,
+  120px 950px white,
+  220px 1010px white,
+  360px 950px white,
+  470px 880px white,
+  550px 990px white,
+  650px 920px white,
+  780px 870px white,
+  900px 960px white,
+  1020px 1000px white,
+  1100px 940px white,
+  1200px 970px white,
+  1300px 1030px white,
+  10px 1080px white,
+  120px 1150px white,
+  220px 1210px white,
+  360px 1150px white,
+  470px 1080px white,
+  550px 1190px white,
+  650px 1120px white,
+  780px 1070px white,
+  900px 1160px white,
+  1020px 1200px white,
+  1100px 1140px white,
+  1200px 1170px white,
+  1300px 1230px white;
+    
+}
+
+@keyframes anim-stars {
+  to               {
+    transform: translateY(-900px);
+  }
+  
+  25% {
+    opacity: 1;
+  }
+}       

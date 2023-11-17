@@ -1,9 +1,8 @@
+
+
 import React, { useState, useEffect } from 'react';
 import Logo from "../style/img/Logo.png";
 import financas from "../style/img/finance.png";
-import Dente1 from "../style/img/Dentao.png";
-import Dente2 from "../style/img/Dente.png";
-import Dente3 from "../style/img/Dentinho.png";
 import "../style/css/login.css";
 
 function Login() {
@@ -24,7 +23,7 @@ function Login() {
     e.preventDefault();
 
     if (validateFields()) {
-      if (email === "teste@gmail.com" && password === "1234") {
+      if (email === "dente@gmail.com" && password === "dente") {
         window.location.href = "/app/dashboard";
       } else {
         setError("Email ou senha incorretos.");
@@ -38,24 +37,16 @@ function Login() {
 
   return (
     <div className="container2">
-      <div className="area">
-        
-        {/* <ul className="circles">
-          <li className="dente dente1"><img src={Dente1} alt="Dente 1" /></li>
-          <li className="dente dente2"><img src={Dente2} alt="Dente 2" /></li>
-          <li className="dente dente3"><img src={Dente3} alt="Dente 3" /></li>
-          <li className="dente dente1"><img src={Dente1} alt="Dente 1" /></li>
-          <li className="dente dente2"><img src={Dente2} alt="Dente 2" /></li>
-          <li className="dente dente3"><img src={Dente3} alt="Dente 3" /></li>
-          <li className="dente dente1"><img src={Dente1} alt="Dente 1" /></li>
-          <li className="dente dente2"><img src={Dente2} alt="Dente 2" /></li>
-          <li className="dente dente3"><img src={Dente3} alt="Dente 3" /></li>
-        </ul> */}
-      </div>
+      <div class="stars" ></div>
+      <div class="stars2" ></div>
+      
+      
+
+
       <div className="container-login">
         <div className="subContainer">
-           <img className="logoStonks" src={Logo} alt="LOGO stonks" /> 
-          <img className="imageFinanca" src={financas} alt="LOGO stonks" />
+           <img className="logo" src={Logo} alt="LOGO" /> 
+          <img className="imageFinanca" src={financas} alt="LOGO" />
         </div>
         <div className="wrap-login">
           <form className="login-form" onSubmit={handleLogin}>
@@ -103,4 +94,5 @@ function Login() {
   );
 }
 
-export default Login;
+export default Login; 
+

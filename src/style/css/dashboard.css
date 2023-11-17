@@ -62,8 +62,8 @@ body{
 .subInfo{
     display: flex;
     flex-direction: column;
-    color: #feea98;
-   
+    
+
 }
 
 .debitos{
@@ -84,5 +84,5 @@ body{
 .iconPlan{
     width: 40px;
     height: 40px;
-    
+
 }
