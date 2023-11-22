@@ -142,9 +142,16 @@ class AppointmentFormContainerBasic extends React.PureComponent {
       consultorios: ["Consultorio 1", "Consultorio 2"],
       duracoes: ["15", "30", "45", "60", "90", "120"],
       formData: {
-        horaInicial: "15:15",
+        horaInicial: "00:00",
       },
       compromisso:"",
+      errors: { 
+        paciente: false,
+        profissional: false,
+        consultorio: false,
+        dataConsulta: false,
+        horaInicio: false,
+      }
     };
 
     
@@ -231,7 +238,31 @@ class AppointmentFormContainerBasic extends React.PureComponent {
     this.openModal();
   }
 
+  validateForm = () => {
+    const { paciente, profissional, consultorio, dataConsulta, formData: { horaInicial } } = this.state;
+    let isValid = true;
+    let errors = {};
+
+    if (!paciente) {
+      errors.paciente = true;
+      isValid = false;
+    }
+    if (!profissional) {
+      errors.profissional = true;
+      isValid = false;
+    }
+    // Repita para os outros campos necessários
+
+    this.setState({ errors });
+    return isValid;
+  }
+
+
   async marcarAgendamento() {
+    if (!this.validateForm()) {
+      
+      return;
+    }
     function converterMinutosParaHoraDuracao(duracao) {
       const horas = Math.floor(duracao / 60);
       const minutosRestantes = duracao % 60;
@@ -249,7 +280,7 @@ class AppointmentFormContainerBasic extends React.PureComponent {
       profissional,
       consultorio,
 
-      horaInicial,
+      
       duracao,
       observacao,
     } = this.state;
@@ -261,16 +292,22 @@ class AppointmentFormContainerBasic extends React.PureComponent {
     selectedDate.setHours(0, 0, 0, 0);
 
     const duracaoFormatada = converterMinutosParaHoraDuracao(duracao);
+    const { dataConsulta, formData: { horaInicial } } = this.state;
+
+  // A data e hora devem ser combinadas corretamente antes do envio
+  const dataHoraConsulta = new Date(dataConsulta);
+  const [hora, minuto] = horaInicial.split(':');
+  dataHoraConsulta.setHours(hora, minuto, 0); // Configura a hora e os minutos
 
     const dataAgendamento = {
       pacienteId: paciente, // Defina o pacienteId conforme necessário
       usuarioId: profissional, // Defina o usuarioId conforme necessário
-      dataConsulta: format(selectedDate, "yyyy-MM-dd"), // Converte a data para o formato ISO
-      horaInicio: format(selectedDate, "HH:mm:ss"), // Converte a hora de início para o formato ISO
+      dataConsulta: new Date().toISOString().split('T')[0], // Teste com a data atual
+      horaInicio: format(dataHoraConsulta, "HH:mm:ss"), // Converte a hora de início para o formato ISO
       duracao: duracaoFormatada, // Use a duração selecionada
       sala: consultorio,
       observacao: observacao,
-      titulo: "Consulta teste de banco",
+      titulo: "Consulta do Paciente: " +paciente,
     };
     console.log(dataAgendamento);
     try {
@@ -290,6 +327,72 @@ class AppointmentFormContainerBasic extends React.PureComponent {
     }
   }
 
+
+  async criarCompromisso() {
+    const {
+      profissional,
+      compromisso,
+      repetirCompromisso,
+      diaInteiro,
+      disponivel,
+    } = this.state;
+  
+    const { dataInicial, dataFinal } = this.state.appointmentChanges;
+
+    const ajustarFusoHorario = (dataHora) => {
+      const data = new Date(dataHora);
+      data.setHours(data.getHours() - 3); // Subtrai 3 horas
+      return data;
+    };
+
+
+if (!(dataInicial instanceof Date && dataFinal instanceof Date)) {
+  console.error("Data inicial ou final não definida");
+  alert("Erro: Data não definida.");
+  return;
+}
+
+    let dataHoraInicio;
+    let dataHoraFim;
+    if (diaInteiro) {
+      const dataInicialAjustada = ajustarFusoHorario(dataInicial);
+      const dataFinalAjustada = ajustarFusoHorario(dataFinal);
+      dataHoraInicio = new Date(dataInicialAjustada.setHours(0, 0, 0, 0)).toISOString();
+      dataHoraFim = new Date(dataFinalAjustada.setHours(23, 59, 59, 999)).toISOString();
+    } else {
+      dataHoraInicio = ajustarFusoHorario(dataInicial).toISOString();
+      dataHoraFim = ajustarFusoHorario(dataFinal).toISOString();
+    }
+  
+    const payload = {
+      usuarioId: profissional,
+      dataHoraInicio,
+      dataHoraFim,
+      descricao: compromisso,
+      repetir: repetirCompromisso,
+      titulo: compromisso,
+      permitirAgendamento: !disponivel,
+    };
+  
+    try {
+      const response = await axios.post(
+        "https://clinicapi-api.azurewebsites.net/Compromisso/CriarCompromisso",
+        payload
+      );
+  
+      if (response.status === 200) {
+        alert("Compromisso criado com sucesso!");
+        console.log(payload);
+      } else {
+        alert("Erro ao criar compromisso.");
+      }
+    } catch (error) {
+      console.error("Erro ao criar compromisso: ", error);
+      alert("Erro ao criar compromisso: " + error.message);
+    }
+  }
+  
+  
   handleRetornoChange = (event) => {
     this.setState({ retornoSelecionado: event.target.value });
   };
@@ -387,8 +490,10 @@ class AppointmentFormContainerBasic extends React.PureComponent {
       diaInteiro,
       dataInicial,
       dataFinal,
-      disponivel
+      disponivel,
+      
     } = this.state;
+    const { errors } = this.state;
 
     const displayCompromissoData = {
       Titulo: titulo,
@@ -462,50 +567,66 @@ class AppointmentFormContainerBasic extends React.PureComponent {
         const dataConsultaPickerProps = pickerEditorProps("dataConsulta");
         dataInicialPickerProps.minDateTime = new Date();
         dataFinalPickerProps.minDateTime = dataInicialPickerProps.minDateTime;
+        dataInicialPickerProps.fullWidth = this.state.diaInteiro; // Tornar full-width se "Dia Inteiro" estiver ativado
+        dataInicialPickerProps.inputFormat = this.state.diaInteiro ? "dd/MM/yyyy" : "dd/MM/yyyy HH:mm"; // Formato sem hora se "Dia Inteiro"
+        dataConsultaPickerProps.inputFormat = "dd/MM/yyyy";
 
         dataFinalPickerProps.onError = (error) => {
-          // Adicione uma validação personalizada para garantir que 'Termina em' não seja menor que 'Começa em'
+          if (!error) {
+            return; // Retorna cedo se não houver erro
+          }
+        
+        
           if (error.code === "validate.min") {
             return "A data não pode ser menor que 'Começa em'";
           }
         };
         
-  const handleDataInicialChange = (date) => {
+        
+       const handleDataInicialChange = (date) => {
+          if (this.state.diaInteiro) {
+            date.setHours(0, 0, 0, 0);
+            this.setState({
+              dataInicial: date,
+              dataFinal: new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59),
+            });
+          } else {
+            this.changeAppointment({
+              field: "dataInicial",
+              changes: date ? new Date(date) : new Date()
+            });
+          }
+        };
+        
+  
+        const handleDataFinalChange = (date) => {
+          this.changeAppointment({
+            field: "dataFinal",
+            changes: date ? new Date(date) : new Date()
+          });
+        };
+
+  const handleDataConsultaChange = (date) => {
+    // Garanta que apenas a data seja armazenada, excluindo a hora
     this.changeAppointment({
-      field: ["dataInicial"],
-      changes: date ? new Date(date)  : new Date(displayCompromissoData.DataInicial),
+      field: ["dataConsulta"],
+      changes: date ? format(date, "yyyy-MM-dd") : null,
     });
   };
   
-  const handleDataFinalChange = (date) => {
-    this.changeAppointment({
-      field: ["dataFinal"],
-      changes: date ? new Date(date)  : new Date(displayCompromissoData.DataFicial),
-    });
+
+  const handleHoraInicialChange = (event) => {
+    const { value } = event.target;
+  
+    if (!value || value.includes('_')) {
+      // Se o valor for vazio ou incompleto, reset para um valor padrão
+      this.setState({ formData: { ...this.state.formData, horaInicial: "00:00" } });
+    } else {
+      // Atualize o estado com o valor da hora
+      this.setState({ formData: { ...this.state.formData, horaInicial: value } });
+    }
   };
-
-  const handleDataConsultaChange = (date) => {
-    this.changeAppointment({
-      field: ["dataConsulta"],
-      changes: date ? new Date(date)  : new Date(displayCompromissoData.DataConsulta),
-    });
-  };
-
-    const handleHoraInicialChange = (event) => {
-      const { value } = event.target;
-
-      // Divida a string da hora em horas e minutos
-      const [hours, minutes] = value.split(":").map(Number);
-
-      // Crie um novo objeto Date e defina as horas e minutos
-      const selectedDate = new Date();
-      selectedDate.setHours(hours);
-      selectedDate.setMinutes(minutes);
-
-      // Atualize o estado com a nova data
-      const updatedFormData = { ...formData, horaInicial: selectedDate };
-      this.setState({ formData: updatedFormData });
-    };
+  
 
     const setFormData = (data) => {
       this.setState({
@@ -578,6 +699,7 @@ class AppointmentFormContainerBasic extends React.PureComponent {
                 className={classes.wrapper}
                 style={{
                   maxWidth: "31.5rem",
+
                   paddingBottom: "0px",
                   marginTop: "5px",
                 }}
@@ -600,13 +722,21 @@ class AppointmentFormContainerBasic extends React.PureComponent {
                   }
                   renderInput={(params) => (
                     <TextField
-                      {...textEditorProps("Paciente")}
                       {...params}
+                      label="Paciente"
+                      variant="outlined"
                       required
                       size="small"
+                      // Aplicando estilo adicional para erro
+                      error={errors.paciente}
+                      InputProps={{
+                        ...params.InputProps,
+                        className: errors.paciente ? 'error-paciente' : '',
+                      }}
                     />
                   )}
                 />
+
               </div>
 
               <div
@@ -614,7 +744,7 @@ class AppointmentFormContainerBasic extends React.PureComponent {
                   paddingLeft: "365px",
                   color: "#2196f3",
                   fontSize: "13px",
-                  paddingBottom: "18.5px",
+                  paddingBottom: "10.5px",
                   marginTop: "4px",
                 }}
               >
@@ -655,6 +785,11 @@ class AppointmentFormContainerBasic extends React.PureComponent {
                         {...params}
                         required
                         size="small"
+                        error={errors.profissional}
+                      InputProps={{
+                        ...params.InputProps,
+                        className: errors.profissional ? 'error-profissional' : '',
+                      }}
                       />
                     )}
                   />
@@ -665,7 +800,7 @@ class AppointmentFormContainerBasic extends React.PureComponent {
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
-                  paddingBottom: "21.5px",
+                 
                   maxWidth: "31.5rem",
                 }}
               >
@@ -673,7 +808,7 @@ class AppointmentFormContainerBasic extends React.PureComponent {
                 <div
                   style={{
                     flexBasis: "48%",
-                    paddingBottom: "21.5px",
+                    paddingBottom: "23.5px",
                     maxWidth: "300px !important",
                   }}
                 >
@@ -691,6 +826,11 @@ class AppointmentFormContainerBasic extends React.PureComponent {
                         {...params}
                         required
                         size="small"
+                        error={errors.consultorio}
+                        InputProps={{
+                        ...params.InputProps,
+                        className: errors.consultorio ? 'error-consultorio' : '',
+                      }}
                       />
                     )}
                   />
@@ -722,14 +862,14 @@ class AppointmentFormContainerBasic extends React.PureComponent {
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
-                  paddingBottom: "21.5px",
+                  
                   maxWidth: "31.5rem",
                 }}
               >
                 {/* Campo Data da Consulta */}
                 <div
                   style={{
-                    marginRight: "5px",
+                    marginRight: "10px",
                     flexBasis: "68%",
                     maxWidth: "300px !important",
                   }}
@@ -750,7 +890,7 @@ class AppointmentFormContainerBasic extends React.PureComponent {
 
                 {/* Campo Hora de Início */}
                 <div
-                  style={{ width: "32%", marginRight: "5px", flexBasis: "68%" }}
+                  style={{ maxWidth: "300px !important", marginLeft: "10px", flexBasis: "68%" }}
                 >
                   <InputMask
                     mask="99:99" // Define a máscara para o formato de hora (hh:mm)
@@ -804,7 +944,7 @@ class AppointmentFormContainerBasic extends React.PureComponent {
                   <TextField
                     value={this.state.retornoSelecionado}
                     onChange={this.handleRetornoChange}
-                    style={{ marginLeft: "10px" }}
+                    
                     size="small"
                     select
                     label="Retorno em"
@@ -924,7 +1064,7 @@ class AppointmentFormContainerBasic extends React.PureComponent {
                     </div>
                   </div>
                   {/* Campo Dia Inteiro (Switch) */}
-                  <div 
+                  <div
                     style={{ flexBasis: "28%", maxWidth: "200px !important" }}
                   >
                     <Switch
@@ -934,7 +1074,7 @@ class AppointmentFormContainerBasic extends React.PureComponent {
                       }
                       color="primary"
                     />
-                    <label className="button-text">Dia Inteiro</label>
+                    <label>Dia Inteiro</label>
                   </div>
                 </div>
 
@@ -974,7 +1114,8 @@ class AppointmentFormContainerBasic extends React.PureComponent {
                       flexBasis: "48%",
                       maxWidth: "400px !important",
                     }}
-                  >
+                    >
+                    {!this.state.diaInteiro && (
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                       <DateTimePicker
                         label="Termina em"
@@ -988,9 +1129,9 @@ class AppointmentFormContainerBasic extends React.PureComponent {
                         required
                       />
                     </LocalizationProvider>
+                )}
                   </div>
                 </div>
-
                 <div
                   style={{
                     display: "flex",
@@ -1011,7 +1152,7 @@ class AppointmentFormContainerBasic extends React.PureComponent {
                       }
                       color="primary"
                     />
-                    <label className="button-text">Repetir Compromisso</label>
+                    <label>Repetir Compromisso</label>
                   </div>
 
                   {this.state.repetirCompromisso && (
@@ -1046,7 +1187,7 @@ class AppointmentFormContainerBasic extends React.PureComponent {
 
                       color="primary"
                     />
-                    <label className="button-text">Receber Alerta</label>
+                    <label>Receber Alerta</label>
                   </div>
                   {this.state.receberAlerta && (
                     <div style={{ maxWidth: "31.5rem" }}>
@@ -1069,14 +1210,14 @@ class AppointmentFormContainerBasic extends React.PureComponent {
                   )}
                 </div>
 
-                <div className="barra_compromisso"
+                <div
+                  className="card-label"
                   style={{
                     display: "flex",
                     justifyContent: "space-between",
                     paddingBottom: "21.5px",
                     maxWidth: "31.5rem",
                     flexDirection:'column',
-                    background:'#feea98',
                     paddingLeft:'12px'
                 
                   }}
@@ -1098,7 +1239,7 @@ class AppointmentFormContainerBasic extends React.PureComponent {
                     }
                     label="Não disponível para atendimento neste período."
                   />
-                  <label style={{paddingLeft:'30px', fontSize:'13px',color:'black',paddingRight:'30px'}}>Marcando essa opção um compromisso ficará visível em sua agenda. Caso seja necessário marcar um atendimento neste horário você será avisado por e-mail.</label>
+                  <label className="card-label" style={{paddingLeft:'30px', fontSize:'13px',color:'black',paddingRight:'30px'}}>Marcando essa opção um compromisso ficará visível em sua agenda. Caso seja necessário marcar um atendimento neste horário você será avisado por e-mail.</label>
                 </div>
               
               </div>
@@ -1134,7 +1275,7 @@ class AppointmentFormContainerBasic extends React.PureComponent {
                   color="success"
                   className={classes.button}
                   onClick={() => {
-                    this.marcarAgendamento(); // Agora a função está definida
+                    this.criarCompromisso(); // Agora a função está definida
                   }}
                 >
                   {isNewAppointment ? "Marcar" : "Salvar"}
@@ -1225,85 +1366,40 @@ export default class Demo extends React.PureComponent {
   }
 
   async componentDidMount() {
-    // Faz uma requisição para buscar os dados da API
-    function parseDuration(duration) {
-      const [hours, minutes] = duration.split(":").map(Number);
-      return hours * 60 * 60 * 1000 + minutes * 60 * 1000;
-    }
-
     try {
       const response = await axios.get(appointmentsApiUrl);
-      const { retorno } = response.data;
-
-      if (retorno) {
-        // Formata os dados recebidos da API para o formato esperado
-        const formattedAppointments = retorno.map((apiAppointment) => {
-          const dataConsultaDate = new Date(apiAppointment.dataConsulta);
-          const horaInicioTime = new Date(apiAppointment.horaInicio);
-
-          // Extract date components
-          const year = dataConsultaDate.getFullYear();
-          const month = dataConsultaDate.getMonth();
-          const day = dataConsultaDate.getDate();
-
-          // Extract time components
-          const hours = horaInicioTime.getHours();
-          const minutes = horaInicioTime.getMinutes();
-
-          const startDate = new Date(
-            dataConsultaDate.getFullYear(),
-            dataConsultaDate.getMonth(),
-            dataConsultaDate.getDate(),
-            horaInicioTime.getHours(),
-            horaInicioTime.getMinutes()
-          );
-          console.log("startdate:", startDate);
-
+      const appointments = response.data.retorno;
+  
+      if (appointments) {
+        const formattedAppointments = appointments.map((appointment) => {
+          const startDate = new Date(`${appointment.dataConsulta}T${appointment.horaInicio}`);
+          const duration = appointment.duracao.split(':');
+          const endDate = new Date(startDate.getTime() + parseInt(duration[0], 10) * 60 * 60 * 1000 + parseInt(duration[1], 10) * 60 * 1000);
+  
+          // Format the startDate and endDate to match the structure of the scheduler component
+          const formattedStartDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(), startDate.getHours(), startDate.getMinutes());
+          const formattedEndDate = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate(), endDate.getHours(), endDate.getMinutes());
+  
           return {
-            id: apiAppointment.agendamentoId,
-            title: apiAppointment.titulo,
-            startDate: apiAppointment.DataConsulta,
-            endDate: new Date(
-              new Date(
-                apiAppointment.dataConsulta + apiAppointment.horaInicio
-              ).getTime() + parseDuration(apiAppointment.duracao)
-            ),
-            location: apiAppointment.sala,
+            title: appointment.titulo,
+            startDate: formattedStartDate,
+            endDate: formattedEndDate,
+            id: appointment.agendamentoId,
+            location: appointment.sala,
           };
         });
-        // Atualiza o estado com os dados formatados
+  
         this.setState({ data: formattedAppointments });
-        console.log("Agendamentos no banco: ", formattedAppointments);
+        console.log("Formatted Appointments:", formattedAppointments);
       }
     } catch (error) {
       console.error("Erro ao buscar dados da API:", error);
     }
   }
+  
+  
 
-  validateForm() {
-    const {
-      paciente,
-      profissional,
-      consultorio,
-      dataConsulta,
-      horaInicio,
-      duracao,
-    } = this.state;
-
-    // Verifique se todos os campos obrigatórios estão preenchidos
-    if (
-      !paciente ||
-      !profissional ||
-      !consultorio ||
-      !dataConsulta ||
-      !horaInicio ||
-      !duracao
-    ) {
-      return false;
-    }
-
-    return true;
-  }
+ 
 
   applyChanges() {
     const { commitChanges } = this.props;
@@ -1318,19 +1414,7 @@ export default class Demo extends React.PureComponent {
     } = this.state;
 
     // Verifique se todos os campos obrigatórios estão preenchidos
-    if (
-      !paciente ||
-      !profissional ||
-      !consultorio ||
-      !dataConsulta ||
-      !horaInicio ||
-      !duracao
-    ) {
-      alert(
-        "Preencha todos os campos obrigatórios antes de criar o agendamento."
-      );
-      return; // Impedir a criação do agendamento se algum campo estiver faltando
-    }
+   
 
     const startDate = new Date(dataConsulta);
     startDate.setHours(horaInicio.getHours());

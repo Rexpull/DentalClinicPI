@@ -108,11 +108,12 @@ function UserCard({ user, onViewClick,refreshUserList  }) {
         if (response.data && response.data.sucesso) {
           setPermissoesCount(response.data.retorno.acesso.quantidadePermissoes);
         }
-        setIsLoading(false);
+       setIsLoading(false);
       })
       .catch((error) => {
         console.error("Erro ao buscar as permissões do usuário", error);
         setIsLoading(false);
+
       });
   }, [user.id]);
 

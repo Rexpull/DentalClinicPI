@@ -33,10 +33,6 @@
     display: flex;
 }
 
-.h3-title span{
-   color: #000000de!important;
-}
-
 .card-content{
     padding: 16px;
 }

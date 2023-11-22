@@ -24,47 +24,22 @@
     --cor-do-botao-alternativo: white;
 }
 
-.css-2ulfj5-MuiTypography-root{
-    color: var(--body_color) !important;
+.css-10t9sww-MuiPaper-root{
+    background-color: var(--body_background) !important;
 }
 
-.css-1sn4lm3-MuiTypography-root{
-    color: var(--body_color) !important;
-}
-
-.css-i4bv87-MuiSvgIcon-root {
+.css-1azl6jz-MuiTableCell-root{
     color: var(--color) !important;
 }
 
-.css-k4qjio-MuiFormHelperText-root{
-    color: #2196f3 !important;
- }
-
- .css-1you3x9-MuiButtonBase-root-MuiTab-root{
-    color: var(--link_color) !important;
- }
-
- .css-1you3x9-MuiButtonBase-root-MuiTab-root.Mui-selected{
-    color: #2196f3 !important;
- }
-
- .modal-content{
-    background-color: var(--body_background) !important;
+.css-1ygcj2i-MuiTableCell-root{
     color: var(--color) !important;
- }
+}
 
- .css-sh22l5-MuiButtonBase-root-MuiAccordionSummary-root{
-    background-color: var(--body_background) !important;
+.css-b7co3x p{
     color: var(--color) !important;
- }
+}
 
- .fixed-buttons{
-    background-color: var(--body_background) !important;
+.css-b7co3x path{
     color: var(--color) !important;
- }
- .cancel-modal{
-    background-color: var(--cor-do-botao-padrao) !important;
-    color: var(--body_color) !important;
- }
-
- 
+}

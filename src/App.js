@@ -5,10 +5,11 @@ import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
 import Pacientes from './pages/pacientes';
 import Comment from './pages/Comment';
-import Analytics from './pages/Analytics';
 import Demo from './pages/Agenda';
 import Login from './pages/Login';
 import AjustesClinica from './pages/Ajuste';
+import PatientPage from './components/PacienteData';
+import FinancePage from './pages/Financeiro'
 
 const App = () => {
   return (
@@ -27,8 +28,9 @@ const App = () => {
             {/* Remova a barra inicial em /dashboard */}
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="paciente" element={<Pacientes />} />
+            <Route path="paciente/detalhes/:id" element={<PatientPage />} />
             <Route path="comment" element={<Comment />} />
-            <Route path="analytics" element={<Analytics />} />
+            <Route path="financeiro" element={<FinancePage />} />
             <Route path="ajustes" element={<AjustesClinica />} />
             <Route path="agenda" element={<Demo />} />
           </Route>

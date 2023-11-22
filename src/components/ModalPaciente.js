@@ -8,7 +8,7 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { Form, GroupItem } from "devextreme-react/form";
-
+import '../style/css/agenda.css'
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import InputMask from "react-input-mask";

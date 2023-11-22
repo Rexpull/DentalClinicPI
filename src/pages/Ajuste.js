@@ -132,6 +132,11 @@ function AjustesClinica() {
     });
   };
   
+  const handleUserEdit = (user) => {
+    setSelectedUser(user);
+    setIsModalOpen(true);
+  };
+  
 
   const handleSave = async () => {
     if (emailError) {
@@ -205,7 +210,7 @@ function AjustesClinica() {
   
 
   return (
-    <Paper style={{ padding: '20px', position: 'relative', minHeight: '300px' }}>
+    <Paper style={{ padding: '20px', position: 'relative', minHeight: '680px' }}>
         <Tabs value={activeTab} onChange={handleChangeTab} sx={{ borderBottom: 1, borderColor: "divider", margin: 0, color:'black',fontWeight:700 }}
         >
         <Tab label="Clínica" sx={{ borderBottom: 1, borderColor: "divider", margin: 0, color:'grey',fontWeight:700 }}/>
@@ -217,7 +222,7 @@ function AjustesClinica() {
         <Typography variant="h6" component="div" style={{ marginTop: '10px', font: '700 17px/28px Roboto,Helvetica Neue,sans-serif' }}>
           Dados da Clínica
         </Typography>
-        <Grid container spacing={2}>
+        <Grid container mb={2} spacing={2}>
           <Grid item xs={6}>
             <TextField
               name="nome"
@@ -296,11 +301,11 @@ function AjustesClinica() {
           </Grid>
     
           {/* Seção 2: Horário de Funcionamento */}
-          <Typography variant="h6" component="div" style={{ marginTop: '10px', font: '700 17px/28px Roboto,Helvetica Neue,sans-serif' }}>
+          <Typography variant="h6" component="div" style={{ marginTop: '20px', font: '700 17px/28px Roboto,Helvetica Neue,sans-serif' }}>
             Horário de Funcionamento
           </Typography>
     
-          <Grid container spacing={2}>
+          <Grid container spacing={2} className='lipin'>
             <Grid item xs={6}>
               <TextField
                 name="horaInicial"
@@ -322,7 +327,7 @@ function AjustesClinica() {
               />
             </Grid>
             <Grid item xs={6}>
-              <TextField 
+              <TextField
                 name="horaFinal"
                 label="Horário final da clínica"
                 variant="outlined"
@@ -344,7 +349,7 @@ function AjustesClinica() {
           </Grid>
     
           {/* Seção 3: Informações da Clínica */}
-          <Typography variant="h6" component="div" style={{ marginTop: '10px', font: '700 17px/28px Roboto,Helvetica Neue,sans-serif' }}>
+          <Typography variant="h6" component="div" style={{ marginTop: '20px', font: '700 17px/28px Roboto,Helvetica Neue,sans-serif' }}>
             Informações da Clínica
           </Typography>
           <Grid container spacing={2}>
@@ -378,10 +383,10 @@ function AjustesClinica() {
             </Grid>
           </Grid>
           {/* Seção 4: Localização */}
-          <Typography variant="h6" component="div" style={{ marginTop: '10px', font: '700 17px/28px Roboto,Helvetica Neue,sans-serif' }}>
+          <Typography variant="h6" component="div" style={{ marginTop: '20px', font: '700 17px/28px Roboto,Helvetica Neue,sans-serif' }}>
             Localização
           </Typography>
-          <Grid container spacing={2}>
+          <Grid container spacing={2} mb={1}>
             <Grid item xs={3}>
               <InputMask
                 mask="99999-999"
@@ -461,7 +466,7 @@ function AjustesClinica() {
                 helperText="Limite de 128 caracteres"
               />
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={4} >
               <TextField
                 name="endereco.cidade"
                 label="Cidade"
@@ -531,8 +536,8 @@ function AjustesClinica() {
           {users.map((user) => (
             <Grid item key={user.id} xs={12} sm={6} md={3} lg={4}>
               <UserCard
-                user={user}
-                onViewClick={(selectedUser) => setSelectedUser(selectedUser)}
+                user={user} 
+                onViewClick={() => handleUserEdit(user)}
                 
               />
             </Grid>
