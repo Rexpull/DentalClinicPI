@@ -1,0 +1,32 @@
+.situacao-info {
+    width: fit-content;
+    color: white;
+    text-align: right;
+    display: inline;
+    padding: .2em .6em .3em;
+    font-size: 95%;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;
+    background-color: '';
+    box-shadow: '';
+
+      &.em_aberto {
+        background-color: #348fe2;
+        box-shadow: 0px 10px 14px -7px #0578dc;
+      }
+    
+      &.vencido {
+        background-color: orange;
+        box-shadow: 0px 10px 13px -7px #b56f05;
+      }
+    
+      &.pago {
+        background-color: #5cb85c;
+        box-shadow: 0px 10px 14px -7px #3e7327;
+      }
+  }

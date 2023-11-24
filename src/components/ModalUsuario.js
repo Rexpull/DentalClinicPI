@@ -30,23 +30,22 @@ import React, { useState, useEffect } from 'react';
   import { faLayerGroup,faIdCardClip } from '@fortawesome/free-solid-svg-icons';
 
 
-  function ModalUsuario() {
-    const [isOpen, setIsOpen] = useState(false);
+  function ModalUsuario({ isOpen, onClose, user }) {
     const [selectedTab, setSelectedTab] = React.useState(0);
     const [selectedUF, setSelectedUF] = useState(null); // Estado selecionado
-    const [nomeUsuario, setNomeUsuario] = useState("");
-    const [senha, setSenha] = useState("");
-    const [telefone, setTelefone] = useState("");
-    const [email, setEmail] = useState("");
+    const [nomeUsuario, setNomeUsuario] = useState(user ? user.nomeUsuario : "");
+    const [senha, setSenha] = useState(user ? user.senha : "");
+    const [telefone, setTelefone] = useState(user ? user.telefone : "");
+    const [email, setEmail] = useState(user ? user.email : "");
     const [sexo, setSexo] = React.useState("");
-    const [perfil, setPerfil] = useState("");
-    const [rua, setRua] = useState("");
-    const [bairro, setBairro] = useState("");
-    const [cidade, setCidade] = useState("");
-    const [cep, setCEP] = useState("");
-    const [valorPorcentagem, setValorPorcentagem] = useState("0");
-    const [salarioBruto, setSalarioBruto] = useState("");
-    const [selectedCommissionOption, setSelectedCommissionOption] = useState("0");
+    const [perfil, setPerfil] = useState(user ? user.perfil : "");
+    const [rua, setRua] = useState(user ? user.rua : "");
+    const [bairro, setBairro] = useState(user ? user.bairro : "");
+    const [cidade, setCidade] = useState(user ? user.cidade : "");
+    const [cep, setCEP] = useState(user ? user.cep : "");
+    const [valorPorcentagem, setValorPorcentagem] = useState(user ? user.valorPorcentagem : "0");
+    const [salarioBruto, setSalarioBruto] = useState(user ? user.salarioBruto : "");
+    const [selectedCommissionOption, setSelectedCommissionOption] = useState(user ? user.selectedCommissionOption : "0");
     const [acessoAjustes, setAcessoAjustes] = useState(false);
     const [acessoDashboard, setAcessoDashboard] = useState(false);
     const [acessoFinanceiro, setAcessoFinanceiro] = useState(false);
@@ -63,19 +62,12 @@ import React, { useState, useEffect } from 'react';
     const [comissionVisible, setComissionVisible] = useState(false); 
     const [ativo, setAtivo] = useState(false);
 
-
-    const openModal = () => {
-      setIsOpen(true);
-    };
-
-    const handleClickOpen = () => {
-      setIsOpen(true);
-    };
+   
+  
 
     const handleClose = () => {
-      setIsOpen(false);
+      onClose();
     };
-
     const handleHorarioAlmocoChange = (campo, valor) => {
       setHorariosAlmoco({
         ...horariosAlmoco,
@@ -162,6 +154,24 @@ import React, { useState, useEffect } from 'react';
         setComissionVisible(false);
       }
     };
+
+    useEffect(() => {
+      // Atualize os estados com as informações do usuário
+      if (user) {
+        setNomeUsuario(user.nome);
+        setSenha (user.senha);
+        setTelefone( user.telefone);
+        setEmail(user.email );
+        setPerfil(user.perfil);
+        setRua(user.rua );
+        setBairro( user.bairro );
+        setCidade( user.cidade );
+        setCEP(user.cep );
+        setValorPorcentagem( user.valorPorcentagem );
+        setSalarioBruto( user.salarioBruto );
+        setSelectedCommissionOption(user.selectedCommissionOption );
+      }
+    }, [user]);
 
     useEffect(() => {
       // Função para buscar os dados da clínica da sua API
@@ -507,19 +517,6 @@ const enviarDadosUsuario = async () => {
   
     return (
       <>
-        <Button
-          variant="contained"
-          onClick={openModal}
-          style={{
-            backgroundColor: "#50ae54",
-            color: "white",
-            position: "absolute",
-            left: "25px",
-            top: "95px",
-          }}
-        >
-          Cadastrar Profissional
-        </Button>
 
         {isOpen && (
           <>

@@ -40,12 +40,13 @@ main{
 .top_section{
   display: flex;
   align-items: center ;
+  
   padding: 20px 15px;
 }
 .bars{
   display: flex;
   font-size: 25px;
-  margin-left: 70px;
+
 }
 .link{
   display: flex;
@@ -175,3 +176,70 @@ css-6od3lo-MuiChip-label{
   color: var(--color) !important;
   background-color: var(--cor-do-botao-padrao) !important;
 }
+.user-profile {
+  position: absolute;
+  bottom: 10px; /* Ajuste a distância do fundo conforme necessário */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 0px;
+  padding: 20px;
+}
+
+.profile-image {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.user-name {
+  color: var(--link_color);
+  font-size: 20px;
+}
+
+.user-profile {
+  transition: opacity 0.5s;
+  opacity: 1;
+}
+
+.user-profile.closed {
+  opacity: 0;
+  pointer-events: none; /* Impede interação com elementos fechados */
+}
+
+.logout-button {
+  position: absolute;
+  bottom: -25px; /* Ajuste a distância do fundo conforme necessário */
+  right: 18px; /* Ajuste a posição à esquerda conforme necessário */
+  color: blue; /* Cor do texto azul */
+ 
+  padding: 4px 8px;
+  border: none;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: color 0.3s; /* Adiciona transição suave à mudança de cor do texto */
+}
+
+.logout-button:hover {
+  color: darkblue; /* Cor mais escura ao passar o mouse */
+}
+
+
+
+.logout-button:hover::after {
+  color: darkblue; /* Cor mais escura ao passar o mouse */
+}
+
+.logout-icon {
+  margin-right: 2px;
+}
+
+
+
+
+ 
+

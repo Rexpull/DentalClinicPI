@@ -35,12 +35,6 @@ const initialFormData = {
   },
 };
 
-const initialUserData = {
-    nomeUsuario: '',
-    senha: '',
-    // Outros campos do usuário
-  };
-  
 
 // Modifique a lista de estados para incluir apenas as siglas
 const estadosDoBrasil = ['DF', 'GO', 'MT', 'MS', 'MG', 'RJ', 'RS', 'SC', 'SP'];
@@ -49,10 +43,10 @@ function AjustesClinica() {
   const [activeTab, setActiveTab] = useState(0);
   const [formData, setFormData] = useState(initialFormData);
   const [emailError, setEmailError] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
- 
+  const [modalUser, setModalUser] = useState(null);
 
   const handleTestClick = () => {
     console.log('Teste clicado'); // Adicione seu console.log aqui para depuração
@@ -133,10 +127,13 @@ function AjustesClinica() {
   };
   
   const handleUserEdit = (user) => {
-    setSelectedUser(user);
-    setIsModalOpen(true);
+    onViewClick(user); 
   };
   
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
 
   const handleSave = async () => {
     if (emailError) {
@@ -208,6 +205,17 @@ function AjustesClinica() {
     }
   };
   
+  const handleOpenModal = (user) => {
+    // Supondo que você tenha um estado para controlar a abertura do modal
+    setIsModalOpen(true);
+    setModalUser(user); // Supondo que você tenha um estado para armazenar o usuário no modal
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setModalUser(null); // Limpa o usuário do modal ao fechar
+  };
+
 
   return (
     <Paper style={{ padding: '20px', position: 'relative', minHeight: '680px' }}>
@@ -531,20 +539,37 @@ function AjustesClinica() {
         </form>
         )}
       {activeTab === 1 && (
+
         <div>
+          <Button
+          variant="contained"
+          onClick={openModal}
+          style={{
+            backgroundColor: "#50ae54",
+            color: "white",
+            position: "absolute",
+            left: "25px",
+            top: "95px",
+          }}
+        >
+          Cadastrar Profissional
+        </Button>
         <Grid container spacing={2} mt={6} style={{boxshadow: '1px 3px 8px 0px rgba(0,0,0,0.63)'}}> 
           {users.map((user) => (
             <Grid item key={user.id} xs={12} sm={6} md={3} lg={4}>
               <UserCard
                 user={user} 
-                onViewClick={() => handleUserEdit(user)}
-                
+                onViewClick={handleOpenModal}                
               />
             </Grid>
           ))}
         </Grid>
         <a href="#" onClick={handleTestClick} style={{ display: "none !important" }}></a>
-        {isModalOpen && <ModalUsuario />}
+        {isModalOpen && <ModalUsuario  
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        user={modalUser}
+  />}
       </div>
         
         )}

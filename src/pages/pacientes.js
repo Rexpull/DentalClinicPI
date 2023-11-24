@@ -20,6 +20,7 @@ import {
 import IconButton from '@mui/material/IconButton';
 import InfoIcon from '@mui/icons-material/Info';
 import DeleteIcon from '@mui/icons-material/Delete';
+import Tooltip from '@mui/material/Tooltip';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
@@ -34,22 +35,23 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import "../style/css/paciente.css";
 import ModalPaciente from "../components/ModalPaciente";
 import { useNavigate } from 'react-router-dom';
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 
 
 const URL = 'https://clinicapi-api.azurewebsites.net/paciente/ListarPacientes';
 const DELETE_URL = 'https://clinicapi-api.azurewebsites.net/Paciente/DeletarPaciente';
 
 function Pacientes( user ) {
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const navigate = useNavigate();
   const [columns] = useState([
-    { name: 'sexo', title: 'Sexo', getCellValue: row => (row.sexo === 'F' ? 
+    { name: '', title: '', getCellValue: row => (row.sexo === 'F' ? 
     <AccountCircleIcon sx={{border:'3px solid pink' ,padding:'0px',borderRadius:'50px', width:'50px',height:'50px'}} /> : 
     <AccountCircleIcon sx={{border:'3px solid blue' ,padding:'0px',borderRadius:'50px', width:'50px',height:'50px'}}/>) },
     { name: 'nome', title: 'Nome' },
-    { name: 'telefone', title: 'Telefone' },
+    { name: 'telefone', title: 'Celular do paciente' },
+    { name: 'idade', title: 'Idade' },
     { name: 'cpf', title: 'CPF' },
-    { name: 'email', title: 'Email' },
+    
     { name: 'actions', title: 'Ações'   },
    
   ]);
@@ -62,52 +64,75 @@ function Pacientes( user ) {
   const [isLoading, setIsLoading] = useState(true);
   const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false);
   const [patientToDeleteId, setPatientToDeleteId] = useState(null);
-  const [isModalPacienteOpen, setIsModalPacienteOpen] = useState(false);
+  const [isModalPacienteOpen, setIsModalPacienteOpen] = useState(true);
   const [editingUser, setEditingUser] = useState(null);
-
+  
+  
+  
 
   const getQueryString = () => (
     `${URL}?take=${pageSize}&skip=${pageSize * currentPage}`
-  );
-
+    );
+    
   
   const loadData = () => {
     const queryString = getQueryString();
     if (queryString !== lastQuery) {
       setIsLoading(true);
       fetch(queryString)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error('Erro na solicitação da API');
-          }
-          return response.json();
-        })
-        .then(({ retorno, totalCount: newTotalCount }) => {
-          if (!retorno || retorno.length === 0) {
-            setRows([]);
-            setTotalCount(0);
-          } else {
-            const mappedData = retorno.map((item) => ({
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Erro na solicitação da API');
+        }
+        return response.json();
+      })
+      .then(({ retorno, totalCount: newTotalCount }) => {
+        if (!retorno || retorno.length === 0) {
+          setRows([]);
+          setTotalCount(0);
+        } else {
+          const mappedData = retorno.map((item) => {
+            // Aqui criamos a URL do WhatsApp para cada paciente
+            const whatsappUrl = `https://api.whatsapp.com/send?phone=55${item.telefone}&text=Ol%C3%A1,%20Paciente`;
+            const idade = calcularIdade(item.dataNascimento);
+            return {
               nome: item.nome,
               sexo: item.sexo,
               telefone: item.telefone,
               cpf: item.cpf,
               email: item.email,
+              idade: idade + ' anos',
               actions: (
-                <div >
-                  <IconButton color="primary" onClick={() => handleEdit(item)}>
-                    <InfoIcon sx={{color:'Blue !important'}}/>
-                  </IconButton>
-                  <IconButton onClick={() => handleDelete(item.id)}>
-                    <DeleteIcon  sx={{color:'red !important'}} />
-                  </IconButton>
+                <div>
+                  <Tooltip title="Conversar com o paciente pelo WhatsApp">
+                    <IconButton                
+                      href={whatsappUrl}
+                      target="_blank"
+                      sx={{color: "#129909" }}
+                    >
+                      <WhatsAppIcon  sx={{color: "#129909" }}/>
+                    </IconButton>
+                  </Tooltip>
+
+                  <Tooltip title="Mais Informações do paciente">
+                    <IconButton color="primary" onClick={() => handleEdit(item)}>
+                      <InfoIcon sx={{color:'Blue !important'}}/>
+                    </IconButton>
+                  </Tooltip>
+
+                  <Tooltip title="Excluir paciente">
+                    <IconButton onClick={() => handleDelete(item.id)}>
+                      <DeleteIcon sx={{color:'red !important'}} />
+                    </IconButton>
+                  </Tooltip>
                 </div>
               ),
-            }));
-            setRows(mappedData);
-            setTotalCount(newTotalCount);
-          }
-        })
+            };
+          });
+          setRows(mappedData);
+          setTotalCount(newTotalCount);
+        }
+      })
         .catch((error) => {
           console.error(error);
         })
@@ -124,9 +149,28 @@ function Pacientes( user ) {
     navigate(`/app/paciente/detalhes/${item.id}`);
   };
   
+  function calcularIdade(dataNascimento) {
+    const hoje = new Date();
+    const nascimento = new Date(dataNascimento);
+    let idade = hoje.getFullYear() - nascimento.getFullYear();
+    const m = hoje.getMonth() - nascimento.getMonth();
+    if (m < 0 || (m === 0 && hoje.getDate() < nascimento.getDate())) {
+      idade--;
+    }
+    return idade;
+  }
 
   const openModalPaciente = () => {
     setIsModalPacienteOpen(true);
+  };
+  
+  const CustomSearchPanel = (props) => {
+    return (
+      <SearchPanel.Input
+        {...props}
+        placeholder="Pesquise pelo CPF" // Define o placeholder desejado
+      />
+    );
   };
 
   const handleDelete = (id) => {
@@ -160,13 +204,30 @@ function Pacientes( user ) {
             // Atualize os dados após a exclusão bem-sucedida
             const updatedRows = rows.filter(item => item.id !== idToDelete);
             setRows(updatedRows);
-            notifySuccess('Registro excluído com sucesso!'); // Notificação de sucesso
+            toast.success("Registro excluído com sucesso!", {
+              position: "bottom-right",
+              autoClose: 2000,
+              hideProgressBar: false,
+              closeOnClick: true,
+            });
           } else {
             console.error(data.mensagem);
+            toast.error("Houve uma falha na exclusão, Inative o Paciente!", {
+              position: "bottom-right",
+              autoClose: 2000,
+              hideProgressBar: false,
+              closeOnClick: true,
+            });
           }
         })
         .catch((error) => {
           console.error(error);
+          toast.error("Houve uma falha na exclusão, Tente novamente!", {
+            position: "bottom-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+          });
         });
     }
   };
@@ -189,19 +250,6 @@ function Pacientes( user ) {
         setCurrentPage(currentPage + 1);
       }
     }
-  };
-
-  // Função para notificação de sucesso
-  const notifySuccess = (message) => {
-    toast.success(message, {
-      position: "bottom-right",
-      autoClose: 3500,
-      hideProgressBar: false,
-      closeOnClick: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
   };
 
   return (
@@ -228,7 +276,9 @@ function Pacientes( user ) {
           <Table />
           <TableHeaderRow showSortingControls />
           <Toolbar /> {/* Adicione a Toolbar para a barra de ferramentas */}
-          <SearchPanel />
+          <SearchPanel
+            InputComponent={CustomSearchPanel} 
+           />
           <PagingPanel
             pageSizes={[9, 20, 50, 100]}
             onPageSizeChange={handlePageSizeChange}
@@ -257,8 +307,10 @@ function Pacientes( user ) {
       <ToastContainer /> {/* Toastify container */}
       
  
-    <Fab color="success" aria-label="add" size='medium' onClick={openModalPaciente} sx={{position:'absolute', left:'1%',top:'7px'}}>
-      <AddIcon />
+    <Button color="success" aria-label="add" size='medium' onClick={openModalPaciente} sx={{position:'absolute', left:'1%',top:'7px',backgroundColor: "#50ae54",width:'240px',marginTop:'2px',marginBottom:'20px',color:'white', fontSize:'14px',
+         '&:hover': {
+            backgroundColor: "#408e43",
+          }}}>
       <a
           href="#"
           onClick={openModalPaciente} // Apenas `openModalPaciente` sem `this`
@@ -268,7 +320,7 @@ function Pacientes( user ) {
         {isModalPacienteOpen && (
           <ModalPaciente open={isModalPacienteOpen} onClose={() => setIsModalPacienteOpen(false)} sx={{color:'black'}}/>
         )}
-    </Fab>
+    </Button>
     
       
     </Paper >

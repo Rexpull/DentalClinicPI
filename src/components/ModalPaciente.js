@@ -61,7 +61,7 @@ function Modal() {
       },
     };
   
-    console.log("Dados do paciente enviados para a API:", pacienteData); // Adicione este console.log
+    console.log("Dados do paciente enviados para a API:", pacienteData); 
   
     try {
       const response = await axios.post('https://clinicapi-api.azurewebsites.net/Paciente/CriarPaciente', pacienteData);
