@@ -4,7 +4,6 @@ import { BrowserRouter, Route, Routes, Outlet } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
 import Pacientes from './pages/pacientes';
-import Comment from './pages/Comment';
 import Demo from './pages/Agenda';
 import Login from './pages/Login';
 import AjustesClinica from './pages/Ajuste';
@@ -27,12 +26,11 @@ const App = () => {
           >
             {/* Remova a barra inicial em /dashboard */}
             <Route path="dashboard" element={<Dashboard />} />
+            <Route path="agenda" element={<Demo />} />
             <Route path="paciente" element={<Pacientes />} />
             <Route path="paciente/detalhes/:id" element={<PatientPage />} />
-            <Route path="comment" element={<Comment />} />
             <Route path="financeiro" element={<FinancePage />} />
             <Route path="ajustes" element={<AjustesClinica />} />
-            <Route path="agenda" element={<Demo />} />
           </Route>
         </Routes>
       </BrowserRouter>

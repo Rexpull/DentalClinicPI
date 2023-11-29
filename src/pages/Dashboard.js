@@ -1,201 +1,256 @@
-import React, { useState } from 'react';
-import TabContext from '@mui/lab/TabContext';
-import TabList from '@mui/lab/TabList';
-import TabPanel from '@mui/lab/TabPanel';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
+import React, { useState,useEffect } from 'react';
 import Box from '@mui/material/Box';
-import { BarChart, Bar, ComposedChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Scatter, ResponsiveContainer, LineChart } from 'recharts';
+import Paper from '@mui/material/Paper';
 import { IconName, MdAttachMoney } from "react-icons/md";
+import { faClipboardList, faUserPlus, faDollarSign } from '@fortawesome/free-solid-svg-icons';
+
+import { Cell, PieChart, Pie, ComposedChart, Bar, BarChart, LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip} from 'recharts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faClipboardList, faUserPlus,faDollarSign } from '@fortawesome/free-solid-svg-icons';
-import {
-  FaBars,
-  FaCommentAlt,
-  FaRegChartBar,
-  FaShoppingBag,
-  FaTh, FaThList, FaUserAlt
-} from 'react-icons/fa';
-import { BiSpreadsheet } from 'react-icons/bi';
+import {faCaretDown, faCaretUp ,faChartLine, faFolderOpen, faThumbsUp, faCalendarDays} from '@fortawesome/free-solid-svg-icons';
+
 
 import '../style/css/dashboard.css';
 
 const Dashboard = () => {
-  const data = [
+  const [totalPatients, setTotalPatients] = useState(0); 
+
+
+ 
+
+
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+
+
+
+  const data1 = [
     {
-      name: 'Page A',
-      uv: 4000,
-      pv: 2400,
-      amt: 2400,
+      dia: 'Dom',
+      valor: 20,
     },
     {
-      name: 'Page B',
-      uv: 3000,
-      pv: 1398,
-      amt: 2210,
+      dia: 'Seg',
+      valor: 1,
     },
     {
-      name: 'Page C',
-      uv: 2000,
-      pv: 9800,
-      amt: 2290,
+      dia: 'Ter',
+      valor: 1,
     },
     {
-      name: 'Page D',
-      uv: 2780,
-      pv: 3908,
-      amt: 2000,
+      dia: 'Qua',
+      valor: 1,
     },
     {
-      name: 'Page E',
-      uv: 1890,
-      pv: 4800,
-      amt: 2181,
+      dia: 'Qui',
+      valor: 1,
     },
     {
-      name: 'Page F',
-      uv: 2390,
-      pv: 3800,
-      amt: 2500,
+      dia: 'Sex',
+      valor: 1,
     },
     {
-      name: 'Page G',
-      uv: 3490,
-      pv: 4300,
-      amt: 2100,
+      dia: 'Sab',
+      valor: 1,
     },
   ];
 
   const data2 = [
-    { index: 10000, red: 1000, blue: 790 },
-    { index: 1666, red: 182, blue: 42 },
-    { index: 625, red: 56, blue: 11 },
-    // Calculation of line of best fit is not included in this demo
-    { index: 300, redLine: 0 },
-    { index: 10000, redLine: 1522 },
-    { index: 600, blueLine: 0 },
-    { index: 10000, blueLine: 678 },
-  ];
-
-  const data3 = [
     {
-      name: 'Page A',
-      uv: 590,
-      pv: 800,
-      amt: 1400,
+      dia: 'Dom',
+      valor: 20,
     },
     {
-      name: 'Page B',
-      uv: 868,
-      pv: 967,
-      amt: 1506,
+      dia: 'Seg',
+      valor: 1,
     },
     {
-      name: 'Page C',
-      uv: 1397,
-      pv: 1098,
-      amt: 989,
+      dia: 'Ter',
+      valor: 14,
     },
     {
-      name: 'Page D',
-      uv: 1480,
-      pv: 1200,
-      amt: 1228,
+      dia: 'Qua',
+      valor: 10,
     },
     {
-      name: 'Page E',
-      uv: 1520,
-      pv: 1108,
-      amt: 1100,
+      dia: 'Qui',
+      valor: 1,
     },
     {
-      name: 'Page F',
-      uv: 1400,
-      pv: 680,
-      amt: 1700,
+      dia: 'Sex',
+      valor: 2,
     },
     {
-      name: 'Page G',
-      uv: 1400,
-      pv: 680,
-      amt: 1700,
-    }, {
-      name: 'Page H',
-      uv: 1250,
-      pv: 680,
-      amt: 1700,
-    }, {
-      name: 'Page I',
-      uv: 1400,
-      pv: 680,
-      amt: 1700,
-    }, {
-      name: 'Page J',
-      uv: 1200,
-      pv: 680,
-      amt: 1700,
-    }, {
-      name: 'Page K',
-      uv: 1800,
-      pv: 880,
-      amt: 1700,
+      dia: 'Sab',
+      valor: 1,
     },
   ];
 
+ const data3 = [
+    {
+      name: 'Jan',
+      CP: 19,
+      CR: 13,
+    },
+    {
+      name: 'Fev',
+      CP: 18,
+      CR: 16,
+    },
+    {
+      name: 'Mar',
+      CP: 6,
+      CR: 2,
+    },
+    {
+      name: 'Abr',
+      CP: 10,
+      CR: 8,
+    },
+    {
+      name: 'Maio',
+      CP: 23,
+      CR: 23,
+    },
+    {
+      name: 'Jun',
+      CP: 21,
+      CR: 1,
+    },
+    {
+      name: 'Jul',
+      CP: 7,
+      CR: 23,
+    },
+    {
+      name: 'Ago',
+      CP: 5,
+      CR: 13,
+    },
+    {
+      name: 'Set',
+      CP: 5,
+      CR: 12,
+    },
+    {
+      name: 'Out',
+      CP: 3,
+      CR: 22,
+    },
+    {
+      name: 'Nov',
+      CP: 20,
+      CR: 2,
+    },
+    {
+      name: 'Dez',
+      CP: 20,
+      CR: 10,
+    },
+  ];
 
-  const getIntroOfPage = (label) => {
-    if (label === 'Page A') {
-      return "Page A is about men's clothing";
-    }
-    if (label === 'Page B') {
-      return "Page B is about women's dress";
-    }
-    if (label === 'Page C') {
-      return "Page C is about women's bag";
-    }
-    if (label === 'Page D') {
-      return 'Page D is about household goods';
-    }
-    if (label === 'Page E') {
-      return 'Page E is about food';
-    }
-    if (label === 'Page F') {
-      return 'Page F is about baby food';
-    }
-    return '';
-  };
 
-  const CustomTooltip = ({ active, payload, label }) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="custom-tooltip">
-          <p className="label">{`${label} : ${payload[0].value}`}</p>
-          <p className="intro">{getIntroOfPage(label)}</p>
-          <p className="desc">Anything you want can be displayed here.</p>
-        </div>
-      );
-    }
+  const data4 = [
+    {
+      name: 'Janeiro',
+      Despesa: 19,
+      Receita: 13,
+    },
+    {
+      name: 'Feverei',
+      Despesa: 18,
+      Receita: 16,
+    },
+    {
+      name: 'Março',
+      Despesa: 6,
+      Receita: 2,
+    },
+    {
+      name: 'Abril',
+      Despesa: 10,
+      Receita: 8,
+    },
+    {
+      name: 'Maio',
+      Despesa: 23,
+      Receita: 23,
+    },
+    {
+      name: 'Junho',
+      Despesa: 21,
+      Receita: 1,
+    },
+    {
+      name: 'Julho',
+      Despesa: 7,
+      Receita: 23,
+    },
+    {
+      name: 'Agosto',
+      Despesa: 5,
+      Receita: 13,
+    },
+    {
+      name: 'Setemb',
+      Despesa: 5,
+      Receita: 12,
+    },
+    {
+      name: 'Outubro',
+      Despesa: 3,
+      Receita: 22,
+    },
+    {
+      name: 'Novemb',
+      Despesa: 20,
+      Receita: 2,
+    },
+    {
+      name: 'Dezemb',
+      Despesa: 20,
+      Receita: 10,
+    },
+  ];
 
-    return null;
-  };
 
-  const [value, setValue] = useState("1");
+ 
+  useEffect(() => {
+    // Fazer a chamada à API para obter a quantidade de pacientes
+    fetch('https://clinicapi-api.azurewebsites.net/Paciente/ListarPacientes')
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data.retorno.length); // Acesse a propriedade "retorno"
+        setTotalPatients(data.retorno.length); // Acesse a propriedade "retorno"
+      })
+      .catch((error) => {
+        console.error('Erro ao obter a quantidade de pacientes:', error);
+      });
+  }, []);
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+
+ 
+  
+   
+  // Calcula a soma de todos os valores em data1
+  const totalPayments = data1.reduce((total, item) => total + item.valor, 0);
+  const totalReceives = data2.reduce((total, item) => total + item.valor, 0);
+
+
+  
+
+
+  
 
   return (
 
-    <TabContext value={value}>
+    <Box >
       <div className='header'>
         <div className='Infos'>
           <div className='infoAtraso'>
-          <FontAwesomeIcon icon={faDollarSign} className='iconsTop' style={{color:'#bc201b' ,marginRight:'3px'}} />
+            <FontAwesomeIcon icon={faDollarSign} className='iconsTop' style={{ color: '#bc201b', marginRight: '3px' }} />
             <div className='subInfo'>
-            <div style={{display:'flex', gap:'35px',alignItems:'center'}}>
-                <h3 className='valor'>R$0,00</h3>
-                <a link='#' style={{color:'#1976d2', fontWeight:'600'}}>VER</a>
+              <div style={{ display: 'flex', gap: '35px', alignItems: 'center' }}>
+                <h3 className='valorAtraso'>R$ 0,00</h3>
+                <a href='http://localhost:3000/app/financeiro' style={{ color: '#1976d2', fontWeight: '600' }}>VER</a>
               </div>
               <p className='debitos'>Débitos em Atraso</p>
             </div>
@@ -203,124 +258,128 @@ const Dashboard = () => {
         </div>
         <div className='Infos'>
           <div className='infoAtraso'>
-            <FontAwesomeIcon icon={faClipboardList}  className='iconsTop' style={{color: 'rgb(255, 190, 0)',marginRight:'9px'}}/>
+            <FontAwesomeIcon icon={faClipboardList} className='iconsTop' style={{ color: 'rgb(255, 190, 0)', marginRight: '9px' }} />
             <div className='subInfo'>
-              <div style={{display:'flex', gap:'35px',alignItems:'center'}}>
-                <h3 className='valor'>R$0,00</h3>
-                <a link='#' style={{color:'#1976d2', fontWeight:'600'}}>VER</a>
+              <div style={{ display: 'flex', gap: '35px', alignItems: 'center' }}>
+                <h3 className='valorOrcamento'>R$ 0,00</h3>
+                <a link='#' style={{ color: '#1976d2', fontWeight: '600' }}>VER</a>
               </div>
-              <p className='debitos'>Orçamentos em aberto e reprovados</p>
+              <p className='debitos'>Tratamentos em Aberto</p>
             </div>
           </div>
         </div>
         <div className='Infos'>
           <div className='infoAtraso'>
-           <FontAwesomeIcon icon={faUserPlus} className='iconsTop' style={{color: 'green',marginRight:'9px'}} />
-           
+            <FontAwesomeIcon icon={faUserPlus} className='iconsTop' style={{ color: 'green', marginRight: '9px' }} />
+
             <div className='subInfo'>
-              <div style={{display:'flex', gap:'35px',alignItems:'center'}}>
-                <h3 className='valor'>0,00</h3>
-                <a href='http://localhost:3000/app/paciente' style={{color:'#1976d2', fontWeight:'600'}}>VER</a>
+              <div style={{ display: 'flex', gap: '35px', alignItems: 'center' }}>
+                <h3 className='valorPaciente'>{totalPatients}</h3>
+                <a href='http://localhost:3000/app/paciente' style={{ color: '#1976d2', fontWeight: '600' }}>VER</a>
               </div>
               <p className='debitos'>Pacientes cadastrados</p>
             </div>
           </div>
         </div>
       </div>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <TabList onChange={handleChange} >
-          <Tab label="Tarefas" value="1" />
-          <Tab label="Performance" value="2" />
-          <Tab label="Ortodontia" value="3" />
-          
-        </TabList>
-      </Box>
-      
-      <TabPanel value="1">
-       
-      </TabPanel>
+ 
 
-      <TabPanel value="2">Item Two</TabPanel>
-      <TabPanel value="3"> 
-      <div className='posGrafic'>
-          <div className='container1'>
-            <div className='grafico1'>
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart
-                  data={data}
-                  margin={{
-                    top: 5,
-                    right: 30,
-                    left: 20,
-                    bottom: 5,
-                  }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
+     
+      <Box className='mainHomeRightbar'>
+      <div>
+        <div className='ItemContainer'>
+          <div className='ItemContainer1'>
+            <div className='subitemContainer'>
+
+              <div className='subitemContainer-up'>
+                <p className='taskProgress'>Custos </p>
+                <span className='box-pagar-semanal'>Semanal</span> 
+              </div>
+              <div className='subitemContainer-down'>
+                <div className='subitemContainer-down-child'>
+                  <p className='taskCounter'><FontAwesomeIcon style={{color:'red'}} icon={faCaretDown} /> R${totalPayments.toFixed(2)} </p>
+                  <p className='currentmonth1'>Custos desta semana</p>
+                </div>
+                <div className='barchartContainer'>
+                <BarChart width={265} height={130} data={data1} 
+                  margin={{ right: 3, bottom: -14, top: 6 }}>
+                    <Tooltip label={({ payload }) => payload[0]?.payload.dia} />
+                    <Bar dataKey="valor" fill="orange" />
+                    <XAxis dataKey="dia" height={14} />
+                  </BarChart>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className='ItemContainer1'>
+            <div className='subitemContainer'>
+              <div className='subitemContainer-up'>
+                <p className='taskProgress'>Recebimentos <small>(em aberto)</small></p>
+                <span className='box-pagar-semanal'>Semanal</span>
+              </div>
+              <div className='subitemContainer-down'>
+                <div className='subitemContainer-down-child'>
+                  <p className='taskCounter'><FontAwesomeIcon style={{color:'green'}} icon={faCaretUp} /> R${totalReceives.toFixed(2)}</p>
+                  <p className='currentmonth1'>Recebimentos desta semana</p>
+                </div>
+                <div className='barchartContainer'>
+                  <BarChart width={265} height={130} data={data2} 
+                  margin={{ right: 3, bottom: -14, top: 6 }}>
+                    <Tooltip label={({ payload }) => payload[0]?.payload.dia} />
+                    <Bar dataKey="valor" fill="#82ca9d" />
+                    <XAxis dataKey="dia" height={14} />
+                  </BarChart>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className='ItemContainer1'>
+            <div className='subitemContainer'>
+              <div className='subitemContainer-up'>
+                <p className='taskProgress'>Liquidados <small>(já recebidos ou pagos)</small></p>
+                <span className='box-pagar-mensal'>Mensal</span>
+              </div>
+              <div className='subitemContainer-down'>
+                <div className='barchartContainer2'>
+                  <LineChart width={435} height={130} data={data3}
+                    margin={{ top: 5, right:20, left:20, bottom: 4 }}>
+                    <Tooltip />
+                    <Line type="monotone" dataKey="CP" stroke="orange" />
+                    <Line type="monotone" dataKey="CR" stroke="#82ca9d" />
+                    <XAxis dataKey="name" />
+                  </LineChart>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+          <div className='MiddleTaskChart'>
+            <div className='subitemContainer-up'>
+                <p className='taskProgress'>Registro anual <small>(Receitas x Despesas)</small></p>
+                <span className='box-pagar-anual'>Anual</span>
+              </div>
+              <div className='chartDirection'>
+                <ComposedChart width={1350 } height={190} data={data4} margin={{ top: 10, right: 5, left: 5, bottom: 10 }}>
+                
                   <XAxis dataKey="name" />
                   <YAxis />
                   <Tooltip />
-                  <Legend />
-                  <Line type="monotone" dataKey="pv" stroke="#ca5520" activeDot={{ r: 8 }} />
-                  <Line type="monotone" dataKey="uv" stroke="#04900b" />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-          <div className='container1'>
-            <ResponsiveContainer width="100%" height="100%">
-              <ComposedChart
-                width={500}
-                height={400}
-                data={data2}
-                margin={{
-                  top: 20,
-                  right: 80,
-                  bottom: 20,
-                  left: 20,
-                }}
-              >
-                <CartesianGrid stroke="#f5f5f5" />
-                <Tooltip />
-                <Legend />
-
-                <XAxis dataKey="index" type="number" label={{ value: 'Index', position: 'insideBottomRight', offset: 0 }} />
-                <YAxis unit="ms" type="number" label={{ value: 'Time', angle: -90, position: 'insideLeft' }} />
-                <Scatter name="red" dataKey="red" fill="red" />
-                <Scatter name="blue" dataKey="blue" fill="blue" />
-                <Line dataKey="blueLine" stroke="blue" dot={false} activeDot={false} legendType="none" />
-                <Line dataKey="redLine" stroke="red" dot={false} activeDot={false} legendType="none" />
-              </ComposedChart>
-            </ResponsiveContainer>
+                  <CartesianGrid stroke="#f5f5f5" />
+                  
+                  <Bar dataKey="Receita" barSize={20} fill="#82ca9d" />
+                  <Line type="monotone" dataKey="Despesa" stroke="orange" />
+                </ComposedChart>
+              </div>
           </div>
 
+
+      
         </div>
-        <div className='posGrafic2'>
-          <div className='container2'>
-            <ResponsiveContainer width="100%" height="100%">
-              <ComposedChart
-                width={500}
-                height={400}
-                data={data3}
-                margin={{
-                  top: 20,
-                  right: 20,
-                  bottom: 20,
-                  left: 20,
-                }}
-              >
-                <CartesianGrid stroke="#f5f5f5" />
-                <XAxis dataKey="name" scale="band" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="uv" barSize={20} fill="#413ea0" />
-                <Line type="monotone" dataKey="uv" stroke="#ff7300" />
-              </ComposedChart>
-            </ResponsiveContainer>
-          </div>
-
-        </div></TabPanel>
-    </TabContext>
+      </div>
+    </Box>
+    </Box>
   );
 };
 

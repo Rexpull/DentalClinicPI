@@ -1,45 +1,163 @@
 :root {
-    --body_background: white;  
-    --body_color: black;
-    --link_color: black;
-    --box_shadow: 4px 0 5px rgba(0, 0, 0, 0.4);
-    --color: black;
-    --cor-do-botao-ativo: #00BFFF;
-    --cor-do-botao-padrao: #ebebeb;
-    --cor_background_div: #feea98;
-    --cor-do-botao-pressionado: #75787e;
-    --cor-do-botao-alternativo: #bfc3c1;
+  --body_background: white;  
+  --body_color: black;
+  --link_color: black;
+  --box_shadow: 4px 0 5px rgba(0, 0, 0, 0.4);
+  --color: black;
+  --border_color: black;
+  --cor-do-botao-ativo: #00BFFF;
+  --cor-do-botao-padrao: #ebebeb;
+  --cor_background_div: #feea98;
+  --cor-do-botao-pressionado: #75787e;
+  --cor-do-botao-alternativo: #bfc3c1;
+}
+
+[data-theme="dark"]{
+  --body_background: #343434;
+  --body_color: white;
+  --link_color: white;
+  --box_shadow: 4px 0 5px rgba(0, 0, 0, 0.4);
+  --color: white;
+  --border_color: white;
+  --cor-do-botao-ativo: #0000CD;
+  --cor-do-botao-padrao: #75787e;
+  --cor_background_div: #ceb930;
+  --cor-do-botao-pressionado: #d0d0d0;
+  --cor-do-botao-alternativo: white;
+}
+
+.situacao-info {
+    width: fit-content;
+    color: white;
+    text-align: right;
+    display: inline;
+    padding: .2em .6em .3em;
+    font-size: 95%;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;
+    background-color: '';
+    box-shadow: '';
+
+      &.em_aberto {
+        background-color: #348fe2;
+        box-shadow: 0px 10px 14px -7px #0578dc;
+      }
+    
+      &.vencido {
+        background-color: orange;
+        box-shadow: 0px 10px 13px -7px #b56f05;
+      }
+    
+      &.pago {
+        background-color: #5cb85c;
+        box-shadow: 0px 10px 14px -7px #3e7327;
+      }
   }
 
-  [data-theme="dark"]{
-    --body_background: #343434;
-    --body_color: white;
-    --link_color: white;
-    --box_shadow: 4px 0 5px rgba(0, 0, 0, 0.4);
-    --color: white;
-    --cor-do-botao-ativo: #0000CD;
-    --cor-do-botao-padrao: #75787e;
-    --cor_background_div: #ceb930;
-    --cor-do-botao-pressionado: #d0d0d0;
-    --cor-do-botao-alternativo: white;
+.css-1h9z7r5-MuiButtonBase-root-MuiTab-root{
+  color: var(--color) !important;
+}
+
+.css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected{
+  color: #1976d2 !important;
 }
 
 .css-10t9sww-MuiPaper-root{
-    background-color: var(--body_background) !important;
-}
-
-.css-1azl6jz-MuiTableCell-root{
-    color: var(--color) !important;
+  background-color: var(--body_background) !important;
 }
 
 .css-1ygcj2i-MuiTableCell-root{
-    color: var(--color) !important;
+  color: var(--color) !important;
 }
 
-.css-b7co3x p{
-    color: var(--color) !important;
+.css-1ex1afd-MuiTableCell-root{
+  color: var(--color) !important;
 }
 
-.css-b7co3x path{
-    color: var(--color) !important;
+.css-1azl6jz-MuiTableCell-root{
+  color: var(--color) !important;
 }
+
+.css-177gid-MuiTableCell-root{
+  color: var(--color) !important;
+}
+
+.css-1up7jln-MuiTypography-root{
+  color: var(--color) !important;
+}
+
+.css-180vzmo-MuiTypography-root{
+  color: var(--color) !important;
+}
+
+.css-rnmm7m-MuiPaper-root-MuiDialog-paper{
+  background-color: var(--body_background) !important;
+}
+
+.css-1pnmrwp-MuiTypography-root{
+  color: var(--color) !important;
+}
+
+.css-1ua80n0-MuiInputBase-input-MuiOutlinedInput-input:invalid{
+  color: var(--color) !important;
+}
+
+.css-17mtua0-MuiTypography-root-MuiDialogTitle-root{
+  color: var(--color) !important;
+}
+
+.css-19nvhel-MuiButtonBase-root-MuiButton-root{
+  background-color: var(--cor-do-botao-padrao) !important;
+  color: var(--color) !important;
+}
+
+.css-4xn1yn-MuiButtonBase-root-MuiButton-root{
+  background-color: #408e43 !important;
+}
+
+.css-uhtvcx-MuiAccordionDetails-root{
+  background-color: var(--body_background) !important;
+}
+
+.css-1t1j96h-MuiPaper-root-MuiDialog-paper{
+  background-color: var(--body_background) !important;
+  color: var(--color) !important;
+}
+
+.css-qfso29-MuiTypography-root-MuiDialogContentText-root{
+  color: var(--color) !important;
+}
+
+.css-10fi992-MuiButtonBase-root-MuiButton-root{
+  background-color: #d32f2f !important;
+  color: white !important;
+}
+
+.css-1e6y48t-MuiButtonBase-root-MuiButton-root{
+  
+  color: white !important;
+}
+
+.css-1xpw712-MuiButtonBase-root-MuiButton-root{
+  background-color: #1976d2 !important;
+  color: white !important;
+}
+
+.css-1wy01w9 .Demo-closeButton{
+  color: var(--color) !important;
+}
+
+.css-1l9sosn-MuiButtonBase-root-MuiButton-root{
+  background-color: #9c27b0 !important;
+  color: white !important;
+}
+
+.situacao-info.recebido{
+  background-color: #408e43 !important;
+}
+

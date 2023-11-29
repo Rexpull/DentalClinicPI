@@ -96,7 +96,7 @@ function SugestaoHorarios({ open, onClose }) {
           </div>
         </div>
       </DialogContent>
-      <div className="rodape-modal" style={{ paddingLeft: "680px", paddingBottom: "15px", marginRight: '10px' }}>
+      <div className="div-sem-classe" style={{ paddingLeft: "680px", paddingBottom: "15px", marginRight: '10px' }}>
         <Button onClick={onClose} style={{ paddingRight: "30px", color: '#000', fontFamily: 'Roboto,Helvetica Neue,sans-serif', fontSize: '14px', fontWeight: '700' }}>Fechar</Button>
         <Button onClick={handleEscolherData} variant="contained" color="success" style={{ fontFamily: 'Roboto,Helvetica Neue,sans-serif', fontSize: '14px', fontWeight: '700' }}>
           Escolher Data

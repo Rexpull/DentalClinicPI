@@ -58,14 +58,6 @@
     background-color: var(--body_background) !important;
 }
 
-label{
-    color: var(--color) !important;
-}
-.card-label{
-    background-color: var(--cor_background_div) !important;
-    color: var(--color) !important;
-}
-
 .css-1e41c9a-MuiTypography-root.TitleCell-title{
     background-color: var(--body_background) !important;
     color: var(--color) !important;
@@ -291,65 +283,57 @@ label{
     color: var(--color) !important;
 }
 
-.css-6od3lo-MuiChip-label{
+.modal-alerta1{
+    padding:20px;
+    background-color: var(--body_background) !important;
+}
+
+.modal-alerta2{
+    background-color: var(--body_background) !important;
+}
+
+.modal-alerta2 path{
     color: var(--color) !important;
 }
 
-.titleForm{
+.css-2wvjr7-MuiTypography-root{
     color: var(--color) !important;
 }
 
-.css-1pk0x2n{
+.css-x1n2ea-MuiButtonBase-root-MuiButton-root{
+    background-color: var(--body_background) !important;
     color: var(--color) !important;
 }
 
-.css-ahj2mt-MuiTypography-root{
-    color: var(--color) !important;
-}
-
-.css-vqmohf-MuiButtonBase-root-MuiRadio-root.Mui-checked{
-    color: var(--cor-do-botao-ativo) !important;
-}
-
-.css-vqmohf-MuiButtonBase-root-MuiRadio-root{
-    color: var(--color) !important;
-}
-
-.css-12tl3rr-MuiInputBase-input-MuiOutlinedInput-input{
-    color: var(--color) !important;
-}
-
-.css-1jq32hf-MuiButtonBase-root-MuiTab-root{
-    color: var(--color) !important;
-}
-
-.css-1jq32hf-MuiButtonBase-root-MuiTab-root.Mui-selected{
-    color: #2196f3 !important;
-}
-
-.css-4xx2wk{
-    background-color: #2e7d32 !important;
+.css-11ngvp6.Content-content{
+    background-color: var(--body_background) !important;
 }
 
 .css-8ludsl.Header-flexContainer{
     background-color: var(--body_background) !important;
 }
 
-.css-11ngvp6.Content-content{
-    background-color: var(--body_background) !important;
-    color: var(--color) !important;
-}
-
 .css-11ngvp6 .Content-dateAndTitle{
     color: var(--color) !important;
 }
 
-.css-1l9sosn-MuiButtonBase-root-MuiButton-root{
-    background-color: #9c27b0 !important;
-    color: white !important;
+.css-11ngvp6 .Content-text{
+    color: var(--color) !important;
 }
 
-.css-1wy01w9 .Demo-closeButton{
+.div-barra{
+    background-color: var(--cor_background_div) !important;
+}
+
+.div-barra label{
+    color: var(--color ) !important;
+}
+
+.css-6od3lo-MuiChip-label{
+    color: var(--color) !important;
+}
+
+.text{
     color: var(--color) !important;
 }
 
@@ -358,23 +342,17 @@ label{
     color: var(--color) !important;
 }
 
+.div-sem-classe{
+    background-color: var(--body_background) !important;
+}
+
 .MuiDialogTitle-root+.css-ypiqx9-MuiDialogContent-root{
     background-color: var(--body_background) !important;
 }
 
-.css-qfso29-MuiTypography-root-MuiDialogContentText-root{
-    color: var(--color) !important;
-}
-
-.css-knqc4i-MuiDialogActions-root{
+.card{
     background-color: var(--body_background) !important;
     color: var(--color) !important;
-}
-
-.css-1rwt2y5-MuiButtonBase-root-MuiButton-root{
-    background-color: var(--cor-do-botao-padrao) !important;
-    border-color: var(--cor-do-botao-padrao) !important;
-    color:  var(--color) !important; 
 }
 
 .h3-title{
@@ -385,108 +363,39 @@ label{
     color: var(--color) !important;
 }
 
-.card{
+.text-receituario{
+    background-color: var(--body_background) !important;
+}
+
+.css-1u7f1pc-MuiTypography-root{
+    color: var(--color) !important;
+}
+
+.pai-receituario{
+    background-color: var(--body_background) !important;
+}
+
+.css-v2h2s7-MuiTypography-root{
+    color: var(--color) !important;
+}
+
+.modal-atestados{
+    background-color: var(--body_background) !important;
+}
+
+.css-u4tvz2-MuiFormLabel-root{
+    color: var(--color) !important;
+}
+
+.text-atestados{
     background-color: var(--body_background) !important;
     color: var(--color) !important;
 }
 
-.css-1hju3x6-MuiPaper-root-MuiDialog-paper{
+.pai-atestados{
     background-color: var(--body_background) !important;
 }
 
-.css-1e6y48t-MuiButtonBase-root-MuiButton-root{
-    color: var(--color) !important;
-    background-color: var(--cor-do-botao-padrao) !important;
-}
-
-.css-1xpw712-MuiButtonBase-root-MuiButton-root{
-    background-color: #2e7d32 !important;
-    color: white !important;
-}
-
-.css-10fi992-MuiButtonBase-root-MuiButton-root{
-    background-color: #d32f2f !important;
-    color: white !important;
-}
-
-.titleFormUsuario{
-    color: var(--color) !important;
-}
-
-.css-j204z7-MuiFormControlLabel-root{
-    color: var(--color) !important;
+.pai-contrato{
     background-color: var(--body_background) !important;
 }
-
-.submit-modal{
-    background-color: #2e7d32 !important;
-}
-
-.css-uhtvcx-MuiAccordionDetails-root{
-    background-color: var(--body_background) !important;
-}
-
-.css-1pnmrwp-MuiTypography-root{
-    color: var(--color) !important;
-}
-
-.css-1ua80n0-MuiInputBase-input-MuiOutlinedInput-input:invalid{
-    color: var(--color) !important;
-}
-
-.css-1ua80n0-MuiInputBase-input-MuiOutlinedInput-input{
-    color: var(--color) !important;
-}
-
-.css-1x51dt5-MuiInputBase-input-MuiInput-input{
-    color: var(--color) !important;
-}
-
-.css-1mrv5kl.Title-title{
-    color: var(--color) !important;
-}
-
-.css-1qgma8u-MuiButtonBase-root-MuiTableSortLabel-root.Mui-active .MuiTableSortLabel-icon{
-    color: var(--color) !important;
-}
-
-.css-duoj8i-MuiTableCell-root .TableNoDataCell-text{
-    color: var(--color) !important;
-}
-
-.css-11awt6d.PageSizeSelector-pageSizeSelector{
-    color: var(--color) !important;
-}
-
-.css-1ar2bnf-MuiSelect-select-MuiInputBase-input-MuiInput-input.css-1ar2bnf-MuiSelect-select-MuiInputBase-input-MuiInput-input.css-1ar2bnf-MuiSelect-select-MuiInputBase-input-MuiInput-input{
-    color: var(--color) !important;
-}
-
-.css-1jwhnuz .Pagination-rowsLabel{
-    color: var(--color) !important;
-}
-
-.css-1jwgte0-MuiButtonBase-root-MuiButton-root.Pagination-text{
-    color: var(--color) !important;
-}
-
-.css-1h9z7r5-MuiButtonBase-root-MuiTab-root{
-    color: var(--color) !important;
-}
-
-.css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected{
-    color: #1976d2 !important;
-}
-
-.css-yr8ao9-MuiInputBase-root-MuiInput-root:before{
-    border-bottom: 1px solid var(--color) !important;
-}
-
-.css-1vweko9-MuiSvgIcon-root-MuiTableSortLabel-icon:hover{
-    color: var(--color) !important;
-}
-
-.MuiInputBase-root .MuiOutlinedInput-root .MuiInputBase-colorPrimary .MuiInputBase-fullWidth .MuiInputBase-formControl .MuiInputBase-sizeSmall .css-md26zr-MuiInputBase-root-MuiOutlinedInput-root{
-    background-color: red !important;
-}
-

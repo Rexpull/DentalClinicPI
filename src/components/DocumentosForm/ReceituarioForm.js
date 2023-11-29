@@ -172,10 +172,10 @@ const handleDataChange = (event) => {
 
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '70vh', backgroundColor: '#fafafa' }}>
+    <div className="pai-receituario" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '70vh', backgroundColor: '#fafafa' }}>
       <Paper sx={{ width: 'fit-content', padding: 0 }}>
         <Box>
-          <div style={{ backgroundColor: 'whitesmoke', padding: 3, display: 'flex' }}>
+          <div className="text-receituario"style={{ backgroundColor: 'whitesmoke', padding: 3, display: 'flex' }}>
             <Button startIcon={<ArrowBackIcon />} onClick={onClose} />
             <Typography variant="h6" gutterBottom component="div" sx={{ color: 'black' }}>
               Receituário

@@ -1,5 +1,193 @@
+:root {
+    --body_background: white;  
+    --body_color: black;
+    --link_color: black;
+    --box_shadow: 4px 0 5px rgba(0, 0, 0, 0.4);
+    --color: black;
+    --border_color: black;
+    --cor-do-botao-ativo: #00BFFF;
+    --cor-do-botao-padrao: #ebebeb;
+    --cor_background_div: #feea98;
+    --cor-do-botao-pressionado: #75787e;
+    --cor-do-botao-alternativo: #bfc3c1;
+  }
+  
+  [data-theme="dark"]{
+    --body_background: #343434;
+    --body_color: white;
+    --link_color: white;
+    --box_shadow: 4px 0 5px rgba(0, 0, 0, 0.4);
+    --color: white;
+    --border_color: white;
+    --cor-do-botao-ativo: #0000CD;
+    --cor-do-botao-padrao: #75787e;
+    --cor_background_div: #ceb930;
+    --cor-do-botao-pressionado: #d0d0d0;
+    --cor-do-botao-alternativo: white;
+  }
+  
 .css-b83p69{
  text-decoration: solid;
  display: 'flex' !important; 
  justify-Content: 'flex-end' !important;
+}
+
+.css-n1vpqo-MuiButtonBase-root-MuiButton-root{
+    background-color: #129909 !important;
+    color: white !important;
+}
+
+.css-shpxtb-MuiSvgIcon-root{
+    color: white !important;
+}
+
+.css-ag7rrr-MuiTypography-root{
+    color: var(--color) !important;
+}
+
+.css-tfjdk6-MuiGrid-root{
+    background-color: var(--body_background) !important;
+}
+
+.css-heg063-MuiTabs-flexContainer{
+    background-color: var(--body_background) !important;
+}
+
+.css-xdp5eg-MuiPaper-root{
+    background-color: var(--body_background) !important;
+}
+
+.css-1gqyz35-MuiTypography-root{
+    color: var(--color) !important;
+}
+
+.css-qscxtw-MuiTypography-root{
+    color: var(--color) !important;
+}
+
+.css-1h5w33c-MuiTypography-root{
+    background-color: var(--body_background) !important;
+    color: var(--color) !important;
+}
+
+.css-zo0ri8-MuiTypography-root{
+    color: #1976d2 !important;
+}
+
+.css-165b2hz-MuiSvgIcon-root{
+    color: var(--color) !important;
+}
+
+.css-1qv0doy-MuiGrid-root{
+    background-color: var(--body_background) !important;
+}
+
+.css-wg4xta-MuiGrid-root{
+    background-color: var(--body_background) !important;
+}
+
+.css-1vqif10-MuiCardContent-root{
+    background-color: var(--body_background) !important;
+}
+
+.css-1fjc5kp-MuiCardActions-root{
+    background-color: var(--body_background) !important;
+}
+
+.css-1ee4pw2-MuiButtonBase-root-MuiButton-root{
+    color: var(--color) !important;
+}
+
+.css-g7462e-MuiTypography-root{
+    background-color: var(--body_background) !important;
+}
+
+.css-g7462e-MuiTypography-root{
+    color: var(--color) !important;
+}
+
+.css-1viocfv{
+    background-color: var(--body_background) !important;
+}
+
+.css-1kkutqc-MuiPaper-root{
+    background-color: var(--body_background) !important;
+}
+
+.css-1rppklt-MuiTypography-root{
+    color: var(--color) !important;
+}
+
+.css-a44auo-MuiTypography-root{
+    color: var(--color) !important;
+}
+
+.css-1usvwdu-MuiTypography-root{
+    background-color: var(--body_background) !important;
+    color: var(--color) !important;
+}
+
+.css-tfgkwb-MuiPaper-root{
+    background-color: var(--body_background) !important;
+}
+
+.css-1lpj03v-MuiTypography-root-MuiDialogTitle-root{
+    color: var(--color) !important;
+}
+
+.css-mxhmsf-MuiButtonBase-root-MuiButton-root{
+    color: #1976d2 !important;
+}
+
+.css-9fhvc6-MuiDialogContent-root{
+    background-color: var(--body_background) !important;
+}
+
+.css-lhcnvk-MuiPaper-root{
+    background-color: var(--body_background) !important;
+    color: var(--color) !important;
+}
+
+.css-1an9w7e-MuiDialogActions-root{
+    background-color: var(--body_background) !important;
+}
+
+.css-ffxvq-MuiButtonBase-root-MuiButton-root{
+    background-color: var(--cor-do-botao-padrao) !important;
+    color: var(--color) !important;
+}
+
+.css-1ibrbfr-MuiButtonBase-root-MuiButton-root.Mui-disabled{
+    background-color: #129909 !important;
+    color: white !important;
+}
+
+.css-qagbh6-MuiTypography-root{
+    background-color: var(--body_background) !important;
+    color: var(--color) !important;
+}
+
+.css-1s9ra0t-MuiPaper-root{
+    background-color: var(--body_background) !important;
+    color: var(--color) !important;
+}
+
+.css-53z2d9-MuiButtonBase-root-MuiButton-root{
+    color: var(--color) !important;
+    background-color: var(--cor-do-botao-padrao) !important;
+}
+
+.css-139j0vr-MuiPaper-root{
+    background-color: var(--body_background) !important;
+    color: var(--color) !important;
+}
+
+.css-1e6y48t-MuiButtonBase-root-MuiButton-root{
+    background-color: var(--cor-do-botao-padrao) !important;
+    color: var(--color) !important;
+}
+
+.css-1e6y48t-MuiButtonBase-root-MuiButton-root{
+    background-color: var(--body_background) !important;
+    
 }

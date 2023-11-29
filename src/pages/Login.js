@@ -1,7 +1,7 @@
 
 
 import React, { useState, useEffect } from 'react';
-import Logo from "../style/img/Logo.png";
+import Logo from "../style/img/Clinic-removebg-preview.png";
 import financas from "../style/img/finance.png";
 import "../style/css/login.css";
 

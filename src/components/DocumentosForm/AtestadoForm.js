@@ -119,7 +119,7 @@ function AtestadoForm({ patient, onClose, professionals }) {
 
 
   return (
-    <div
+    <div className="pai-atestados"
       style={{
         display: "flex",
         justifyContent: "center",
@@ -128,9 +128,9 @@ function AtestadoForm({ patient, onClose, professionals }) {
         backgroundColor: "#fafafa",
       }}
     >
-      <Paper sx={{ width: "fit-content", padding: 0 , width:'720px'}}>
+      <Paper className="modal-atestados"sx={{ width: "fit-content", padding: 0 , width:'720px'}}>
         <Box>
-          <div
+          <div className="text-atestados"
             style={{
               backgroundColor: "whitesmoke",
               padding: 3,
@@ -138,7 +138,7 @@ function AtestadoForm({ patient, onClose, professionals }) {
             }}
           >
             <Button startIcon={<ArrowBackIcon />} onClick={onClose} />
-            <Typography
+            <Typography 
               variant="h6"
               gutterBottom
               component="div"

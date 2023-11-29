@@ -94,7 +94,6 @@ const AddEvolutionModal = ({ open, handleClose, handleAdd,setIsAddEvolutionModal
             label="Profissional"
             onChange={handleProfessionalChange}
             select
-            readOnly={readOnlyModal}
           >
             {professionals.map((prof) => (
               <MenuItem key={prof.id} value={prof.id}>

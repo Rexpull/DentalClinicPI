@@ -2,12 +2,8 @@
   margin: 0;
   padding: 0;
   text-decoration: none;
-}
 
-.top_section svg{
-  cursor: pointer;
 }
-
 .container{
   display: flex;
 }
@@ -46,10 +42,11 @@ main{
   align-items: center ;
   padding: 20px 15px;
 }
+
 .bars{
   display: flex;
   font-size: 25px;
-  margin-left: 70px;
+
 }
 .link{
   display: flex;
@@ -178,4 +175,180 @@ css-6od3lo-MuiChip-label{
 .css-kpm0tx-MuiButtonBase-root-MuiButton-root{
   color: var(--color) !important;
   background-color: var(--cor-do-botao-padrao) !important;
+}
+.user-profile {
+  position: absolute;
+  bottom: 10px; /* Ajuste a distância do fundo conforme necessário */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 0px;
+  padding: 20px;
+}
+
+.profile-image {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.user-name {
+  color: var(--link_color);
+  font-size: 20px;
+}
+
+.user-profile {
+  transition: opacity 0.5s;
+  opacity: 1;
+}
+
+.user-profile.closed {
+  opacity: 0;
+  pointer-events: none; /* Impede interação com elementos fechados */
+}
+
+.logout-button {
+  position: absolute;
+  bottom: -25px; /* Ajuste a distância do fundo conforme necessário */
+  right: 18px; /* Ajuste a posição à esquerda conforme necessário */
+  color: blue; /* Cor do texto azul */
+ 
+  padding: 4px 8px;
+  border: none;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: color 0.3s; /* Adiciona transição suave à mudança de cor do texto */
+}
+
+.logout-button:hover {
+  color: darkblue; /* Cor mais escura ao passar o mouse */
+}
+
+
+
+.logout-button:hover::after {
+  color: darkblue; /* Cor mais escura ao passar o mouse */
+}
+
+.logout-icon {
+  margin-right: 2px;
+}
+
+.debitos{
+  color: var(--color) !important;
+}
+
+.subitemContainer{
+  background-color: var(--body_background) !important;
+}
+
+.MiddleTaskChart{
+  background-color: var(--body_background) !important;
+  color: var(--color) !important;
+}
+
+.ItemContainer{
+  background-color: var(--body_background) !important;
+}
+
+.taskProgress{
+  color: var(--color) !important;
+}
+
+.css-1v32d53{
+  background-color: var(--body_background) !important;
+}
+
+.css-1v32d53 p{
+  color: var(--color) !important;
+}
+
+.css-1x51dt5-MuiInputBase-input-MuiInput-input{
+  color: var(--color) !important;
+}
+
+.css-1mrv5kl.Title-title{
+  color: var(--color) !important;
+}
+
+.css-1qgma8u-MuiButtonBase-root-MuiTableSortLabel-root.Mui-active .MuiTableSortLabel-icon{
+  color: var(--color) !important;
+}
+
+.css-xhtqz8-MuiTableCell-root.TableCell-cellNoWrap{
+  color: var(--color) !important;
+}
+
+.css-11awt6d .PageSizeSelector-label{
+  color: var(--color) !important;
+}
+
+.css-1ar2bnf-MuiSelect-select-MuiInputBase-input-MuiInput-input.css-1ar2bnf-MuiSelect-select-MuiInputBase-input-MuiInput-input.css-1ar2bnf-MuiSelect-select-MuiInputBase-input-MuiInput-input{
+  color: var(--color) !important;
+}
+
+.css-1jwhnuz .Pagination-rowsLabel{
+  color: var(--color) !important;
+}
+
+.css-1jwgte0-MuiButtonBase-root-MuiButton-root.Pagination-text{
+  color: var(--color) !important;
+}
+
+.css-k4qjio-MuiFormHelperText-root{
+  color: var(--color) !important;
+}
+
+.titleFormUsuario{
+  color: var(--color) !important;
+}
+
+.css-vqmohf-MuiButtonBase-root-MuiRadio-root{
+  color: var(--color) !important;
+}
+
+.css-vqmohf-MuiButtonBase-root-MuiRadio-root.Mui-checked{
+  color: var(--cor-do-botao-ativo) !important;
+}
+
+.css-1jq32hf-MuiButtonBase-root-MuiTab-root{
+  color: var(--color) !important;
+}
+
+.css-1jq32hf-MuiButtonBase-root-MuiTab-root.Mui-selected{
+  color: #1976d2 !important;
+}
+
+.css-fwx5jw-MuiButtonBase-root-MuiButton-root:hover{
+  background-color: var(--cor-botão-hover) !important;
+  color: var(--color-botão-hover) !important;
+}
+
+.css-fwx5jw-MuiButtonBase-root-MuiButton-root{
+  background-color: var(--cor-do-botao-padrao) !important;
+  color: var(--color) !important;
+}
+
+.mainHomeRightbar{
+  background-color: var(--body_background) !important;
+}
+
+.titleForm{
+  color: var(--color) !important;
+}
+
+.css-1pk0x2n{
+  color: var(--color) !important;
+}
+
+.css-ahj2mt-MuiTypography-root{
+  color: var(--color) !important;
+}
+
+.css-12tl3rr-MuiInputBase-input-MuiOutlinedInput-input{
+  color: var(--color) !important;
 }

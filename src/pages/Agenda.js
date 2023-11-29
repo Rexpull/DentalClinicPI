@@ -9,6 +9,8 @@ import "../style/css/agenda.css";
 import Typography from "@mui/material/Typography";
 import ModalPaciente from "../components/ModalPaciente";
 import SugestaoHorarios from "../components/sugestionAppointment";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faCircleExclamation} from '@fortawesome/free-solid-svg-icons';
 import Chip from "@mui/material/Chip";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { ViewState, EditingState } from "@devexpress/dx-react-scheduler";
@@ -20,6 +22,9 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import MenuItem from "@mui/material/MenuItem";
 import { format } from "date-fns";
+import { toast, ToastContainer } from 'react-toastify';
+import Divider from '@mui/material/Divider';
+import 'react-toastify/dist/ReactToastify.css';
 import {
   Scheduler,
   Toolbar,
@@ -47,6 +52,8 @@ import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import TextField from "@mui/material/TextField";
 import Switch from "@mui/material/Switch";
+import Popper from '@mui/material/Popper';
+import Fade from '@mui/material/Fade';
 import axios from "axios";
 
 const PREFIX = "Demo";
@@ -297,6 +304,8 @@ class AppointmentFormContainerBasic extends React.PureComponent {
   // A data e hora devem ser combinadas corretamente antes do envio
   const dataHoraConsulta = new Date(dataConsulta);
   const [hora, minuto] = horaInicial.split(':');
+  const pacienteSelecionado = this.state.pacientes.find(p => p.id === this.state.paciente);
+
   dataHoraConsulta.setHours(hora, minuto, 0); // Configura a hora e os minutos
 
     const dataAgendamento = {
@@ -307,9 +316,9 @@ class AppointmentFormContainerBasic extends React.PureComponent {
       duracao: duracaoFormatada, // Use a duração selecionada
       sala: consultorio,
       observacao: observacao,
-      titulo: "Consulta do Paciente: " +paciente,
+      titulo: "Consulta de: " + pacienteSelecionado.nome,
     };
-    console.log(dataAgendamento);
+   
     try {
       // Faça a chamada à API
       const response = await axios.post(
@@ -318,12 +327,13 @@ class AppointmentFormContainerBasic extends React.PureComponent {
       );
       console.log(dataAgendamento);
       if (response.status === 200) {
-        alert("Agendamento marcado com sucesso!"); // Exiba uma mensagem de sucesso
+        toast.success("Agendamento Criado com sucesso!");
+        this.props.onHide();
       } else {
-        alert("Ocorreu um erro ao marcar o agendamento."); // Exiba uma mensagem de erro
+        toast.error("Falha ao criar o agendamento, verifique os campos!");
       }
     } catch (error) {
-      alert("Ocorreu um erro ao marcar o agendamento: " + error.message);
+      toast.error("Falha ao criar o agendamento: " + error.message);
     }
   }
 
@@ -381,14 +391,14 @@ if (!(dataInicial instanceof Date && dataFinal instanceof Date)) {
       );
   
       if (response.status === 200) {
-        alert("Compromisso criado com sucesso!");
+        toast.success("Compromisso criado com sucesso!");
         console.log(payload);
+        this.props.onHide();
       } else {
-        alert("Erro ao criar compromisso.");
+        toast.error("Erro ao criar compromisso.");
       }
     } catch (error) {
-      console.error("Erro ao criar compromisso: ", error);
-      alert("Erro ao criar compromisso: " + error.message);
+      toast.error("Erro ao criar compromisso: " + error.message);
     }
   }
   
@@ -1064,7 +1074,7 @@ if (!(dataInicial instanceof Date && dataFinal instanceof Date)) {
                     </div>
                   </div>
                   {/* Campo Dia Inteiro (Switch) */}
-                  <div
+                  <div className="text"
                     style={{ flexBasis: "28%", maxWidth: "200px !important" }}
                   >
                     <Switch
@@ -1142,7 +1152,7 @@ if (!(dataInicial instanceof Date && dataFinal instanceof Date)) {
                   }}
                 >
                   {/* Repetir Compromisso */}
-                  <div
+                  <div className="text"
                     style={{ flexBasis: "28%", maxWidth: "200px !important" }}
                   >
                     <Switch
@@ -1176,7 +1186,7 @@ if (!(dataInicial instanceof Date && dataFinal instanceof Date)) {
                   )}
 
                   {/* Receber alerta */}
-                  <div
+                  <div className="text"
                     style={{ flexBasis: "28%", maxWidth: "200px !important" }}
                   >
                     <Switch
@@ -1210,14 +1220,14 @@ if (!(dataInicial instanceof Date && dataFinal instanceof Date)) {
                   )}
                 </div>
 
-                <div
-                  className="card-label"
+                <div className="div-barra"
                   style={{
                     display: "flex",
                     justifyContent: "space-between",
                     paddingBottom: "21.5px",
                     maxWidth: "31.5rem",
                     flexDirection:'column',
+                    background:'#feea98',
                     paddingLeft:'12px'
                 
                   }}
@@ -1239,7 +1249,7 @@ if (!(dataInicial instanceof Date && dataFinal instanceof Date)) {
                     }
                     label="Não disponível para atendimento neste período."
                   />
-                  <label className="card-label" style={{paddingLeft:'30px', fontSize:'13px',color:'black',paddingRight:'30px'}}>Marcando essa opção um compromisso ficará visível em sua agenda. Caso seja necessário marcar um atendimento neste horário você será avisado por e-mail.</label>
+                  <label style={{paddingLeft:'30px', fontSize:'13px',color:'black',paddingRight:'30px'}}>Marcando essa opção um compromisso ficará visível em sua agenda. Caso seja necessário marcar um atendimento neste horário você será avisado por e-mail.</label>
                 </div>
               
               </div>
@@ -1284,7 +1294,9 @@ if (!(dataInicial instanceof Date && dataFinal instanceof Date)) {
             </StyledDiv>
           </div>
         )}
+         <ToastContainer />
       </AppointmentForm.Overlay>
+      
     );
   }
 }
@@ -1315,7 +1327,10 @@ export default class Demo extends React.PureComponent {
       endDayHour: 19,
       isNewAppointment: false,
       dataSelecionada: null,
+      popperOpen: false,
+      
     };
+    this.anchorRef = React.createRef();
 
     this.currentDateChange = (currentDate) => {
       this.setState({ currentDate });
@@ -1330,6 +1345,19 @@ export default class Demo extends React.PureComponent {
     this.onEditingAppointmentChange =
       this.onEditingAppointmentChange.bind(this);
     this.onAddedAppointmentChange = this.onAddedAppointmentChange.bind(this);
+
+    this.handlePopperToggle = () => {
+      this.setState((prevState) => ({ popperOpen: !prevState.popperOpen }));
+    };
+
+    this.handlePopperClose = (event) => {
+      if (this.anchorRef.current && this.anchorRef.current.contains(event.target)) {
+        return;
+      }
+      // Use o setState para fechar o Popper
+      this.setState({ popperOpen: false });
+    };
+
     this.appointmentForm = connectProps(AppointmentFormContainerBasic, () => {
       const {
         editingFormVisible,
@@ -1340,6 +1368,7 @@ export default class Demo extends React.PureComponent {
         previousAppointment,
       } = this.state;
 
+ 
       const currentAppointment =
         data.filter(
           (appointment) =>
@@ -1369,7 +1398,8 @@ export default class Demo extends React.PureComponent {
     try {
       const response = await axios.get(appointmentsApiUrl);
       const appointments = response.data.retorno;
-  
+      this.setState({ popperOpen: false });
+
       if (appointments) {
         const formattedAppointments = appointments.map((appointment) => {
           const startDate = new Date(`${appointment.dataConsulta}T${appointment.horaInicio}`);
@@ -1436,6 +1466,8 @@ export default class Demo extends React.PureComponent {
     });
   }
 
+
+  
   handleDateChange = (newDate) => {
     this.setState({ selectedDate: newDate });
   };
@@ -1459,10 +1491,6 @@ export default class Demo extends React.PureComponent {
     this.setState({ editingAppointment: undefined, isNewAppointment: true });
   }
 
-  setDeletedAppointmentId(id) {
-    this.setState({ deletedAppointmentId: id });
-  }
-
   toggleEditingFormVisibility() {
     const { editingFormVisible } = this.state;
     this.setState({
@@ -1475,17 +1503,30 @@ export default class Demo extends React.PureComponent {
     this.setState({ confirmationVisible: !confirmationVisible });
   }
 
-  commitDeletedAppointment() {
-    this.setState((state) => {
-      const { data, deletedAppointmentId } = state;
-      const nextData = data.filter(
-        (appointment) => appointment.id !== deletedAppointmentId
-      );
-
-      return { data: nextData, deletedAppointmentId: null };
-    });
+  commitDeletedAppointment = async () => {
+    const { data, deletedAppointmentId } = this.state;
+  
+    try {
+      const deleteUrl = `https://clinicapi-api.azurewebsites.net/Agendamento/DeletarAgendamento/?id=${deletedAppointmentId}`;
+      const response = await axios.delete(deleteUrl);
+  
+      if (response.status === 200) {
+        const nextData = data.filter(
+          (appointment) => appointment.id !== deletedAppointmentId
+        );
+        this.setState({ data: nextData, deletedAppointmentId: null });
+        toast.success("Agendamento excluído com sucesso!");
+      } else {
+        // Tratar erros de resposta diferentes de 200
+        toast.error("Erro ao excluir o agendamento.");
+      }
+    } catch (error) {
+      // Tratar erro de requisição
+      toast.error("Erro na requisição: " + error.message);
+    }
+  
     this.toggleConfirmationVisible();
-  }
+  };
 
   commitChanges({ added, changed, deleted }) {
     this.setState((state) => {
@@ -1532,8 +1573,11 @@ export default class Demo extends React.PureComponent {
       startDayHour,
       endDayHour,
       dataSelecionada,
+      popperOpen,
     } = this.state;
 
+
+    
     const messages = {
       "pt-BR": {
         Week: "Semana",
@@ -1541,7 +1585,11 @@ export default class Demo extends React.PureComponent {
       },
     };
 
-    console.log("Current Date:", this.state.currentDate);
+
+  
+    
+
+  
     return (
       <LocalizationProvider
         dateAdapter={AdapterDateFns}
@@ -1569,12 +1617,14 @@ export default class Demo extends React.PureComponent {
             />
             <DayView messages={messages["pt-BR"]} />
             <AllDayPanel messages={{ "All Day": "Hoje" }} />
+            
             <EditRecurrenceMenu />
             <Appointments />
             <AppointmentTooltip
               showOpenButton
               showCloseButton
               showDeleteButton
+              onOpenButtonClick={() => this.onEditingAppointmentChange()}
             />
             <Toolbar />
             <ViewSwitcher messages={messages["pt-BR"]} />
@@ -1613,6 +1663,52 @@ export default class Demo extends React.PureComponent {
               </Button>
             </DialogActions>
           </Dialog>
+
+          <Button
+              ref={this.anchorRef}
+              aria-controls={popperOpen ? 'popper' : undefined}
+              aria-haspopup="true"
+              onClick={this.handlePopperToggle}
+              sx={{position:'absolute', right:'150px',top:'32px',fontSize:'22px',backgroundColor:'#E9E9E9', padding:'9px 0',minWidth:'41px', color:'#696969'}}
+            >
+              
+              <FontAwesomeIcon  icon={faCircleExclamation} />
+            </Button>
+            <Popper
+            open={popperOpen}
+            anchorEl={this.anchorRef.current} // Use this.anchorRef.current
+            placement="bottom-end"
+            transition
+            sx={{zIndex:999}}
+          >
+            {({ TransitionProps }) => (
+              <Fade {...TransitionProps} timeout={350} >
+                <Paper  sx={{minWidth:'500px'}}>
+                  <div className="modal-alerta1">
+                    <Typography sx={{color:'black', fontSize:'20px'}}>
+                      Alertas de Retorno
+                    </Typography>
+                    <Typography sx={{color:'#696969', fontSize:'13px'}}>
+                      Nenhum retorno previsto para o período 20/11 a 26/11
+                    </Typography>
+                  </div>
+                  <Divider></Divider>
+                  <div className="modal-alerta2" style={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:'center',paddingTop:40,paddingBottom:40,}}>
+                    <FontAwesomeIcon  icon={faCircleExclamation} style={{width:'35px !important'}}/>
+                    <div style={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:'center',paddingTop:10}}>
+                      <Typography sx={{color:'#696969'}}>
+                      Nenhum alerta de retorno encontrado
+                      </Typography>
+                      <Typography sx={{color:'#696969'}}>
+                      para os filtros aplicados.
+                      </Typography>
+                    </div>
+                  </div>
+                </Paper>
+              </Fade>
+            )}
+          </Popper>
+
 
           <StyledFab
             color="primary"

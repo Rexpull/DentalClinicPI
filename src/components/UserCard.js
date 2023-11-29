@@ -25,7 +25,6 @@ const contentStyle = {
 const bodyStyle = {
   paddingLeft: 2,
   paddingRight: 3,
-  color: '#696969 !important',
   fontSize:'16px',
   display:'flex',
   gap:'10px',
@@ -98,6 +97,7 @@ function UserCard({ user, onViewClick,refreshUserList  }) {
   const color = getColorByInitial(initials);
 
 
+
   useEffect(() => {
     setIsLoading(true);
     // Faça uma chamada para a API para buscar a quantidade de permissões
@@ -117,6 +117,10 @@ function UserCard({ user, onViewClick,refreshUserList  }) {
       });
   }, [user.id]);
 
+  const handleEdit = (user) => {
+
+    onViewClick(user); 
+  };
 
   const reactivateUser = (user) => {
     // Chame a API para atualizar o atributo 'ativo' para true
@@ -302,7 +306,7 @@ function UserCard({ user, onViewClick,refreshUserList  }) {
       </CardContent>
       <div style={buttonContainerStyle}>
         {user.ativo ? ( 
-          <Button onClick={() => onViewClick(user)} color="primary">
+          <Button onClick={() => handleEdit(user)} color="primary">
             Editar
           </Button>
         ) : (
