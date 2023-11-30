@@ -191,3 +191,71 @@
     background-color: var(--body_background) !important;
     
 }
+
+.text-u{
+    color: var(--color) !important;
+}
+
+.tox .tox-toolbar__group{
+    background-color: var(--body_background) !important;
+}
+
+.tox .tox-tbtn svg{
+    fill: var(--color) !important;
+}
+
+.tox-tinymce{
+    border: 1px solid var(--color) !important;
+} 
+
+.tox .tox-toolbar, .tox .tox-toolbar__overflow, .tox .tox-toolbar__primary{
+    background-color: var(--body_background) !important;
+}
+
+.tox:not(.tox-tinymce-inline) .tox-editor-header{
+    background-color: var(--body_background) !important;
+}
+
+.tox .tox-statusbar{
+    background-color: var(--body_background) !important;
+}
+
+.tox .tox-statusbar__branding svg{
+    fill: var(--color) !important;
+}
+
+.tox .tox-statusbar a, .tox .tox-statusbar__path-item, .tox .tox-statusbar__wordcount{
+    color: var(--color) !important;
+}
+
+.tox .tox-menubar{
+    background-color: var(--body_background) !important;
+}
+
+.tox .tox-mbtn__select-label{
+    color: var(--color) !important;
+}
+
+.tox .tox-menubar+.tox-toolbar, .tox .tox-menubar+.tox-toolbar-overlord{
+    border-top: 1px solid var(--body_background) !important;
+}
+
+.tox .tox-toolbar-overlord{
+    background-color: var(--body_background) !important;
+}
+
+.tox .tox-tbtn:hover{
+    background-color: var(--cor-do-botao-padrao) !important;
+}
+
+.tox .tox-tbtn--enabled, .tox .tox-tbtn--enabled:hover{
+    background-color: var(--cor-do-botao-pressionado) !important;
+}
+
+.css-f3fu7d-MuiTypography-root-MuiDialogContentText-root{
+    color: var(--color) !important;
+}
+
+.css-duoj8i-MuiTableCell-root .TableNoDataCell-text{
+    color: var(--color) !important;
+}

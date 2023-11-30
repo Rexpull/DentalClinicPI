@@ -255,7 +255,7 @@ function Pacientes( user ) {
   return (
     <Paper style={{ position: 'relative' }}>
       {isLoading ? (
-        <div style={{ textAlign: 'center', padding: '100px' }}>
+        <div className="text-u" style={{ textAlign: 'center', padding: '100px' }}>
           Carregando dados...
         </div>
       ) : (
